@@ -16,4 +16,9 @@ class WelcomeController {
     public String welcome() {
         return "Hello and welcome to COMS 309";
     }
+
+    @GetMapping("/home")
+    public String home() {
+        return "Home page";
+    }
 }

@@ -25,7 +25,7 @@ public class PeopleController {
     // Springboot system.
     HashMap<String, Person> peopleList = new  HashMap<>();
 
-    //CRUDL (create/read/update/delete/list)
+    // CRUDL (create/read/update/delete/list)
     // use POST, GET, PUT, DELETE, GET methods for CRUDL
 
     // THIS IS THE LIST OPERATION
@@ -49,7 +49,7 @@ public class PeopleController {
     public  String createPerson(@RequestBody Person person) {
         System.out.println(person);
         peopleList.put(person.getFirstName(), person);
-        return "New person "+ person.getFirstName() + " Saved";
+        return "New person " + person.getFirstName() + " Saved";
     }
 
     // THIS IS THE READ OPERATION
@@ -88,5 +88,6 @@ public class PeopleController {
         peopleList.remove(firstName);
         return peopleList;
     }
+
 }
 
