@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashMap;
 
+@RestController
 public class AnimalController {
 
     // Note that there is only ONE instance of AnimalController in
