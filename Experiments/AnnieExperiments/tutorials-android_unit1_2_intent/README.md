@@ -1,8 +1,8 @@
-# android_unit1_1
+# android_unit1_2
 
 ### What is this example: 
 
-A "hello world" example for testing environment setup
+A "counter" example for toying with `intent` (switch between activities)
 
 ### version tested
 |Android Studio            | Android SDK | Gradle | Emulator |
