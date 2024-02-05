@@ -62,6 +62,7 @@ public class SignUpController {
         ConnectToDB db = new ConnectToDB(ConnectToDB.getOneTimeConnection());
         Connection con = db.getCurrentConnection();
         createUserInDB(con,generalUser);
+        db.closeConnection();
         return "Welcome! " + generalUser.getFirstName();
     }
 
