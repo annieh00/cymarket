@@ -1,6 +1,6 @@
 package com.cs309.ta45.backend.mainPackage;
 
-import com.cs309.ta45.backend.dbmsPackage.ConnectToDB;
+import com.cs309.ta45.backend.mainPackage.dbmsPackage.ConnectToDB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,7 +16,11 @@ public class MainPackageApplication {
 		ConnectToDB db = null;
 		try{
 			connection = ConnectToDB.getOneTimeConnection();
-			connection.close();
+			if(connection == null){
+				System.out.println("something is wrong with db");
+			}else{
+				connection.close();
+			}
 			SpringApplication.run(MainPackageApplication.class, args);
 		}catch(Exception e){
 			e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.dbmsPackage;
+package com.cs309.ta45.backend.mainPackage.dbmsPackage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,16 +47,16 @@ public class ConnectToDB {
      * before the application starts
      * It is the caller's job to manually close the connection returned by this method
      * */
-    public static Connection getOneTimeConnection() throws SQLException{
+    public static Connection getOneTimeConnection() {
         Connection ret = null;
         try{
             ret = DriverManager.getConnection("jdbc:mysql://localhost/cs309","cs309","cs309ta45");
             return ret;
         }catch(SQLException ex){
             System.out.println("Error at ConnectToDB.getConnection()");
-            throw ex;
-        }
 
+        }
+        return null;
     }
 
 }
