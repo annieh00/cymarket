@@ -24,8 +24,8 @@ public class LogInController {
             Statement st = con.createStatement();
             //firstName, lastName, email, password, isNormal(int), isOrg(int), isManaager(int)
 
-            String find = "select * from users where email="+
-                    "\'" + generalUser.getEmail() +"\'";
+            String find = "select * from users where"+
+                     " userName =" + "\"" +generalUser.getUserName() +"\"";
 
             ResultSet rs = st.executeQuery(find);
             if(!rs.isBeforeFirst()){//checks if the cursor is before the table
