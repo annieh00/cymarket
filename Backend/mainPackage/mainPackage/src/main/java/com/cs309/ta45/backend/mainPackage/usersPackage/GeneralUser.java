@@ -15,6 +15,8 @@ public class GeneralUser {
 
     private int userType;
 
+    private String userName;
+
 
     public String getFirstName() {
         return firstName;
@@ -54,5 +56,13 @@ public class GeneralUser {
 
     public void setUserType(int userType) {
         this.userType = userType;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

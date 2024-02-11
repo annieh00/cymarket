@@ -39,14 +39,15 @@ public class SignUpController {
             }
 
             String insertSql =
-                    "INSERT INTO USERS(firstName, lastName, email, password,isNormal,isOrg,isManager) VALUES("
+                    "INSERT INTO USERS(firstName, lastName, email, password,isNormal,isOrg,isManager,userName) VALUES("
                             +"\""+generalUser.getFirstName()+"\""+","
                             +"\""+generalUser.getLastName() +"\"" + ","
                             +"\""+generalUser.getEmail() +"\"" + ","
                             +"\""+generalUser.getPassword() +"\"" + ","
                             +isNormal + ","
                             +isOrg + ","
-                            +isManager + ")";
+                            +isManager +",\""+generalUser.getUserName() +"\"" +
+                            ")";
             System.out.println(insertSql);
             st.executeUpdate(insertSql);
 
