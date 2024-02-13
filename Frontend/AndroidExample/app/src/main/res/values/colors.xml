@@ -15,5 +15,22 @@
     <color name="security">#D95F69</color>
     <color name="cardinal">#C8102E</color>
     <color name="gold">#F1BE48</color>
-    <color name="warmGrey">#6E6259</color>
+    <color name="darkWarmGrey">#6E6259</color>
+    <color name="orangeYellow">#524727</color>
+    <color name="darkTan">#9B945F</color>
+    <color name="mediumLightYellow">#CAC7A7</color>
+    <color name="darkGreen">#3E4827</color>
+    <color name="lightGreen">#76881D</color>
+    <color name="mediumTan">#A2A569</color>
+    <color name="darkBluishGreen">#003D4C</color>
+    <color name="lightBluishGreen">#006BA6</color>
+    <color name="lightBlue">#7A99AC</color>
+    <color name="darkRed">#7C2529</color>
+    <color name="orangeReddish">#9A3324</color>
+    <color name="orange">#BE531C</color>
+    <color name="brown">#8B5B29</color>
+    <color name="lightBrownishTannish">#B9975B</color>
+    <color name="yellow">#EED484</color>
+    <color name="darkBluishGreyish">#707372</color>
+    <color name="lightWarmGrey">#ACA39A</color>
 </resources>
