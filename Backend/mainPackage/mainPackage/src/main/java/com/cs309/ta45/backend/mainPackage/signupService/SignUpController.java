@@ -39,7 +39,7 @@ public class SignUpController {
             }
 
             String insertSql =
-                    "INSERT INTO USERS(firstName, lastName, email, password,isNormal,isOrg,isManager,userName) VALUES("
+                    "INSERT INTO users(firstName, lastName, email, password,isNormal,isOrg,isManager,userName) VALUES("
                             +"\""+generalUser.getFirstName()+"\""+","
                             +"\""+generalUser.getLastName() +"\"" + ","
                             +"\""+generalUser.getEmail() +"\"" + ","
