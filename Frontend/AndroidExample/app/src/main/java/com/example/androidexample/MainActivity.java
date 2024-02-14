@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 /* when login button is pressed, use intent to switch to Login Activity */
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });
