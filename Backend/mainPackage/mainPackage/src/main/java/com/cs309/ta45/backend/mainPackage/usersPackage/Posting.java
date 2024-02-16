@@ -1,20 +1,40 @@
 package com.cs309.ta45.backend.mainPackage.usersPackage;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "posts")
 public class Posting {
+
+    //@OneToOne(cascade = CascadeType.ALL)
+    @Column(name = "author")
+    //@JoinColumn(name="email")
     private String author;
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "picture1")
     private String picture1;
 
+    @Column(name = "picture2")
     private String picture2;
 
+    @Column(name = "picture3")
     private String picture3;
+//    @Column(name = "picture4")
+//    private String picture4;
+//
+//    @Column(name = "picture5")
+//    private String picture5;
+//
+//    @Column(name = "picture6")
+//    private String picture6;
 
-    private String picture4;
-
-    private String picture5;
-
-    private String picture6;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "postId")
+    private int id;
     public String getAuthor() {
         return author;
     }
@@ -56,27 +76,27 @@ public class Posting {
         this.picture3 = picture3;
     }
 
-    public String getPicture4() {
-        return picture4;
-    }
-
-    public void setPicture4(String picture4) {
-        this.picture4 = picture4;
-    }
-
-    public String getPicture5() {
-        return picture5;
-    }
-
-    public void setPicture5(String picture5) {
-        this.picture5 = picture5;
-    }
-
-    public String getPicture6() {
-        return picture6;
-    }
-
-    public void setPicture6(String picture6) {
-        this.picture6 = picture6;
-    }
+//    public String getPicture4() {
+//        return picture4;
+//    }
+//
+//    public void setPicture4(String picture4) {
+//        this.picture4 = picture4;
+//    }
+//
+//    public String getPicture5() {
+//        return picture5;
+//    }
+//
+//    public void setPicture5(String picture5) {
+//        this.picture5 = picture5;
+//    }
+//
+//    public String getPicture6() {
+//        return picture6;
+//    }
+//
+//    public void setPicture6(String picture6) {
+//        this.picture6 = picture6;
+//    }
 }
