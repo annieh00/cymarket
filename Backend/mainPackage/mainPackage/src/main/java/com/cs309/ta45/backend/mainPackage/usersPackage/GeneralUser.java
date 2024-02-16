@@ -1,20 +1,39 @@
 package com.cs309.ta45.backend.mainPackage.usersPackage;
 
 
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+
 /**
  * @author Junhyung Shim
  * implementation of normal user
  * Watch out for getter and setter names, it might cause errors
  * */
-public class GeneralUser {
 
+@Entity
+@Table(name="users")
+public class GeneralUser {
+    @Column(name = "firstName")
     private String firstName;
+
+    @Column(name = "lastName")
     private String lastName;
+
+    @Id
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
 
+    @Column(name="userType")
     private int userType;
 
+    @Column(name = "userName")
     private String userName;
 
 
