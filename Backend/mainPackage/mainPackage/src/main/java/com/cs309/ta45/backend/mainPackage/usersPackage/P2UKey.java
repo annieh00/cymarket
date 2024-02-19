@@ -1,7 +1,9 @@
 package com.cs309.ta45.backend.mainPackage.usersPackage;
 
 import java.io.Serializable;
-
+/**
+ * @author Junhyung Shim
+ * */
 public class P2UKey implements Serializable {
     private int pid;
     private String uid;

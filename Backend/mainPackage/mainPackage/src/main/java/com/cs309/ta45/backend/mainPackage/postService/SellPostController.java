@@ -74,9 +74,9 @@ public class SellPostController {
     }
 
     //update
-    @PostMapping("posts/update/{pid}")
-    public Posting updatePost(@PathVariable(name = "pid") int pid, @RequestBody Posting update){
-        Posting p = postingRepository.findPostingById(pid);
+    @PostMapping("posts/update")
+    public Posting updatePost(@RequestBody Posting update){
+        Posting p = postingRepository.findPostingById(update.getId());
         if(p == null)return null;
         updatePost(p,update);
         postingRepository.save(p);

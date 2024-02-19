@@ -2,7 +2,9 @@ package com.cs309.ta45.backend.mainPackage.usersPackage;
 
 import jakarta.persistence.*;
 
-
+/**
+ * @author Junhyung Shim
+ * */
 @Entity
 @Table(name = "posts")
 public class Posting {
