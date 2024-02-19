@@ -1,5 +1,6 @@
 package com.cs309.ta45.backend.mainPackage.postService;
 
+import com.cs309.ta45.backend.mainPackage.errorMsg.ErrorMsg;
 import com.cs309.ta45.backend.mainPackage.usersPackage.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,13 @@ public class SellPostController {
 
     //create
     @PostMapping("/posts")
-    public Posting createUser(@RequestBody Posting p){
+    public Object createPost(@RequestBody Posting p){
         if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
-            System.out.println("user "+p.getUserName()+ " does not exist");
-            return null;
+            //System.out.println("user "+p.getUserName()+ " does not exist");
+            ErrorMsg e = new ErrorMsg();
+            e.setErrormsg("user does not exist, and therefore cannot create post");
+            return e;
         }
-        System.out.println(p.getUserName());
-
         postingRepository.save(p);
         Post2UserMapping p2u = new Post2UserMapping();
         p2u.setPid(p.getId());
