@@ -16,6 +16,13 @@
         <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <!-- for local -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- for server? -->
+        <!--
+        <property name="hibernate.current_session_context_class">org.hibernate.context.ThreadLocal‌​SessionContext</property>
+        -->
         <!-- List of XML mapping files -->
         <mapping class = "com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUser"/>
 

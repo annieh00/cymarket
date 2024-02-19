@@ -22,20 +22,7 @@ public class SignUpController {
 
     @Autowired
     private GeneralUserRepository generalUserRepository;
-    private void createUserInDB(GeneralUser generalUser){
-        try{
-            Connect2DBHibernate sess = new Connect2DBHibernate();
-            Session currSess = sess.getSession();
-            currSess.beginTransaction();
-            currSess.persist(generalUser);
-            currSess.getTransaction().commit();
-            currSess.close();
-        } catch (Exception e) {
-            System.out.println("Error at SignUpController.createUserInDB()");
-            e.printStackTrace();
-        }
 
-    }
 
     @PostMapping("/signup")
     public String createUser(@RequestBody GeneralUser generalUser){
