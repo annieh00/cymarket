@@ -60,6 +60,7 @@ public class LaptopController {
         return laptopRepository.findById(id);
     }
 
+    @Transactional
     @DeleteMapping(path = "/laptops/{id}")
     String deleteLaptop(@PathVariable int id){
 

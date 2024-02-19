@@ -88,6 +88,7 @@ public class UserController {
         return success;
     }
 
+    @Transactional
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         userRepository.deleteById(id);
