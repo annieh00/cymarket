@@ -33,7 +33,7 @@ public class GeneralUser {
     @Column(name="userType")
     private int userType;
 
-    @Column(name = "userName")
+    @Column(name = "userName",unique = true)
     private String userName;
 
 

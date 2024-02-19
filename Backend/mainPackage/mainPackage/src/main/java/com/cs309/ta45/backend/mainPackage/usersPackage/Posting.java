@@ -8,9 +8,12 @@ import jakarta.persistence.*;
 public class Posting {
 
     //@OneToOne(cascade = CascadeType.ALL)
-    @Column(name = "author")
+    @Column(name = "userName")
     //@JoinColumn(name="email")
-    private String author;
+    private String userName;
+
+    @Column(name = "title")
+    private String title;
     @Column(name = "description")
     private String description;
 
@@ -35,12 +38,12 @@ public class Posting {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "postId")
     private int id;
-    public String getAuthor() {
-        return author;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 
@@ -74,6 +77,18 @@ public class Posting {
 
     public void setPicture3(String picture3) {
         this.picture3 = picture3;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getId() {
+        return id;
     }
 
 //    public String getPicture4() {
