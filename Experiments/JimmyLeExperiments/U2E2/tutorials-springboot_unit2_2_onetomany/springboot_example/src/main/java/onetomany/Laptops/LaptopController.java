@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -53,6 +54,7 @@ public class LaptopController {
         return laptopRepository.findById(id);
     }
 
+    @Transactional
     @DeleteMapping(path = "/laptops/{id}")
     String deleteLaptop(@PathVariable int id){
         laptopRepository.deleteById(id);

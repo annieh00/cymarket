@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 import onetomany.Laptops.Laptop;
 import onetomany.Laptops.LaptopRepository;
@@ -71,6 +72,7 @@ public class UserController {
         return success;
     }
 
+    @Transactional
     @DeleteMapping(path = "/users/{id}")
     String deleteLaptop(@PathVariable int id){
         userRepository.deleteById(id);

@@ -48,7 +48,6 @@ public class User {
 
      // =============================== Constructors ================================== //
 
-
     public User(String name, String emailId, Date joiningDate) {
         this.name = name;
         this.emailId = emailId;

@@ -57,8 +57,7 @@ public class UserController {
             return null;
         userRepository.save(request);
         return userRepository.findById(id);
-    }   
-    
+    }
     @PutMapping("/users/{userId}/laptops/{laptopId}")
     String assignLaptopToUser(@PathVariable int userId,@PathVariable int laptopId){
         User user = userRepository.findById(userId);
@@ -70,7 +69,6 @@ public class UserController {
         userRepository.save(user);
         return success;
     }
-
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         userRepository.deleteById(id);

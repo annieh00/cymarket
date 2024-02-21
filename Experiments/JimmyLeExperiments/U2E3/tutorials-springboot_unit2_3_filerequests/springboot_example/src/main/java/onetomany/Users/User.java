@@ -73,7 +73,6 @@ public class User {
     
     // =============================== Getters and Setters for each field ================================== //
 
-
     public int getId(){
         return id;
     }

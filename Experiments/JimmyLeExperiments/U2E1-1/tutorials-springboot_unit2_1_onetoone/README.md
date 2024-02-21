@@ -1,4 +1,4 @@
-SpringBoot version 2.4.0
+    SpringBoot version 2.4.0
 JAVA JDK version 11
 
 # SpringBoot JPA: One to One relation example

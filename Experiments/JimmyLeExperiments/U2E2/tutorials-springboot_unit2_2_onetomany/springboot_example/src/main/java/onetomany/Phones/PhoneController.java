@@ -35,7 +35,6 @@ public class PhoneController {
         phoneRepository.save(phone);
         return success;
     }
-
     @PutMapping("/phones/{id}")
     Phone updatePhone(@PathVariable int id, @RequestBody Phone request){
         Phone phone = phoneRepository.findById(id);
