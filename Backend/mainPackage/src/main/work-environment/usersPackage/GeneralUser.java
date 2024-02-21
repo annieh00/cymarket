@@ -23,9 +23,13 @@ public class GeneralUser {
     @Column(name = "lastName")
     private String lastName;
 
-    @Id
-    @Column(name = "email")
+
+    @Column(name = "email",unique = true)
     private String email;
+
+    @Id
+    @Column(name = "uid")
+    private int id;
 
     @Column(name = "password")
     private String password;
@@ -83,5 +87,9 @@ public class GeneralUser {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -12,6 +12,7 @@ public interface GeneralUserRepository extends CrudRepository<GeneralUser,Long> 
     public ArrayList<GeneralUser> findGeneralUsersByUserType(int userType);
     public GeneralUser findGeneralUserByEmailAndPassword(String email, String password);
 
+    public GeneralUser findById(int id);
     public GeneralUser findGeneralUserByEmail(String email);
 
 
