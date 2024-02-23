@@ -18,7 +18,8 @@
             android:layout_height="50dp"
             android:src="@drawable/back_btn"
             android:padding="14dp"
-            android:background="null"/>
+            android:background="@null"
+            android:contentDescription="back"/>
         
         <TextView
             android:layout_width="wrap_content"
@@ -31,10 +32,13 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
         
         <LinearLayout
+            android:id="@+id/scroll_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -242,7 +246,7 @@
                         android:id="@+id/securityAndPrivacyArrow"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:background="null"/>
+                        android:background="@null"/>
 
 
                 </RelativeLayout>
@@ -279,7 +283,7 @@
                         android:id="@+id/textSizeArrow"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:background="null"/>
+                        android:background="@null"/>
 
 
 
@@ -317,7 +321,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:id="@+id/languagesArrow"
-                        android:background="null"/>
+                        android:background="@null"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -362,7 +366,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:id="@+id/sendUsAMessageArrow"
-                        android:background="null"/>
+                        android:background="@null"
+                        />
 
 
                 </RelativeLayout>
@@ -399,7 +404,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:id="@+id/aboutUsArrow"
-                        android:background="null"/>
+                        android:background="@null"/>
 
 
 
@@ -437,7 +442,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:id="@+id/FAQArrow"
-                        android:background="null"/>
+                        android:background="@null"/>
                 </RelativeLayout>
 
 
@@ -484,7 +489,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:id="@+id/logOutArrow"
-                    android:background="null"/>
+                    android:background="@null"/>
             </RelativeLayout>
 
         </LinearLayout>
