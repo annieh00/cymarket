@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darkRed"
+    android:background="@color/darkWarmGrey"
     android:orientation="vertical"
     tools:context=".SettingsActivity">
     
@@ -13,11 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         
-        <ImageView
+        <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/back_btn"
-            android:padding="14dp"/>
+            android:padding="14dp"
+            android:background="@null"
+            android:contentDescription="back"/>
         
         <TextView
             android:layout_width="wrap_content"
@@ -30,10 +32,13 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
         
         <LinearLayout
+            android:id="@+id/scroll_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -69,6 +74,7 @@
                 android:layout_marginTop="20dp"
                 android:paddingStart="30dp"
                 android:layout_gravity="center"
+                android:id="@+id/editProfileButton"
                 android:background="@drawable/round_back_secondary_100"
                 android:text="Edit Profile"
                 android:textAllCaps="false"
@@ -120,7 +126,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:switchMinWidth="50dp"
-                        android:theme="@style/nightModeSwitch" />
+                        android:theme="@style/nightModeSwitch"
+                        android:id="@+id/nightModeSwitch"/>
 
 
                 </RelativeLayout>
@@ -156,7 +163,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:switchMinWidth="50dp"
-                        android:theme="@style/notificationsSwitch"/>
+                        android:theme="@style/notificationsSwitch"
+                        android:id="@+id/notificationsSwitch"/>
 
 
                 </RelativeLayout>
@@ -192,7 +200,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:switchMinWidth="50dp"
-                        android:theme="@style/privateAccountSwitch"/>
+                        android:theme="@style/privateAccountSwitch"
+                        android:id="@+id/privateAccouuntSwitch"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -230,12 +239,14 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
+                        android:id="@+id/securityAndPrivacyArrow"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:background="@null"/>
 
 
                 </RelativeLayout>
@@ -265,12 +276,14 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
+                        android:id="@+id/textSizeArrow"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:background="@null"/>
 
 
 
@@ -301,12 +314,14 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:id="@+id/languagesArrow"
+                        android:background="@null"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -344,12 +359,15 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:id="@+id/sendUsAMessageArrow"
+                        android:background="@null"
+                        />
 
 
                 </RelativeLayout>
@@ -379,12 +397,14 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:id="@+id/aboutUsArrow"
+                        android:background="@null"/>
 
 
 
@@ -415,12 +435,14 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/right_arrow_icon"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:id="@+id/FAQArrow"
+                        android:background="@null"/>
                 </RelativeLayout>
 
 
@@ -460,12 +482,14 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <ImageView
+                <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/right_arrow_icon"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:id="@+id/logOutArrow"
+                    android:background="@null"/>
             </RelativeLayout>
 
         </LinearLayout>

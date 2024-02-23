@@ -94,17 +94,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton6"
+        android:id="@+id/addImageButton"
         android:layout_width="135dp"
         android:layout_height="110dp"
-        android:background="null"
+        android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.913"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.169"
-        app:srcCompat="@drawable/plus_svgrepo_com" />
+        android:src="@drawable/plus_sign" />
 
     <HorizontalScrollView
         android:layout_width="226dp"
