@@ -24,7 +24,11 @@
         <property name="hibernate.current_session_context_class">org.hibernate.context.ThreadLocal‌​SessionContext</property>
         -->
         <!-- List of XML mapping files -->
-        <mapping class = "com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUser"/>
+        <mapping class = "work-environment.usersPackage.GeneralUser"/>
+        <mapping class = "work-environment.usersPackage.Post2UserMapping"/>
+        <mapping class = "work-environment.usersPackage.Posting"/>
+        <mapping class = "work-environment.imageProcess.Image"/>
+
 
     </session-factory>
 </hibernate-configuration>

@@ -1,12 +1,8 @@
 package com.cs309.ta45.backend.mainPackage.signupService;
 
-import com.cs309.ta45.backend.mainPackage.dbmsPackage.Connect2DBHibernate;
-
 import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUser;
 import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUserRepository;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

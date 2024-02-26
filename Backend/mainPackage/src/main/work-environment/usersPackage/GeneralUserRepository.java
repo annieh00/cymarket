@@ -1,13 +1,13 @@
 package com.cs309.ta45.backend.mainPackage.usersPackage;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
 
 /**
  * @author Junhyung Shim
  * */
-public interface GeneralUserRepository extends CrudRepository<GeneralUser,Long> {
+public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
     public GeneralUser findGeneralUserByUserName(String uid);
     public ArrayList<GeneralUser> findGeneralUsersByUserType(int userType);
     public GeneralUser findGeneralUserByEmailAndPassword(String email, String password);
