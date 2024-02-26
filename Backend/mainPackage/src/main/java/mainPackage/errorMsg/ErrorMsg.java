@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.errorMsg;
+package mainPackage.errorMsg;
 
 public class ErrorMsg {
     private String errormsg;

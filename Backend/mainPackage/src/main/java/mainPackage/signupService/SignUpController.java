@@ -1,7 +1,7 @@
-package com.cs309.ta45.backend.mainPackage.signupService;
+package mainPackage.signupService;
 
-import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUser;
-import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUserRepository;
+import mainPackage.usersPackage.GeneralUser;
+import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

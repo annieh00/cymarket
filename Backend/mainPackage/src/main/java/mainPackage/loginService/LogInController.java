@@ -1,8 +1,8 @@
-package com.cs309.ta45.backend.mainPackage.loginService;
+package mainPackage.loginService;
 
-import com.cs309.ta45.backend.mainPackage.dbmsPackage.ConnectToDB;
-import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUser;
-import com.cs309.ta45.backend.mainPackage.usersPackage.GeneralUserRepository;
+import mainPackage.dbmsPackage.ConnectToDB;
+import mainPackage.usersPackage.GeneralUser;
+import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

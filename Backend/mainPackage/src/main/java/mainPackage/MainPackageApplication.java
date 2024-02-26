@@ -1,6 +1,6 @@
-package com.cs309.ta45.backend.mainPackage;
+package mainPackage;
 
-import com.cs309.ta45.backend.mainPackage.dbmsPackage.ConnectToDB;
+import mainPackage.dbmsPackage.ConnectToDB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

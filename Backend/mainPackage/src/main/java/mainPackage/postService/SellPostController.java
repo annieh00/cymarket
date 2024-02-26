@@ -1,7 +1,7 @@
-package com.cs309.ta45.backend.mainPackage.postService;
+package mainPackage.postService;
 
-import com.cs309.ta45.backend.mainPackage.errorMsg.ErrorMsg;
-import com.cs309.ta45.backend.mainPackage.usersPackage.*;
+import mainPackage.errorMsg.ErrorMsg;
+import mainPackage.usersPackage.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
