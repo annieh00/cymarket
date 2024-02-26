@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.imageProcess;
+package mainPackage.imageProcess;
 
 
 import org.apache.commons.io.FileUtils;
@@ -8,6 +8,8 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -18,6 +20,8 @@ public class ImageProcessingController {
     @Autowired
     private ImageRepository imageRepository;
 
+
+    //create
     @GetMapping("/rotateImage")
     public Object rotateImage(){
         Image img = new Image();
@@ -33,15 +37,35 @@ public class ImageProcessingController {
 
             Mat imageToProcess = Imgcodecs.imread(fname);
             Mat dst = new Mat();
-
+            //Mat imageToSave = Imgcodecs.imread(fname);
             Core.rotate(imageToProcess,dst,Core.ROTATE_90_CLOCKWISE);
             Imgcodecs.imwrite("rotatedImage.jpg",dst);
-            HighGui.imshow("rotated",dst);
+            //HighGui.imshow("rotated",dst);
         }catch (Exception e){
             e.printStackTrace();
         }
 
         return img;
     }
+
+
+    //Create Image
+    @PostMapping("img/save")
+    public Object saveImage(@RequestBody Image img){
+        try {
+            nu.pattern.OpenCV.loadLocally();
+
+
+            byte[] decoded = Base64.getDecoder().decode(img.getBase64Encoding());
+            FileUtils.writeByteArrayToFile(new File(img.getFileName()),decoded);
+            //imageRepository.save(img);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return "internal server error";
+        }
+        return null;
+    }
+
 
 }

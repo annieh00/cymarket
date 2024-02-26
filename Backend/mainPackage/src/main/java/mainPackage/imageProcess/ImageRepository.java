@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.imageProcess;
+package mainPackage.imageProcess;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

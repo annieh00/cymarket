@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.imageProcess;
+package mainPackage.imageProcess;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class Image {
     @Column(name = "fileName")
     private String fileName;
-    @Column(name = "base64Encoding")
+
     private String base64Encoding;
 
     @Id

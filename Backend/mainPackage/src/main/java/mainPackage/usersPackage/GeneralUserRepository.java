@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.usersPackage;
+package mainPackage.usersPackage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

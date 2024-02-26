@@ -1,4 +1,4 @@
-package com.cs309.ta45.backend.mainPackage.dbmsPackage;
+package mainPackage.dbmsPackage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
