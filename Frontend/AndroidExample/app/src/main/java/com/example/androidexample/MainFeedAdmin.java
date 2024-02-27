@@ -116,7 +116,7 @@ public class MainFeedAdmin extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                             builder.setTitle("Server Response");
                         try {
-                            builder.setMessage("Response " + response.getString("message"));
+                            builder.setMessage("Response " + response.getString("status"));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
