@@ -3,6 +3,8 @@ package mainPackage.adminService;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.announcementPackage.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -19,7 +21,9 @@ public class adminController {
     public String createAnnouncement(@RequestBody Announcement a) {
         a.setDate(new Date());
         announcementRepository.save(a);
-        return a.getTitle() + ": " + a.getDescription();
+        // Title: " + a.getTitle() + "\nDescription: " + a.getDescription();
+        String response = "Announcement created.";
+        return "{\"status\": \"" + response + "\"}";
     }
 
     // Read
@@ -74,4 +78,9 @@ public class adminController {
     public List<Announcement> getAllAnnouncements() {
         return announcementRepository.findAll();
     }
+}
+
+class Message {
+    String status;
+    Message (String s) { status = s;}
 }
