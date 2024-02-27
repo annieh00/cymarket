@@ -72,13 +72,17 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
 
-                if (password.equals(confirm)){
-                    Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
+                if (alreadyExists == false && password.equals(confirm)){
                     sendJsonObjReq();
+                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(SignupActivity.this, "Please login now", Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    Toast.makeText(SignupActivity.this, "Passwords don't match", Toast.LENGTH_LONG).show();
+                    startActivity(intent);
                 }
-                else {
-                    Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
-                }
+
             }
         });
     }
@@ -96,31 +100,15 @@ public class SignupActivity extends AppCompatActivity {
         }
 
 //        System.out.println(jsonObject.toString());
-//        String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_REGISTER_USER, jsonObject, response -> {
+        String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data3";
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, URL_POST_LOGIN_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-//                    Toast.makeText(LoginActivity.this, "Successfully got email and password", Toast.LENGTH_LONG).show();
-//                    Toast.makeText(LoginActivity.this, "assigning values", Toast.LENGTH_LONG).show();
-//                email = response.getString("email");
-//                 = response.getString("password");
                 alreadyExists = response.getBoolean("fromServer");
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-
-                if (alreadyExists == true){
-                    Toast.makeText(SignupActivity.this, "User Already Exists", Toast.LENGTH_LONG).show();
-                }else{
-                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                    Toast.makeText(SignupActivity.this, "Login", Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-                }
-
-
-//                    Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-//                }
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());

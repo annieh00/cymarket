@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
 //        }
     }
 
-
+    String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
 
     private void sendJsonObjReq() {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -129,14 +129,15 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_LOGIN_USER, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, URL_POST_LOGIN_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
 //                email = response.getString("email");
 //                password = response.getString("password");
                 validUser = response.getBoolean("fromServer");
+//                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
 
             if (validUser){

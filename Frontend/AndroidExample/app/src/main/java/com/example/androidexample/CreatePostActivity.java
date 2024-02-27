@@ -34,7 +34,7 @@ import org.json.JSONArray;
 
 import com.android.volley.toolbox.Volley;
 import com.example.androidexample.Const;
-import com.example.androidexample.Manifest;
+//import com.example.androidexample.Manifest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,8 +86,6 @@ public class CreatePostActivity extends AppCompatActivity{
         image5 = findViewById(R.id.image5);
         image6 = findViewById(R.id.image6);
 
-
-
         //Buttons
         cancelBtn = findViewById(R.id.cancel_button);    // link to login button in the Login activity XML
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
@@ -110,24 +108,6 @@ public class CreatePostActivity extends AppCompatActivity{
             @Override
             public void onClick(View v){
 
-//                if ((ContextCompat.checkSelfPermission(getApplicationContext(),
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(getApplicationContext(),
-//                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-//                    if ((ActivityCompat.shouldShowRequestPermissionRationale(CreatePostActivity.this,
-//                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) && (ActivityCompat.shouldShowRequestPermissionRationale(CreatePostActivity.this,
-//                            Manifest.permission.READ_EXTERNAL_STORAGE))) {
-//
-//                    } else {
-//                        ActivityCompat.requestPermissions(CreatePostActivity.this,
-//                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-//                                REQUEST_PERMISSIONS);
-//                    }
-//                } else {
-//                    Log.e("Else", "Else");
-//                    showFileChooser();
-//                }
-
-
             }
         });
 
@@ -149,6 +129,13 @@ public class CreatePostActivity extends AppCompatActivity{
             //input your API parameters
             jsonObject.put("title", titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
+            jsonObject.put("picture1", titleEditText.getText().toString());
+            jsonObject.put("picture2", titleEditText.getText().toString());
+            jsonObject.put("picture3", titleEditText.getText().toString());
+            jsonObject.put("picture4", titleEditText.getText().toString());
+            jsonObject.put("picture5", titleEditText.getText().toString());
+            jsonObject.put("picture6", titleEditText.getText().toString());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -156,9 +143,7 @@ public class CreatePostActivity extends AppCompatActivity{
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_LOGIN_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-//                email = response.getString("email");
-//                password = response.getString("password");
-//                validUser = response.getBoolean("fromServer");
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -197,100 +182,6 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
     }
-
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            Uri picUri = data.getData();
-//            filePath = getPath(picUri);
-//            if (filePath != null) {
-//                try {
-//
-//                    textView.setText("File Selected");
-//                    Log.d("filePath", String.valueOf(filePath));
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), picUri);
-//                    uploadBitmap(bitmap);
-//                    imageView.setImageBitmap(bitmap);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            else
-//            {
-//                Toast.makeText(
-//                        CreatePostActivity.this,"no image selected",
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        }
-//
-////    }
-//    public String getPath(Uri uri) {
-//        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-//        cursor.moveToFirst();
-//        String document_id = cursor.getString(0);
-//        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-//        cursor.close();
-//
-//        cursor = getContentResolver().query(
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-//        cursor.moveToFirst();
-//        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-//        cursor.close();
-//
-//        return path;
-//    }
-
-
-    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-//    private void uploadBitmap(final Bitmap bitmap) {
-//
-//        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, ROOT_URL,
-//                new Response.Listener<NetworkResponse>() {
-//                    @Override
-//                    public void onResponse(NetworkResponse response) {
-//                        try {
-//                            JSONObject obj = new JSONObject(new String(response.data));
-//                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//                        Log.e("GotError",""+error.getMessage());
-//                    }
-//                }) {
-//
-//
-//            @Override
-//            protected Map<String, DataPart> getByteData() {
-//                Map<String, DataPart> params = new HashMap<>();
-//                long imagename = System.currentTimeMillis();
-//                params.put("image", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
-//                return params;
-//            }
-//        };
-//
-//        //adding the request to volley
-//        Volley.newRequestQueue(this).add(volleyMultipartRequest);
-//    }
 
 }
 
