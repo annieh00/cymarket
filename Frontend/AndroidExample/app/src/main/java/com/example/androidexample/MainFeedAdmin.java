@@ -50,7 +50,7 @@ public class MainFeedAdmin extends AppCompatActivity {
 
 //  String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
 
-    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements/create";
+ String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements/create";
     AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,24 +103,35 @@ public class MainFeedAdmin extends AppCompatActivity {
                 message = adminMessage.getText().toString();
 
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                builder.setTitle("Server Response");
-                                builder.setMessage("Response" + response);
-                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        adminMessage.setText("");
-                                        adminTitle.setText("");
-                                    }
-                                });
-                                AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("title", msgTitle);
+                    jsonBody.put("description", message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                            builder.setTitle("Server Response");
+                        try {
+                            builder.setMessage("Response " + response.getString("message"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    adminMessage.setText("");
+                                    adminTitle.setText("");
+                                }
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
 
-                            }
+                    }
+
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -132,15 +143,15 @@ public class MainFeedAdmin extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params = new HashMap<String, String>();
-
-                        params.put("title", msgTitle);
-                        params.put("description", message);
-
+//
+//                        params.put("title", msgTitle);
+//                        params.put("description", message);
+//
                         return params;
                     }
                 };
 
-                MySingleton.getInstance(MainFeedAdmin.this).addToRequestQueue(stringRequest);
+                MySingleton.getInstance(MainFeedAdmin.this).addToRequestQueue(jsonObjReq);
 
             }
         });
