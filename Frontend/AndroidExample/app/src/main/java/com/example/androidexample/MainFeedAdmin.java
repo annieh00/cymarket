@@ -41,12 +41,16 @@ public class MainFeedAdmin extends AppCompatActivity {
 
     private EditText adminMessage;
 
+    private EditText adminTitle;
+
     private Button sendMsgBtn;
 
-    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements/create";
+//    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
     //insert url here
 
+//  String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
 
+    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements/create";
     AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,12 @@ public class MainFeedAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed_admin);
 
+        adminTitle = findViewById(R.id.DescTitle);
         adminMessage = findViewById(R.id.announcementText);    // link to confirm edtext in the Signup activity XML
         sendMsgBtn = findViewById(R.id.sendMsgBtn);
+
+
+
         builder = new AlertDialog.Builder(MainFeedAdmin.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,8 +98,10 @@ public class MainFeedAdmin extends AppCompatActivity {
 //                String announcement = adminMessage.toString();
 //                sendAnnouncementToServer(announcement);
 
-                final String message;
+                final String message, msgTitle;
+                msgTitle = adminTitle.getText().toString();
                 message = adminMessage.getText().toString();
+
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
                         new Response.Listener<String>() {
@@ -103,6 +113,7 @@ public class MainFeedAdmin extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         adminMessage.setText("");
+                                        adminTitle.setText("");
                                     }
                                 });
                                 AlertDialog alertDialog = builder.create();
@@ -121,7 +132,10 @@ public class MainFeedAdmin extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params = new HashMap<String, String>();
-                        params.put("message", message);
+
+                        params.put("title", msgTitle);
+                        params.put("description", message);
+
                         return params;
                     }
                 };
