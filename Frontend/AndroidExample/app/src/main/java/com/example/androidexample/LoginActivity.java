@@ -20,6 +20,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 
+import com.android.volley.toolbox.Volley;
+import com.example.androidexample.Const;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,18 +34,23 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTxt, passwordTxt;  //these text boxes are where the user enters their credentials
     private Button loginButton;         // the login button is used to submit the credentials of the user
     private Button signupButton;        // the sign up button is used to indicate that the user wants to sign up, and it will lead to another screen
-    public static String username;    //the user's full name given to Iowa State
+ //   public static String username;    //the user's full name given to Iowa State
     private String TAG = LoginActivity.class.getSimpleName(); //the tag used to identify JSON object requests
-    public static int userID = 0;       //id of the user who is currently logged in
-    public static int myPermission = 0; //0=admin, 1=organizer, 2=normal user
-    public static String profilePicture;        //the user's profile picture
+//    public static int userID = 0;       //id of the user who is currently logged in
+//    public static int permission = 0; //0=admin, 1=organizer, 2=normal user
+//    public static String profilePicture;        //the user's profile picture
     public static String password;      //the user's password
+    public static String firstName;//
+
+    public static String lastName;
+    public static String userType;
+    public static String username;
     public static String email;         //the user's email
-    public static String dateCreated;
+//    public static String dateCreated; //the date that the account was created
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req"; //this is the tag names
-    private Boolean userValidity = true; //this boolean is meant to validate the user
-
-
+//    private Boolean userValidity = true; //this boolean is meant to validate the user
+    private Boolean txtValidity = true;
+    public Boolean validUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         //Buttons
         loginButton = findViewById(R.id.login_login_btn);    // link to login button in the Login activity XML
         signupButton = findViewById(R.id.login_signup_btn);  // link to signup button in the Login activity XML
+
 
 
         /* click listener on signup button pressed */
@@ -73,12 +82,18 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /* grab strings from user inputs */
-                if (userValidity == true) {
-                    sendJsonObjReq();
+                //sendJsonObjReq();
+                if (v.getId() == R.id.login_login_btn){
+                    Pass();
                 }
-
+                /* grab strings from user inputs */
+//                if (txtValidity == true) {
+                     sendJsonObjReq();
+//                    Pass();
+//                }else if (!txtValidity){
+//                    Pass();
+//                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
+//                }
                 /* when login button is pressed, use intent to switch to Login Activity */
 //                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
@@ -89,59 +104,61 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    public void Pass(){
+//        if (!(emailTxt.getText().toString().contains("@iastate.edu"))){
+//            txtValidity = false;
+//        }else if (passwordTxt.getText().length() < 8){
+//            passwordTxt.setError("Password must be at least 8 characters long");
+//            txtValidity = false;
+//        }else{
+//            txtValidity = true;
+//        }
+    }
 
-
-
+    String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
 
     private void sendJsonObjReq() {
+        RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();
+        JSONObject body = new JSONObject();
         try {
             //input your API parameters
             jsonObject.put("email", emailTxt.getText().toString());
             jsonObject.put("password", passwordTxt.getText().toString());
-//            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        System.out.println(jsonObject.toString());
-        String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                URL_POST_LOGIN_USER, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, URL_POST_LOGIN_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-                Toast.makeText(LoginActivity.this, "assigning values", Toast.LENGTH_LONG).show();
-                email = response.getString("email");
-                password = response.getString("password");
-                try {
-                    username = response.getString("username");
-                    profilePicture = response.getString("pfp");
-                    userID = response.getInt("userId");
-                    dateCreated = response.getString("dateCreated");
-                } catch (JSONException e) {
-                    profilePicture = "";
-                }
-                try {
-                    myPermission = response.getInt("permission");
-                } catch (Exception e) {
-                    myPermission = 2;
-                }
+//                email = response.getString("email");
+//                password = response.getString("password");
+                validUser = response.getBoolean("fromServer");
+//                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
-            Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+
+            if (validUser){
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+            }
+
+
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
             Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-            userValidity = false;
+            txtValidity = true;
         }) {
 
             /**
              * Passing some request headers
-             * */
+             */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -149,7 +166,19 @@ public class LoginActivity extends AppCompatActivity {
                 return headers;
             }
 
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+
         };
+
+        //queue.add(jsonObjReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
+
 
     }
 }
