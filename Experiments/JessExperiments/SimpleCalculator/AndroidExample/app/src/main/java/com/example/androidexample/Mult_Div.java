@@ -45,9 +45,9 @@ public class Mult_Div extends AppCompatActivity {
         multiply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int number1 = Integer.parseInt(num1.getText().toString());
-                int number2 = Integer.parseInt(num2.getText().toString());
-                int sum = number1 * number2;
+                Double number1 = Double.parseDouble(num1.getText().toString());
+                Double number2 = Double.parseDouble(num2.getText().toString());
+                double sum = number1 * number2;
 
                 result.setText("Answer:  " + String.valueOf(sum));
             }
@@ -56,9 +56,9 @@ public class Mult_Div extends AppCompatActivity {
         divide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int number1 = Integer.parseInt(num1.getText().toString());
-                int number2 = Integer.parseInt(num2.getText().toString());
-                int sum = number1 / number2;
+                double number1 = Double.parseDouble(num1.getText().toString());
+                double number2 = Double.parseDouble(num2.getText().toString());
+                double sum = number1 / number2;
 
                 result.setText("Answer:  " + String.valueOf(sum));
             }
