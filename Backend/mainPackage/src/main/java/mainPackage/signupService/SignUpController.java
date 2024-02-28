@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 
 
 /**
@@ -22,9 +23,18 @@ public class SignUpController {
 
     //create
     @PostMapping("/signup")
-    public String createUser(@RequestBody GeneralUser generalUser){
-        generalUserRepository.save(generalUser);
-        return "Welcome! " + generalUser.getFirstName();
+    public Object createUser(@RequestBody GeneralUser generalUser){
+        HashMap<String,Boolean> ret = new HashMap<>();
+        try{
+            generalUserRepository.save(generalUser);
+        }catch (Exception e){
+            e.printStackTrace();
+            ret.put("fromServer",false);
+            return ret;
+        }
+        ret.put("fromServer",true);
+        return ret;
+        //return "Welcome! " + generalUser.getFirstName();
     }
 
 
