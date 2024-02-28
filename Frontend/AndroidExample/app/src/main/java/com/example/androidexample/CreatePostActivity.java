@@ -59,6 +59,12 @@ public class CreatePostActivity extends AppCompatActivity{
     private ImageView image4 = null;
     private ImageView image5 = null;
     private ImageView image6 = null;
+    private String imageString1 = null;
+    private String imageString2 = null;
+    private String imageString3 = null;
+    private String imageString4 = null;
+    private String imageString5 = null;
+    private String imageString6 = null;
 
     private String title;
     private String description;
@@ -140,6 +146,7 @@ public class CreatePostActivity extends AppCompatActivity{
             jsonObject.put("picture4", titleEditText.getText().toString());
             jsonObject.put("picture5", titleEditText.getText().toString());
             jsonObject.put("picture6", titleEditText.getText().toString());
+            body.put("post", jsonObject);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -151,9 +158,16 @@ public class CreatePostActivity extends AppCompatActivity{
                 category = response.getString("category");
                 title = response.getString("title");
                 description = response.getString("description");
+                imageString1 = response.getString("picture1");
+                imageString2 = response.getString("picture2");
+                imageString3 = response.getString("picture3");
+                imageString4 = response.getString("picture4");
+                imageString5 = response.getString("picture5");
+                imageString6 = response.getString("picture6");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
 
 
 

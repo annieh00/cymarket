@@ -37,7 +37,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button signupButton;        // define signup button variable
     private String TAG = SignupActivity.class.getSimpleName(); //the tag used to identify JSON object requests
     public String email;
-    public Boolean alreadyExists;
+    public Boolean signupSuccess = false;
     public String passsword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                 String username = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
-
-                if (alreadyExists == false && password.equals(confirm)){
-                    sendJsonObjReq();
-                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(SignupActivity.this, "Please login now", Toast.LENGTH_LONG).show();
-                }else{
-                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                    Toast.makeText(SignupActivity.this, "Passwords don't match", Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-                }
+                sendJsonObjReq();
 
             }
         });
@@ -100,14 +90,23 @@ public class SignupActivity extends AppCompatActivity {
         }
 
 //        System.out.println(jsonObject.toString());
-        String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data3";
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, URL_POST_LOGIN_USER, jsonObject, response -> {
+//        String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data3";
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_REGISTER_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-                alreadyExists = response.getBoolean("fromServer");
-
+                signupSuccess = response.getBoolean("fromServer");
+//                Toast.makeText(SignupActivity.this, "" + alreadyExists, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 throw new RuntimeException(e);
+            }
+            if (signupSuccess){
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+                Toast.makeText(SignupActivity.this, "Please login now", Toast.LENGTH_LONG).show();
+            }else{
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                Toast.makeText(SignupActivity.this, "User already in database", Toast.LENGTH_LONG).show();
+                startActivity(intent);
             }
 
         }, error -> {

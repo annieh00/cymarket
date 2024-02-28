@@ -52,9 +52,15 @@ public class MainFeedAdmin extends AppCompatActivity {
     private Button displayUsersBtn;
     private TextView allUsersTxt;
     private RequestQueue mQueue;
-    String[] items = {"Material", "Design", "Components", "Android", "5.0 Lollipop"};
-    AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> adapterItems;
+
+    private EditText deleteUser;
+    private String deleteUserString;
+    private Button deleteBtn;
+    private boolean deleteUserBool;
+//    String[] items = {"Material", "Design", "Components", "Android", "5.0 Lollipop"};
+//    AutoCompleteTextView autoCompleteTextView;
+//    ArrayAdapter<String> adapterItems;
+
 
 //    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
     //insert url here
@@ -75,16 +81,17 @@ public class MainFeedAdmin extends AppCompatActivity {
         allUsersTxt = findViewById(R.id.displayUsersTxt);
         displayUsersBtn = findViewById(R.id.displayUsersBtn);
         mQueue = Volley.newRequestQueue(this);
-        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
-        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
-        autoCompleteTextView.setAdapter(adapterItems);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String item = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(MainFeedAdmin.this, "Item:" + item, Toast.LENGTH_LONG).show();
-            }
-        });
+        deleteBtn = findViewById(R.id.deleteButton);
+//        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
+//        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
+//        autoCompleteTextView.setAdapter(adapterItems);
+//        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String item = adapterView.getItemAtPosition(i).toString();
+//                Toast.makeText(MainFeedAdmin.this, "Item:" + item, Toast.LENGTH_LONG).show();
+//            }
+//        });
         displayUsersBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,18 +121,66 @@ public class MainFeedAdmin extends AppCompatActivity {
 
         }
 
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                deleteUserString = deleteUser.getText().toString();
+
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("deleteUser", deleteUserString);
+//                    jsonBody.put("description", message);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_GET_ALL_USERS, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            deleteUserBool = response.getBoolean("deleteUser");
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        if (deleteUserBool == true){
+                            Toast.makeText(MainFeedAdmin.this, "User successfully deleted", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainFeedAdmin.this, "Something was wrong", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainFeedAdmin.this, "Error....", Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }){
+                    //                    @Nullable
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<String, String>();
+//
+//                        params.put("title", msgTitle);
+//                        params.put("description", message);
+//
+                        return params;
+                    }
+                };
+
+                MySingleton.getInstance(MainFeedAdmin.this).addToRequestQueue(jsonObjReq);
+
+            }
+        });
 
 
 
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                final String
-//
-//                String announcement = adminMessage.toString();
-//                sendAnnouncementToServer(announcement);
 
                 final String message, msgTitle;
                 msgTitle = adminTitle.getText().toString();
@@ -189,20 +244,18 @@ public class MainFeedAdmin extends AppCompatActivity {
     }
     private void jsonParse() {
 
-        String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/users";
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_USERS, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray jsonArray = response.getJSONArray("employees");
+                            JSONArray jsonArray = response.getJSONArray("users");
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject employee = jsonArray.getJSONObject(i);
+                                JSONObject users = jsonArray.getJSONObject(i);
 
-                                String firstName = employee.getString("firstName");
-                                String lastName = employee.getString("lastName");
-                                int age = employee.getInt("age");
-                                String mail = employee.getString("mail");
+                                String firstName = users.getString("firstName");
+                                String lastName = users.getString("lastName");
+                                int age = users.getInt("age");
+                                String mail = users.getString("mail");
 
                                 allUsersTxt.append(mail + ", ");
                             }

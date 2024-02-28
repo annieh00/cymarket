@@ -9,5 +9,8 @@ public class Const {
     public static final String URL_POST_REGISTER_USER = DOMAIN + "/signup";
     //URL to make a post
     public static final String URL_CREATE_POST = DOMAIN + "/create_post";
+    public static final String URL_GET_ALL_USERS = DOMAIN + URL_POST_LOGIN_USER + "/getAllUsers";
+
+    public static final String URL_DELETE_USER = DOMAIN + URL_POST_LOGIN_USER + "/delete";
 
 }
