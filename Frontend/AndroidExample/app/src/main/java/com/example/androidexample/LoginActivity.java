@@ -123,13 +123,13 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject body = new JSONObject();
         try {
             //input your API parameters
-            jsonObject.put("email", emailTxt.getText().toString());
-            jsonObject.put("password", passwordTxt.getText().toString());
+            jsonObject.put("email", emailTxt.getText().toString().trim());
+            jsonObject.put("password", passwordTxt.getText().toString().trim());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, URL_POST_LOGIN_USER, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_LOGIN_USER, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
 //                email = response.getString("email");
