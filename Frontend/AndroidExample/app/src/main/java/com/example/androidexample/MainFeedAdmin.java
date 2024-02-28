@@ -12,8 +12,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +49,13 @@ public class MainFeedAdmin extends AppCompatActivity {
 
     private Button sendMsgBtn;
 
+    private Button displayUsersBtn;
+    private TextView allUsersTxt;
+    private RequestQueue mQueue;
+    String[] items = {"Material", "Design", "Components", "Android", "5.0 Lollipop"};
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterItems;
+
 //    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
     //insert url here
 
@@ -54,17 +65,32 @@ public class MainFeedAdmin extends AppCompatActivity {
     AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main_feed_admin);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed_admin);
 
         adminTitle = findViewById(R.id.DescTitle);
         adminMessage = findViewById(R.id.announcementText);    // link to confirm edtext in the Signup activity XML
         sendMsgBtn = findViewById(R.id.sendMsgBtn);
-
-
+        displayUsersBtn = findViewById(R.id.displayUsersBtn);
+        allUsersTxt = findViewById(R.id.displayUsersTxt);
+        displayUsersBtn = findViewById(R.id.displayUsersBtn);
+        mQueue = Volley.newRequestQueue(this);
+        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
+        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
+        autoCompleteTextView.setAdapter(adapterItems);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(MainFeedAdmin.this, "Item:" + item, Toast.LENGTH_LONG).show();
+            }
+        });
+        displayUsersBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jsonParse();
+            }
+        });
 
         builder = new AlertDialog.Builder(MainFeedAdmin.this);
 
@@ -87,6 +113,9 @@ public class MainFeedAdmin extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
+
+
 
 
         sendMsgBtn.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +184,40 @@ public class MainFeedAdmin extends AppCompatActivity {
 
             }
         });
+
+
+    }
+    private void jsonParse() {
+
+        String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/users";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("employees");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject employee = jsonArray.getJSONObject(i);
+
+                                String firstName = employee.getString("firstName");
+                                String lastName = employee.getString("lastName");
+                                int age = employee.getInt("age");
+                                String mail = employee.getString("mail");
+
+                                allUsersTxt.append(mail + ", ");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        mQueue.add(request);
     }
 }
 
