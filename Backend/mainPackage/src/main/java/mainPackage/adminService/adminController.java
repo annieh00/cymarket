@@ -33,7 +33,7 @@ public class adminController {
     }
 
     // Update
-    @PatchMapping("/announcements/update/{id}")
+    @PutMapping("/announcements/update/{id}")
     public String updateAnnouncement(@PathVariable("id") int id, @RequestBody Announcement a) {
         Announcement existingAnnouncement = announcementRepository.findAnnouncementById(id);
 
@@ -78,9 +78,4 @@ public class adminController {
     public List<Announcement> getAllAnnouncements() {
         return announcementRepository.findAll();
     }
-}
-
-class Message {
-    String status;
-    Message (String s) { status = s;}
 }
