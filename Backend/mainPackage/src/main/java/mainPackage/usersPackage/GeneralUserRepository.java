@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
     public GeneralUser findGeneralUserByUserName(String uid);
     public ArrayList<GeneralUser> findGeneralUsersByUserType(int userType);
-    //@Query(value = "SELECT * FROM USERS WHERE email = ?0 AND password = ?1",nativeQuery = true)
+
     public GeneralUser findGeneralUserByEmailAndPassword(String email, String password);
 
 

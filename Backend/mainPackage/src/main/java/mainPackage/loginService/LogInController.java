@@ -101,26 +101,31 @@ public class LogInController {
     }
 
     //delete
-    @DeleteMapping("/login/deleteUser/{email}")
-    public String deleteUser(@PathVariable(name = "email") String email){
-        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
-        if(db == null){
-            return "{\"deleteUser\" : false}";
-        }
+//    @DeleteMapping("/login/deleteUser/{email}")
+//    public String deleteUser(@PathVariable(name = "email") String email){
+//        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
+//        if(db == null){
+//            return "{\"deleteUser\" : false}";
+//        }
+//
+//        //String msg = db.getUserName() + " was successfully deleted";
+//        generalUserRepository.delete(db);
+//        return "{\"deleteUser\" : true}";
+//    }
 
-        //String msg = db.getUserName() + " was successfully deleted";
-        generalUserRepository.delete(db);
-        return "{\"deleteUser\" : true}";
-    }
-
-    @PostMapping("/login/deleteUser/")
+    @PostMapping("/login/deleteUser")
     public String deleteUser(@RequestBody GeneralUser userToEdit){
+        System.out.println(userToEdit.getEmail());
+        System.out.println(userToEdit.getPassword());
         GeneralUser db = generalUserRepository.findGeneralUserByEmail(userToEdit.getEmail());
         if(db == null){
             return "{\"deleteUser\" : false}";
         }
         //String msg = db.getUserName() + " was successfully deleted";
+        //System.out.println(db.getUserName());
         generalUserRepository.delete(db);
+        GeneralUser gg =generalUserRepository.findGeneralUserByEmail(db.getEmail());
+        System.out.println(gg);
         return "{\"deleteUser\" : true}";
     }
 
