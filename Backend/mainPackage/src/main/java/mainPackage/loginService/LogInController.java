@@ -5,7 +5,7 @@ import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,31 +26,30 @@ public class LogInController {
 
     //read
     @PostMapping("/login")
-    public boolean checkUser(@RequestBody GeneralUser generalUser){
-        GeneralUser user = generalUserRepository.findGeneralUserByEmailAndPassword(generalUser.getUserName(), generalUser.getPassword());
-        if(user == null){
-            return false;
+    public String checkUser(@RequestBody GeneralUser generalUser){
+
+        GeneralUser user = generalUserRepository.findGeneralUserByEmail(generalUser.getEmail());
+        System.out.println(generalUser.getEmail());
+        System.out.println(generalUser.getPassword());
+        System.out.println(user);
+
+        if(user == null || !(user.getPassword().equals(generalUser.getPassword()))){
+            return "{\"fromServer\" : false}";
         }
         //return "welcome back! " + user.getUserName() ;
-        return true;
+        System.out.println("returned true!");
+        return "{\"fromServer\" : true}";
     }
 
     /*REMOVE METHODS BELOW AFTER DEMO2*/
 
     //list/read
-    @GetMapping("/login/getUsers/{mode}")
-    public ArrayList<GeneralUser> getUsers(@PathVariable(name="mode") int mode){
-        if(mode > 3 || mode < 0)return null;
-        if(mode == 0){
-            return generalUserRepository.findGeneralUsersByUserType(0);
-        }
-        if(mode == 1){
-            return generalUserRepository.findGeneralUsersByUserType(1);
-        }
-        if(mode == 2){
-            return generalUserRepository.findGeneralUsersByUserType(2);
-        }
-       return generalUserRepository.findAll();
+    @GetMapping("/login/getAllUsers")
+    public String getUsers(){
+        ArrayList<GeneralUser> mylist = generalUserRepository.findAll();
+        String json = new Gson().toJson(mylist);
+
+        return "{ \"users\" :" +json + "}";
     }
 
     private void updateUser(GeneralUser db, GeneralUser req){
@@ -74,34 +73,34 @@ public class LogInController {
 
     //update
     @PostMapping("/login/editUser")
-    public Object updateUser(@RequestBody ArrayList<GeneralUser> old2new){
-        if(old2new.size() != 2)return null;
+    public Object updateUser(@RequestBody GeneralUser userToEdit){
 
-        GeneralUser old = old2new.get(0);
-        GeneralUser newUser = old2new.get(1);
+        GeneralUser editedUser;
 
-        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(old.getEmail(),old.getPassword());
-
+        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(userToEdit.getEmail(),userToEdit.getPassword());
+        db.setUserName(userToEdit.getUserName());
+        generalUserRepository.save(db);
         if(db == null){
-            return "user does not exist";
-        }
-        if(generalUserRepository.findGeneralUserByEmail(newUser.getEmail()) != null && !(db.getEmail().equals(newUser.getEmail())) ){
-            return "email already exists";
+            return "{\"response\" : " + db.getUserName() +"}";
         }
 
-        updateUser(db,newUser);
+
+        //updateUser(db,newUser);
         return db;
 
     }
 
     //delete
-    @PostMapping("/login/deleteUser")
-    public Object deleteUser(@RequestBody GeneralUser delUser){
-        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(delUser.getEmail(),delUser.getPassword());
-        if(db == null)return "user cannot be delete because it does not exist";
-        String msg = db.getUserName() + " was successfully deleted";
+    @DeleteMapping("/login/deleteUser")
+    public String deleteUser(@RequestBody GeneralUser delUser){
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(delUser.getEmail());
+        if(db == null){
+            return "{\"deleteUser\" : false}";
+        }
+
+        //String msg = db.getUserName() + " was successfully deleted";
         generalUserRepository.delete(db);
-        return msg;
+        return "{\"deleteUser\" : true}";
     }
 
 
