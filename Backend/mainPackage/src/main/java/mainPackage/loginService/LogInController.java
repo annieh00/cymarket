@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Junhyung Shim
@@ -72,32 +73,52 @@ public class LogInController {
     }
 
     //update
-    @PostMapping("/login/editUser")
-    public Object updateUser(@RequestBody GeneralUser userToEdit){
+    @PutMapping("/login/editUser")
+    public String updateUser(@RequestBody HashMap<String,ArrayList<GeneralUser>> editList){
 
-        GeneralUser editedUser;
+        ArrayList<GeneralUser> arr = editList.get("array");
+        GeneralUser before = arr.get(0);
+        GeneralUser after = arr.get(1);
 
-        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(userToEdit.getEmail(),userToEdit.getPassword());
-        db.setUserName(userToEdit.getUserName());
-        generalUserRepository.save(db);
+        System.out.println(before.getEmail());
+        System.out.println(before.getPassword());
+
+        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(before.getEmail(), before.getPassword());
         if(db == null){
-            return "{\"response\" : " + db.getUserName() +"}";
+            return "{\"response\" : " + "\"user does not exist\"" +"}";
         }
+        String oldP = before.getPassword();
+        String newP = after.getPassword();
+        db.setPassword(after.getPassword());
+        generalUserRepository.save(db);
+
+
 
 
         //updateUser(db,newUser);
-        return db;
+        return "{\"response\" : " + "\"" +"pw changed from "+ oldP + " to " + newP +"\"" +"}";
 
     }
 
     //delete
-    @DeleteMapping("/login/deleteUser")
-    public String deleteUser(@RequestBody GeneralUser delUser){
-        GeneralUser db = generalUserRepository.findGeneralUserByEmail(delUser.getEmail());
+    @DeleteMapping("/login/deleteUser/{email}")
+    public String deleteUser(@PathVariable(name = "email") String email){
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
         if(db == null){
             return "{\"deleteUser\" : false}";
         }
 
+        //String msg = db.getUserName() + " was successfully deleted";
+        generalUserRepository.delete(db);
+        return "{\"deleteUser\" : true}";
+    }
+
+    @PostMapping("/login/deleteUser/")
+    public String deleteUser(@RequestBody GeneralUser userToEdit){
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(userToEdit.getEmail());
+        if(db == null){
+            return "{\"deleteUser\" : false}";
+        }
         //String msg = db.getUserName() + " was successfully deleted";
         generalUserRepository.delete(db);
         return "{\"deleteUser\" : true}";
