@@ -44,6 +44,8 @@ public class MainFeedAdmin extends AppCompatActivity {
     private DrawerLayout nDrawerLayout;
 
     private EditText adminMessage;
+    private String TAG = MainFeedAdmin.class.getSimpleName(); //the tag used to identify JSON object requests
+
 
     private EditText adminTitle;
 
@@ -57,6 +59,21 @@ public class MainFeedAdmin extends AppCompatActivity {
     private String deleteUserString;
     private Button deleteBtn;
     private boolean deleteUserBool;
+    private String firstName;
+    private String lastName;
+    private String password;
+    private String userName;
+    private int userType;
+    private int uid;
+    private EditText oldEmail;
+    private EditText oldPassword;
+    private EditText newPassword;
+    private Button updatePasswordBtn;
+    private String oldEmailString;
+    private String oldPasswordString;
+    private String newPasswordString;
+    private String updatedPassword;
+
 //    String[] items = {"Material", "Design", "Components", "Android", "5.0 Lollipop"};
 //    AutoCompleteTextView autoCompleteTextView;
 //    ArrayAdapter<String> adapterItems;
@@ -79,9 +96,14 @@ public class MainFeedAdmin extends AppCompatActivity {
         sendMsgBtn = findViewById(R.id.sendMsgBtn);
         displayUsersBtn = findViewById(R.id.displayUsersBtn);
         allUsersTxt = findViewById(R.id.displayUsersTxt);
-        displayUsersBtn = findViewById(R.id.displayUsersBtn);
+//        displayUsersBtn = findViewById(R.id.displayUsersBtn);
         mQueue = Volley.newRequestQueue(this);
         deleteBtn = findViewById(R.id.deleteButton);
+        deleteUser = findViewById(R.id.deleteTxt);
+        oldEmail = findViewById(R.id.oldEmail);
+        oldPassword = findViewById(R.id.oldPassword);
+        newPassword = findViewById(R.id.newUserPassword);
+        updatePasswordBtn = findViewById(R.id.updatePasswordBtn);
 //        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
 //        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
 //        autoCompleteTextView.setAdapter(adapterItems);
@@ -121,21 +143,149 @@ public class MainFeedAdmin extends AppCompatActivity {
 
         }
 
+        updatePasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                oldEmailString = oldEmail.getText().toString().trim();
+                oldPasswordString = oldPassword.getText().toString().trim();
+                newPasswordString = newPassword.getText().toString().trim();
+
+
+                JSONObject wrapper = new JSONObject();
+                JSONArray arr = new JSONArray();
+                JSONObject old = new JSONObject();
+                JSONObject updated = new JSONObject();
+                try {
+                    old.put("email", oldEmailString);
+                    old.put("password", oldPasswordString);
+                    updated.put("email", "");
+                    updated.put("password", newPasswordString);
+                    arr.put(old);
+                    arr.put(updated);
+                    wrapper.put("array",arr);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT, Const.URL_UPDATE_USER,wrapper , new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            updatedPassword = response.getString("response");
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                            Toast.makeText(MainFeedAdmin.this, "Password Updated Successfully! " + updatedPassword, Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainFeedAdmin.this, "Error....", Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }){
+                    //                    @Nullable
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<String, String>();
+//
+//                        params.put("title", msgTitle);
+//                        params.put("description", message);
+//
+                        return params;
+                    }
+                };
+
+                MySingleton.getInstance(MainFeedAdmin.this).addToRequestQueue(jsonObjReq);
+
+            }
+        });
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                deleteUserString = deleteUser.getText().toString();
+                deleteUserString = deleteUser.getText().toString().trim();
+
 
                 JSONObject jsonBody = new JSONObject();
                 try {
-                    jsonBody.put("deleteUser", deleteUserString);
-//                    jsonBody.put("description", message);
+                    jsonBody.put("email", deleteUserString);
+//                    jsonBody.put("firstName", firstName);
+//                    jsonBody.put("lastName", lastName);
+//                    jsonBody.put("password", password);
+//                    jsonBody.put("userName", userName);
+//                    jsonBody.put("userType", userType);
+//                    jsonBody.put("uid", uid);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_GET_ALL_USERS, jsonBody, new Response.Listener<JSONObject>() {
+                Log.d(TAG, jsonBody.toString());
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_DELETE_USER, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            deleteUserBool = response.getBoolean("deleteUser");
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        if (deleteUserBool == true){
+                            Toast.makeText(MainFeedAdmin.this, "User successfully deleted", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainFeedAdmin.this, "Something was wrong", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainFeedAdmin.this, "Error....", Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }){
+                    //                    @Nullable
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<String, String>();
+//
+//                        params.put("title", msgTitle);
+//                        params.put("description", message);
+//
+                        return params;
+                    }
+                };
+
+                MySingleton.getInstance(MainFeedAdmin.this).addToRequestQueue(jsonObjReq);
+
+            }
+        });
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                deleteUserString = deleteUser.getText().toString().trim();
+
+
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("email", deleteUserString);
+                    jsonBody.put("firstName", firstName);
+                    jsonBody.put("lastName", lastName);
+                    jsonBody.put("password", password);
+                    jsonBody.put("userName", userName);
+                    jsonBody.put("userType", userType);
+                    jsonBody.put("uid", uid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d(TAG, jsonBody.toString());
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_DELETE_USER, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -248,14 +398,15 @@ public class MainFeedAdmin extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+//                            JSONObject temp = response.getJSONObject;
                             JSONArray jsonArray = response.getJSONArray("users");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject users = jsonArray.getJSONObject(i);
 
-                                String firstName = users.getString("firstName");
-                                String lastName = users.getString("lastName");
-                                int age = users.getInt("age");
-                                String mail = users.getString("mail");
+//                                String firstName = users.getString("firstName");
+//                                String lastName = users.getString("lastName");
+//                                int age = users.getInt("age");
+                                String mail = users.getString("email");
 
                                 allUsersTxt.append(mail + ", ");
                             }
