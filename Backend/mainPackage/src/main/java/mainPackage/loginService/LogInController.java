@@ -26,12 +26,13 @@ public class LogInController {
 
     //read
     @PostMapping("/login")
-    public String checkUser(@RequestBody GeneralUser generalUser){
+    public boolean checkUser(@RequestBody GeneralUser generalUser){
         GeneralUser user = generalUserRepository.findGeneralUserByEmailAndPassword(generalUser.getUserName(), generalUser.getPassword());
         if(user == null){
-            return "user does not exist OR password incorrect password";
+            return false;
         }
-        return "welcome back! " + user.getUserName() ;
+        //return "welcome back! " + user.getUserName() ;
+        return true;
     }
 
     /*REMOVE METHODS BELOW AFTER DEMO2*/

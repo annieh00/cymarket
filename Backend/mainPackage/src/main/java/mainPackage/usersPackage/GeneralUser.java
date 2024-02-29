@@ -3,17 +3,17 @@ package mainPackage.usersPackage;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 /**
  * @author Junhyung Shim
  * implementation of normal user
  * Watch out for getter and setter names, it might cause errors
  * */
-
+@TableGenerator(
+        name = "usersGenerator",
+        allocationSize = 1,
+        initialValue = 1)
 @Entity
 @Table(name="users")
 public class GeneralUser {
@@ -27,6 +27,9 @@ public class GeneralUser {
     @Column(name = "email",unique = true)
     private String email;
 
+    @GeneratedValue(
+            strategy=GenerationType.TABLE,
+            generator="usersGenerator")
     @Id
     @Column(name = "uid")
     private int id;

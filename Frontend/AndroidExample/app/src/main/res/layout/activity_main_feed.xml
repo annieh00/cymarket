@@ -46,6 +46,78 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_anchor="@+id/constraintLayout2"
+            app:layout_anchorGravity="center">
+
+            <EditText
+                android:id="@+id/yInput"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.758"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.205" />
+
+            <TextView
+                android:id="@+id/yCoordInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter X Coord:"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.105"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.121" />
+
+            <TextView
+                android:id="@+id/xCoordInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Y Coord:"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.844"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.121" />
+
+            <EditText
+                android:id="@+id/xInput"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.205" />
+
+            <Button
+                android:id="@+id/locationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Location"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.292" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

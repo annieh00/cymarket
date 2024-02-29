@@ -168,7 +168,7 @@ public class CreatePostActivity extends AppCompatActivity{
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post failed ", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreatePostActivity.this, "Post failed sd", Toast.LENGTH_LONG).show();
             }
 
 
