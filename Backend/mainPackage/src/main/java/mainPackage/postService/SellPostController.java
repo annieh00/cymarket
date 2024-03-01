@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class SellPostController {
 
 
     //Read/list
-    @GetMapping("/posts")
+    @GetMapping("/getAllPosts")
     public String getPosts(){
         ArrayList<Posting> mylist = postingRepository.findAll();
         String json = new Gson().toJson(mylist);
@@ -78,21 +79,29 @@ public class SellPostController {
     }
 
     //update
-    @PostMapping("posts/update")
-    public Posting updatePost(@RequestBody Posting update){
-        Posting p = postingRepository.findPostingById(update.getId());
-        if(p == null)return null;
-        updatePost(p,update);
-        postingRepository.save(p);
-        return p;
+    @PostMapping("/posts/update")
+    public String updatePost(@RequestBody Posting editpost){
+
+        Posting p = postingRepository.findPostingById(editpost.getId());
+
+        if(p == null){
+            return "{\"serverResponse\" : false}";
+        }
+        //updatePost(p,update);
+        p.setTitle(editpost.getTitle());
+        Posting p2 = p;
+        postingRepository.save(p2);
+        return "{\"serverResponse\" : true}";
     }
 
-    @PostMapping("posts/del/{pid}")
-    public String deletePost(@PathVariable(name = "pid") int pid){
-        Posting p = postingRepository.findPostingById(pid);
-        if(p==null)return "post does not exist";
-        String msg = "Successfully deleted"+ p.getDescription() + "written by: " + p.getUserName();
+    @PostMapping("/posts/delete")
+    public String deletePost(@RequestBody Posting delete){
+        Posting p = postingRepository.findPostingById(delete.getId());
+        if(p==null){
+            return "{ \"serverResponse\" : false}";
+        }
+
         postingRepository.delete(p);
-        return  msg;
+        return  "{ \"serverResponse\" : true}";
     }
 }

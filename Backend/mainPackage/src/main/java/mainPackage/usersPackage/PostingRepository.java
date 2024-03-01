@@ -13,5 +13,10 @@ public interface PostingRepository extends JpaRepository<Posting,Long> {
     ArrayList<Posting> findPostingByUserName(String author);
     Posting findPostingById(int id);
 
+    Posting findPostingByTitle(String title);
+
+    ArrayList<Posting> findPostingsByTitle(String title);
+
+
     public ArrayList<Posting> findAll();
 }
