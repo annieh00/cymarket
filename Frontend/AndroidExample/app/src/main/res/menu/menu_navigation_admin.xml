@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Admin Features">
+    <item android:title="Admin">
         <menu>
             <item
                 android:id="@+id/thing1"
-                android:title="admin feature 1"
+                android:title="adminfeat1"
                 >
 
             </item>
 
             <item
                 android:id="@+id/thing2"
-                android:title="admin feature 2">
+                android:title="adminfeat2">
 
             </item>
         </menu>
