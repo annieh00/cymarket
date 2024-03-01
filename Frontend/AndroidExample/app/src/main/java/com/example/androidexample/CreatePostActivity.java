@@ -52,6 +52,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
+    private EditText categoryEditTxt;
     private HorizontalScrollView images;
     private ImageView image1 = null;
     private ImageView image2 = null;
@@ -59,14 +60,27 @@ public class CreatePostActivity extends AppCompatActivity{
     private ImageView image4 = null;
     private ImageView image5 = null;
     private ImageView image6 = null;
-    private static final String ROOT_URL = "http://seoforworld.com/api/v1/file-upload.php";
-    private static final int REQUEST_PERMISSIONS = 100;
-    private static final int PICK_IMAGE_REQUEST =1 ;
+    private String imageString1 = null;
+    private String imageString2 = null;
+    private String imageString3 = null;
+    private String imageString4 = null;
+    private String imageString5 = null;
+    private String imageString6 = null;
+    private Boolean createPostSuccess;
+
+    private String title;
+    private String description;
+    private String usernameString;
+//    private static final String ROOT_URL = "http://seoforworld.com/api/v1/file-upload.php";
+//    private static final int REQUEST_PERMISSIONS = 100;
+//    private static final int PICK_IMAGE_REQUEST =1 ;
     private Bitmap bitmap;
     private String filePath;
 //    ImageView imageView;
     TextView textView;
     private  int userType = 0;
+
+    String URL_POST_LOGIN_USER = "";
 
 
 
@@ -92,7 +106,6 @@ public class CreatePostActivity extends AppCompatActivity{
         cancelBtn = findViewById(R.id.cancel_button);    // link to login button in the Login activity XML
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
         addImageBtn = findViewById(R.id.addImageButton); //link to add images
-
 
 
         /* click listener on signup button pressed */
@@ -131,15 +144,14 @@ public class CreatePostActivity extends AppCompatActivity{
         try {
             //input your API parameters
             jsonObject.put("title", titleEditText.getText().toString());
+//            jsonObject.put("category", categoryEditTxt.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
             jsonObject.put("username", username.getText().toString());
-//            jsonObject.put("picture1", titleEditText.getText().toString());
-//            jsonObject.put("picture2", titleEditText.getText().toString());
-//            jsonObject.put("picture3", titleEditText.getText().toString());
-//            jsonObject.put("picture4", titleEditText.getText().toString());
-//            jsonObject.put("picture5", titleEditText.getText().toString());
-//            jsonObject.put("picture6", titleEditText.getText().toString());
-
+//            jsonObject.put("title", "helloWorld");
+////            jsonObject.put("category", categoryEditTxt.getText().toString());
+//            jsonObject.put("description", "hello");
+            jsonObject.put("username", "world");
+            body.put("post", jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -147,9 +159,24 @@ public class CreatePostActivity extends AppCompatActivity{
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-
+                createPostSuccess = response.getBoolean("serverResponse");
+//                    title = response.getString("title");
+//                description = response.getString("description");
+//                imageString1 = response.getString("picture1");
+//                imageString2 = response.getString("picture2");
+//                imageString3 = response.getString("picture3");
+//                imageString4 = response.getString("picture4");
+//                imageString5 = response.getString("picture5");
+//                imageString6 = response.getString("picture6");
             } catch (Exception e) {
                 throw new RuntimeException(e);
+            }
+
+            if (createPostSuccess){
+                Toast.makeText(this, "Post was successful", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(this, "Something was wrong", Toast.LENGTH_LONG).show();
+
             }
 
 
