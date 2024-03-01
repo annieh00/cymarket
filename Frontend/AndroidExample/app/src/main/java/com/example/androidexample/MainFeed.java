@@ -10,6 +10,9 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+//import android.widget.ListAdapter;
+import android.widget.ListView;
+import java.util.ArrayList;
 import android.view.View;
 import android.widget.EditText;
 
@@ -25,6 +28,54 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import com.example.androidexample.ListAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +126,7 @@ String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocat
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
 
         setLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,5 +200,7 @@ String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocat
 
 
     }
+
+    private static final String URL_JSON_ARRAY = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/testCreatePost";
 
 }
