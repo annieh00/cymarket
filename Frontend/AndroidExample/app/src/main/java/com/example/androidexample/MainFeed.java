@@ -1,5 +1,6 @@
 package com.example.androidexample;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -140,6 +143,21 @@ String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocat
 
                 MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
 
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+              Intent intent = new Intent(getApplicationContext(), ViewPosts.class);
+              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//              intent.putExtra("URL", website); IDK ABOUT THIS LINE
+              getApplicationContext().startActivity(intent);
+
+
+              nDrawerLayout.closeDrawers();
+
+                return false;
             }
         });
 
