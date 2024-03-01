@@ -5,12 +5,13 @@ import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Junhyung Shim
@@ -26,31 +27,30 @@ public class LogInController {
 
     //read
     @PostMapping("/login")
-    public boolean checkUser(@RequestBody GeneralUser generalUser){
-        GeneralUser user = generalUserRepository.findGeneralUserByEmailAndPassword(generalUser.getUserName(), generalUser.getPassword());
-        if(user == null){
-            return false;
+    public String checkUser(@RequestBody GeneralUser generalUser){
+
+        GeneralUser user = generalUserRepository.findGeneralUserByEmail(generalUser.getEmail());
+        System.out.println(generalUser.getEmail());
+        System.out.println(generalUser.getPassword());
+        System.out.println(user);
+
+        if(user == null || !(user.getPassword().equals(generalUser.getPassword()))){
+            return "{\"fromServer\" : false}";
         }
         //return "welcome back! " + user.getUserName() ;
-        return true;
+        System.out.println("returned true!");
+        return "{\"fromServer\" : true}";
     }
 
     /*REMOVE METHODS BELOW AFTER DEMO2*/
 
     //list/read
-    @GetMapping("/login/getUsers/{mode}")
-    public ArrayList<GeneralUser> getUsers(@PathVariable(name="mode") int mode){
-        if(mode > 3 || mode < 0)return null;
-        if(mode == 0){
-            return generalUserRepository.findGeneralUsersByUserType(0);
-        }
-        if(mode == 1){
-            return generalUserRepository.findGeneralUsersByUserType(1);
-        }
-        if(mode == 2){
-            return generalUserRepository.findGeneralUsersByUserType(2);
-        }
-       return generalUserRepository.findAll();
+    @GetMapping("/login/getAllUsers")
+    public String getUsers(){
+        ArrayList<GeneralUser> mylist = generalUserRepository.findAll();
+        String json = new Gson().toJson(mylist);
+
+        return "{ \"users\" :" +json + "}";
     }
 
     private void updateUser(GeneralUser db, GeneralUser req){
@@ -73,35 +73,60 @@ public class LogInController {
     }
 
     //update
-    @PostMapping("/login/editUser")
-    public Object updateUser(@RequestBody ArrayList<GeneralUser> old2new){
-        if(old2new.size() != 2)return null;
+    @PutMapping("/login/editUser")
+    public String updateUser(@RequestBody HashMap<String,ArrayList<GeneralUser>> editList){
 
-        GeneralUser old = old2new.get(0);
-        GeneralUser newUser = old2new.get(1);
+        ArrayList<GeneralUser> arr = editList.get("array");
+        GeneralUser before = arr.get(0);
+        GeneralUser after = arr.get(1);
 
-        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(old.getEmail(),old.getPassword());
+        System.out.println(before.getEmail());
+        System.out.println(before.getPassword());
 
+        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(before.getEmail(), before.getPassword());
         if(db == null){
-            return "user does not exist";
+            return "{\"response\" : " + "\"user does not exist\"" +"}";
         }
-        if(generalUserRepository.findGeneralUserByEmail(newUser.getEmail()) != null && !(db.getEmail().equals(newUser.getEmail())) ){
-            return "email already exists";
-        }
+        String oldP = before.getPassword();
+        String newP = after.getPassword();
+        db.setPassword(after.getPassword());
+        generalUserRepository.save(db);
 
-        updateUser(db,newUser);
-        return db;
+
+
+
+        //updateUser(db,newUser);
+        return "{\"response\" : " + "\"" +"pw changed from "+ oldP + " to " + newP +"\"" +"}";
 
     }
 
     //delete
+//    @DeleteMapping("/login/deleteUser/{email}")
+//    public String deleteUser(@PathVariable(name = "email") String email){
+//        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
+//        if(db == null){
+//            return "{\"deleteUser\" : false}";
+//        }
+//
+//        //String msg = db.getUserName() + " was successfully deleted";
+//        generalUserRepository.delete(db);
+//        return "{\"deleteUser\" : true}";
+//    }
+
     @PostMapping("/login/deleteUser")
-    public Object deleteUser(@RequestBody GeneralUser delUser){
-        GeneralUser db = generalUserRepository.findGeneralUserByEmailAndPassword(delUser.getEmail(),delUser.getPassword());
-        if(db == null)return "user cannot be delete because it does not exist";
-        String msg = db.getUserName() + " was successfully deleted";
+    public String deleteUser(@RequestBody GeneralUser userToEdit){
+        System.out.println(userToEdit.getEmail());
+        System.out.println(userToEdit.getPassword());
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(userToEdit.getEmail());
+        if(db == null){
+            return "{\"deleteUser\" : false}";
+        }
+        //String msg = db.getUserName() + " was successfully deleted";
+        //System.out.println(db.getUserName());
         generalUserRepository.delete(db);
-        return msg;
+        GeneralUser gg =generalUserRepository.findGeneralUserByEmail(db.getEmail());
+        System.out.println(gg);
+        return "{\"deleteUser\" : true}";
     }
 
 

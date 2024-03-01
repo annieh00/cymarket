@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 /**
  * @author Junhyung Shim
  * */
+
+@TableGenerator(
+        name = "postsGenerator",
+        allocationSize = 1,
+        initialValue = 1)
 @Entity
 @Table(name = "posts")
 public class Posting {
@@ -37,7 +42,9 @@ public class Posting {
 //    private String picture6;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(
+            strategy=GenerationType.TABLE,
+            generator="usersGenerator")
     @Column(name = "postId")
     private int id;
     public String getUserName() {
