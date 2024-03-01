@@ -51,7 +51,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button cancelBtn;
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
-    private EditText category;
+    private EditText username;
     private HorizontalScrollView images;
     private ImageView image1 = null;
     private ImageView image2 = null;
@@ -66,6 +66,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private String filePath;
 //    ImageView imageView;
     TextView textView;
+    private  int userType = 0;
 
 
 
@@ -79,6 +80,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         titleEditText = findViewById(R.id.Title);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
+        username = findViewById(R.id.usernameEditTxt);
         image1 = findViewById(R.id.image1);
         image2 = findViewById(R.id.image2);
         image3 = findViewById(R.id.image3);
@@ -97,6 +99,7 @@ public class CreatePostActivity extends AppCompatActivity{
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendJsonObjReq();
                 /* when post button is pressed, use intent to switch to Signup Activity */
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);  // go to SignupActivity
@@ -129,18 +132,19 @@ public class CreatePostActivity extends AppCompatActivity{
             //input your API parameters
             jsonObject.put("title", titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
-            jsonObject.put("picture1", titleEditText.getText().toString());
-            jsonObject.put("picture2", titleEditText.getText().toString());
-            jsonObject.put("picture3", titleEditText.getText().toString());
-            jsonObject.put("picture4", titleEditText.getText().toString());
-            jsonObject.put("picture5", titleEditText.getText().toString());
-            jsonObject.put("picture6", titleEditText.getText().toString());
+            jsonObject.put("username", username.getText().toString());
+//            jsonObject.put("picture1", titleEditText.getText().toString());
+//            jsonObject.put("picture2", titleEditText.getText().toString());
+//            jsonObject.put("picture3", titleEditText.getText().toString());
+//            jsonObject.put("picture4", titleEditText.getText().toString());
+//            jsonObject.put("picture5", titleEditText.getText().toString());
+//            jsonObject.put("picture6", titleEditText.getText().toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_LOGIN_USER, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
 

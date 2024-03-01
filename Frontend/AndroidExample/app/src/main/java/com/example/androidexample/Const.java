@@ -7,5 +7,7 @@ public class Const {
     public static final String URL_POST_LOGIN_USER = DOMAIN + "/login";
     //URL to post register user data
     public static final String URL_POST_REGISTER_USER = DOMAIN + "/signup";
+    public static final String URL_POSTS = DOMAIN + "/posts";
+
 
 }

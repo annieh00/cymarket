@@ -19,7 +19,7 @@
         <!-- //changed this activity to true for testing purposes -->
         <activity
             android:name=".MainFeedAdmin"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".MainFeed"
@@ -33,18 +33,34 @@
         <activity
             android:name=".ProfileSetUpActivity"
             android:exported="false" />
-        <activity
-            android:name=".CreatePostActivity"
-            android:exported="false" />
+
+
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="false"/>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+            <activity
+                android:name=".ViewPostActivity"
+                android:exported="false"/>
+<!--                <intent-filter>-->
+<!--                    <action android:name="android.intent.action.MAIN" />-->
+
+<!--                    <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                </intent-filter>-->
+        <activity
+            android:name=".CreatePostActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+            </activity>
+
     </application>
 
 </manifest>
