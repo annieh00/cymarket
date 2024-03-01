@@ -12,4 +12,6 @@ import java.util.ArrayList;
 public interface PostingRepository extends JpaRepository<Posting,Long> {
     ArrayList<Posting> findPostingByUserName(String author);
     Posting findPostingById(int id);
+
+    public ArrayList<Posting> findAll();
 }

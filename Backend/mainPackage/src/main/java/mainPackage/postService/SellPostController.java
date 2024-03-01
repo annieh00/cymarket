@@ -1,11 +1,13 @@
 package mainPackage.postService;
 
+import com.google.gson.Gson;
 import mainPackage.errorMsg.ErrorMsg;
 import mainPackage.usersPackage.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Junhyung Shim
@@ -28,27 +30,28 @@ public class SellPostController {
 
     //create
     @PostMapping("/posts")
-    public Object createPost(@RequestBody Posting p){
-        if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
-            //System.out.println("user "+p.getUserName()+ " does not exist");
-            ErrorMsg e = new ErrorMsg();
-            e.setErrormsg("user does not exist, and therefore cannot create post");
-            return e;
-        }
+    public String createPost(@RequestBody Posting p){
+//        if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
+//            //System.out.println("user "+p.getUserName()+ " does not exist");
+//            ErrorMsg e = new ErrorMsg();
+//            e.setErrormsg("user does not exist, and therefore cannot create post");
+//            return e;
+//        }
         postingRepository.save(p);
-        Post2UserMapping p2u = new Post2UserMapping();
-        p2u.setPid(p.getId());
-        p2u.setUid(p.getUserName());
-        post2UserMappingRepository.save(p2u);
-
-        return p;
+        //Post2UserMapping p2u = new Post2UserMapping();
+        //p2u.setPid(p.getId());
+        //p2u.setUid(p.getUserName());
+        //post2UserMappingRepository.save(p2u);
+        return "{\"serverResponse\" : true}";
     }
 
 
     //Read/list
-    @GetMapping("/posts/{userName}")
-    public ArrayList<Posting> getPosts(@PathVariable(name = "userName") String userName){
-        return postingRepository.findPostingByUserName(userName);
+    @GetMapping("/posts")
+    public String getPosts(){
+        ArrayList<Posting> mylist = postingRepository.findAll();
+        String json = new Gson().toJson(mylist);
+        return "{ \"posts\" :" +json + "}";
     }
 
     private void updatePost(Posting db, Posting userRequest){
