@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data1";
+    private String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
 
     private Spinner spMethod;
     private EditText etUrl;
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         tvResponse.setText(response.toString());
                     }
                 },

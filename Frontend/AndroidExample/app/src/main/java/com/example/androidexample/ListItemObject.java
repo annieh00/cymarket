@@ -60,20 +60,21 @@ import android.icu.text.CaseMap;
 public class ListItemObject {
     private String title;
     private String description;
-
-    // Constructor for ListItemObject with title and description
-    public ListItemObject(String title, String description) {
-        this.title = title;
-        this.description = description;
+private int userName;
+    public ListItemObject(String name, String email, int username) {
+        this.title = name;
+        this.description= email;
+        this.userName = username;
     }
 
-    // Getters for title and description
-    public String getTitle() {
+    public String getName() {
         return title;
     }
 
-    public String getDescription() {
+    public String getEmail() {
         return description;
+    }
+    public int getUsername(){ return userName;
     }
 }
 

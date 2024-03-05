@@ -14,7 +14,7 @@ public class MeetingLocation {
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
-            generator="announcementsGenerator")
+            generator="meetingLocationGenerator")
     private int id;
 
     @Column(name = "map_x")

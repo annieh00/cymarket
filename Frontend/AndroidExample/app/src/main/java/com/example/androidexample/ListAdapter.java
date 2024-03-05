@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class ListAdapter<T> extends ArrayAdapter<T> {
@@ -32,8 +35,9 @@ public class ListAdapter<T> extends ArrayAdapter<T> {
         }
 
         // Lookup view for data population
-        TextView itemName = convertView.findViewById(R.id.itemTitle);
-        TextView itemEmail = convertView.findViewById(R.id.itemDescription);
+        TextView itemName = convertView.findViewById(R.id.itemName);
+        TextView itemEmail = convertView.findViewById(R.id.itemEmail);
+        TextView itemUsername = convertView.findViewById(R.id.itemUsername);
 
         // Populate the data into the template view using the data object
         ListItemObject items = (ListItemObject) item;
