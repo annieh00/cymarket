@@ -11,7 +11,7 @@
     android:background="@drawable/border">
 
     <TextView
-        android:id="@+id/Title"
+        android:id="@+id/itemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -26,7 +26,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/Category"
+        android:id="@+id/itemEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="right"
