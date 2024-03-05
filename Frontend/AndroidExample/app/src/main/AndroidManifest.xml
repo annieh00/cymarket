@@ -27,7 +27,14 @@
             android:exported="true" /> <!-- //changed this activity to true for testing purposes -->
         <activity
             android:name=".MainFeedAdmin"
-            android:exported="true" />
+            android:exported="true" >
+<!--<intent-filter>-->
+<!--                            <action android:name="android.intent.action.MAIN" />-->
+
+<!--                            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                        </intent-filter>-->
+        </activity>
+
         <activity
             android:name=".MainFeed"
             android:exported="false" />

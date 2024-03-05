@@ -200,6 +200,14 @@
                     app:layout_anchor="@+id/constraintLayout2"
                     app:layout_anchorGravity="center" />
 
+    <Button
+        android:id="@+id/displayUsersBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Users"
+        app:layout_anchor="@+id/constraintLayout2"
+        app:layout_anchorGravity="center" />
+
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -272,10 +280,10 @@
 
     </com.google.android.material.navigation.NavigationView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="@string/select"/>
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:hint="@string/select"/>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

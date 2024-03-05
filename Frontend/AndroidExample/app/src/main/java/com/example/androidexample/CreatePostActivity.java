@@ -28,6 +28,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
@@ -48,6 +49,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText titleEditText;
     private ImageButton addImageBtn;
     private EditText descriptionEditText;
+    private EditText categoryEditTxt;
     private Button cancelBtn;
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
@@ -80,7 +82,7 @@ public class CreatePostActivity extends AppCompatActivity{
     TextView textView;
     private  int userType = 0;
 
-    String URL_POST_LOGIN_USER = "";
+    String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/testCreatePost";
 
 
 
@@ -91,7 +93,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         /* initialize UI elements */
         //Text
-
+        categoryEditTxt = findViewById(R.id.categoryEditText);
         titleEditText = findViewById(R.id.Title);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         username = findViewById(R.id.usernameEditTxt);
@@ -114,8 +116,9 @@ public class CreatePostActivity extends AppCompatActivity{
             public void onClick(View v) {
                 sendJsonObjReq();
                 /* when post button is pressed, use intent to switch to Signup Activity */
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                startActivity(intent);  // go to SignupActivity
+//                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+//                startActivity(intent);  // go to SignupActivity
+                sendJsonObjReq();
             }
         });
 
@@ -131,8 +134,6 @@ public class CreatePostActivity extends AppCompatActivity{
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                startActivity(intent);  // go to SignupActivity
             }
         });
     }
@@ -156,28 +157,22 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, body, response -> {
             Log.d(TAG, response.toString());
             try {
-                createPostSuccess = response.getBoolean("serverResponse");
-//                    title = response.getString("title");
-//                description = response.getString("description");
-//                imageString1 = response.getString("picture1");
-//                imageString2 = response.getString("picture2");
-//                imageString3 = response.getString("picture3");
-//                imageString4 = response.getString("picture4");
-//                imageString5 = response.getString("picture5");
-//                imageString6 = response.getString("picture6");
+                postSuccessful = response.getBoolean("postSuccessful");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            if (createPostSuccess){
-                Toast.makeText(this, "Post was successful", Toast.LENGTH_LONG).show();
-            }else {
-                Toast.makeText(this, "Something was wrong", Toast.LENGTH_LONG).show();
-
+            if (postSuccessful == true) {
+                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
+            }else{
+                Toast.makeText(CreatePostActivity.this, "Post failed sd", Toast.LENGTH_LONG).show();
             }
+
 
 
 

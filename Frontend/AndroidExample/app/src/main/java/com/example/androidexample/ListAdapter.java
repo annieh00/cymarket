@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class ListAdapter extends ArrayAdapter<ListItemObject> {
 
-    public ListAdapter(ViewPostActivity context, List<ListItemObject> items) {
+    public ListAdapter(Context context, List<ListItemObject> items) {
         super(context, 0, items);
     }
 

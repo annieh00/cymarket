@@ -23,18 +23,19 @@ public class SignUpController {
 
     //create
     @PostMapping("/signup")
-    public Object createUser(@RequestBody GeneralUser generalUser){
-        HashMap<String,Boolean> ret = new HashMap<>();
+    public String createUser(@RequestBody GeneralUser generalUser){
         try{
+            if(generalUserRepository.findGeneralUserByEmail(generalUser.getEmail()) != null){
+                return "{\"fromServer\" : false}";
+            }
+
             generalUserRepository.save(generalUser);
         }catch (Exception e){
             e.printStackTrace();
-            ret.put("fromServer",false);
-            return ret;
+            return "{\"fromServer\" : false}";
         }
-        ret.put("fromServer",true);
-        return ret;
-        //return "Welcome! " + generalUser.getFirstName();
+
+        return "{\"fromServer\" : true}";
     }
 
 
