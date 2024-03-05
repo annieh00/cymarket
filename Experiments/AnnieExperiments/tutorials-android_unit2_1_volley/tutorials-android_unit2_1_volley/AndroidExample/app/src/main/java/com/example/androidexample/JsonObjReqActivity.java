@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,7 +28,12 @@ public class JsonObjReqActivity extends AppCompatActivity {
 
     private TextView msgResponse;
     public static int myID = 0;
-    private static final String URL_JSON_OBJECT = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data1"; //using my mock server instead of data given
+    public static String username;
+    public static String emailTxt;
+    public static String passwordTxt;
+
+
+    private static final String URL_JSON_OBJECT = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1"; //using my mock server instead of data given
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +55,30 @@ public class JsonObjReqActivity extends AppCompatActivity {
      * Making json object request
      */
     private void makeJsonObjReq() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //input your API parameters
+            jsonObject.put("email", emailTxt.getText().toString());
+            jsonObject.put("password", passwordTxt.getText().toString());
+//            Toast.makeText(JsonObjReqActivity.this, "got e and p", Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.POST,
                 URL_JSON_OBJECT,
-                null, // Pass null as the request body since it's a GET request
+                JSONObject, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-                       msgResponse.setText(response.toString()); //got it to extract certain data from the object
-
+//                       msgResponse.setText(response.toString()); //got it to extract certain data from the object
+                        try{
+                            username = response.getString("username");
+                            msgResponse.setText(username); //got it to extract certain data from the object
+                        }catch(Exception e){
+                            throw new RuntimeException();
+                        }
 //                                                try {
 //                                                    myID = response.getInt("id"); //got it to extract certain data from the object
 //                                                    msgResponse.setText(response.getInt("id"));

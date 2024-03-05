@@ -1,19 +1,22 @@
 package com.example.androidexample;
 
 public class ListItemObject {
-    private String name;
-    private String email;
-
-    public ListItemObject(String name, String email) {
-        this.name = name;
-        this.email = email;
+    private String title;
+    private String description;
+private int userName;
+    public ListItemObject(String name, String email, int username) {
+        this.title = name;
+        this.description= email;
+        this.userName = username;
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
     public String getEmail() {
-        return email;
+        return description;
+    }
+    public int getUsername(){ return userName;
     }
 }
