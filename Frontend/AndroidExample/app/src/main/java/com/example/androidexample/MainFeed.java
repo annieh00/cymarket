@@ -197,20 +197,20 @@ String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocat
             }
         });
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-              Intent intent = new Intent(getApplicationContext(), ViewPosts.class);
-              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//              intent.putExtra("URL", website); IDK ABOUT THIS LINE
-              getApplicationContext().startActivity(intent);
-
-
-              nDrawerLayout.closeDrawers();
-
-                return false;
-            }
-        });
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//              Intent intent = new Intent(getApplicationContext(), ViewPosts.class);
+//              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////              intent.putExtra("URL", website); IDK ABOUT THIS LINE
+//              getApplicationContext().startActivity(intent);
+//
+//
+//              nDrawerLayout.closeDrawers();
+//
+//                return false;
+//            }
+//        });
 
 
 
