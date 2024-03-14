@@ -53,7 +53,8 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button cancelBtn;
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
-//    private EditText categoryEditTxt;
+    private EditText username;
+    private EditText categoryEditTxt;
     private HorizontalScrollView images;
     private ImageView image1 = null;
     private ImageView image2 = null;
@@ -67,12 +68,11 @@ public class CreatePostActivity extends AppCompatActivity{
     private String imageString4 = null;
     private String imageString5 = null;
     private String imageString6 = null;
-    private boolean postSuccessful;
-
+    private Boolean createPostSuccess;
 
     private String title;
     private String description;
-    private String category;
+    private String usernameString;
 //    private static final String ROOT_URL = "http://seoforworld.com/api/v1/file-upload.php";
 //    private static final int REQUEST_PERMISSIONS = 100;
 //    private static final int PICK_IMAGE_REQUEST =1 ;
@@ -80,8 +80,10 @@ public class CreatePostActivity extends AppCompatActivity{
     private String filePath;
 //    ImageView imageView;
     TextView textView;
+    private  int userType = 0;
 
     String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/testCreatePost";
+
 
 
     @Override
@@ -94,6 +96,7 @@ public class CreatePostActivity extends AppCompatActivity{
         categoryEditTxt = findViewById(R.id.categoryEditText);
         titleEditText = findViewById(R.id.Title);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
+        username = findViewById(R.id.usernameEditTxt);
         image1 = findViewById(R.id.image1);
         image2 = findViewById(R.id.image2);
         image3 = findViewById(R.id.image3);
@@ -111,6 +114,7 @@ public class CreatePostActivity extends AppCompatActivity{
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendJsonObjReq();
                 /* when post button is pressed, use intent to switch to Signup Activity */
 //                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
 //                startActivity(intent);  // go to SignupActivity
@@ -141,16 +145,14 @@ public class CreatePostActivity extends AppCompatActivity{
         try {
             //input your API parameters
             jsonObject.put("title", titleEditText.getText().toString());
-            jsonObject.put("category", categoryEditTxt.getText().toString());
+//            jsonObject.put("category", categoryEditTxt.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
-//            jsonObject.put("picture1", titleEditText.getText().toString());
-//            jsonObject.put("picture2", titleEditText.getText().toString());
-//            jsonObject.put("picture3", titleEditText.getText().toString());
-//            jsonObject.put("picture4", titleEditText.getText().toString());
-//            jsonObject.put("picture5", titleEditText.getText().toString());
-//            jsonObject.put("picture6", titleEditText.getText().toString());
-            body.put("posts", jsonObject);
-
+            jsonObject.put("username", username.getText().toString());
+//            jsonObject.put("title", "helloWorld");
+////            jsonObject.put("category", categoryEditTxt.getText().toString());
+//            jsonObject.put("description", "hello");
+            jsonObject.put("username", "world");
+            body.put("post", jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }

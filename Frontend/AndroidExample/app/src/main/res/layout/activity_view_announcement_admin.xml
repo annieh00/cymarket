@@ -7,16 +7,16 @@
     tools:context=".ViewAnnouncementAdmin">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appbar">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/vwebtoolbar1"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:id="@+id/vwebtoolbar1"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            android:background="@color/cardinal">
+            android:background="@color/cardinal"
+            app:navigationIcon="?attr/homeAsUpIndicator">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -27,7 +27,137 @@
                 android:src="@drawable/cymarket_logos_white">
 
             </ImageView>
+
+
         </androidx.appcompat.widget.Toolbar>
 
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <ListView
+        android:id="@+id/adminListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar"
+        android:layout_marginTop="300dp" />
+
+    <Button
+        android:id="@+id/announcementsBtn"
+        android:layout_width="171dp"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="218dp"
+        android:backgroundTint="@color/cardinal"
+        android:text="See Announcement" />
+
+    <Button
+        android:id="@+id/deleteBtn"
+        android:layout_width="171dp"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="215dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="25dp"
+        android:backgroundTint="@color/cardinal"
+        android:text="Delete Announcement" />
+
+    <Button
+        android:id="@+id/updateBtn"
+        android:layout_width="176dp"
+        android:layout_height="88dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="174dp"
+        android:layout_marginEnd="224dp"
+        android:backgroundTint="@color/cardinal"
+        android:text="Update announcement" />
+
+    <EditText
+        android:id="@+id/idToUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="193dp"
+        android:layout_marginTop="182dp"
+        android:layout_marginEnd="7dp"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="121dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="191dp"
+        android:layout_marginTop="165dp"
+        android:layout_marginEnd="98dp"
+        android:text="ID of announcment"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/titleToUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="191dp"
+        android:layout_marginTop="242dp"
+        android:layout_marginEnd="9dp"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="104dp"
+        android:layout_height="46dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="194dp"
+        android:layout_marginTop="219dp"
+        android:layout_marginEnd="113dp"
+        android:text="Title Update:"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/bodyToUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="192dp"
+        android:layout_marginTop="304dp"
+        android:layout_marginEnd="9dp"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="129dp"
+        android:layout_height="24dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="194dp"
+        android:layout_marginTop="283dp"
+        android:layout_marginEnd="87dp"
+        android:text="Update Body:"
+        android:textColor="#000000" />
+
+
 </RelativeLayout>
+
