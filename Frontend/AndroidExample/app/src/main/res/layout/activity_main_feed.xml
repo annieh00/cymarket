@@ -21,28 +21,28 @@
 
 
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/cardinal"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/cardinal"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-
-
-                android:scaleType="fitCenter"
-                android:src="@drawable/cymarket_logos_white">
-
-            </ImageView>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
 
 
-        </androidx.appcompat.widget.Toolbar>
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/cymarket_logos_white">
+
+                </ImageView>
+
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -270,6 +270,41 @@
 
     </com.google.android.material.navigation.NavigationView>
 
+<<<<<<< HEAD
+    <!--    <TextView-->
+    <!--        android:id="@+id/coordList"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_below="@id/appbar"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:text="TextView Content"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/appbar" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/adminListView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_below="@id/appbar"-->
+    <!--        android:layout_marginTop="300dp" />-->
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <!--&lt;!&ndash;        <ListView&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:id="@+id/listView"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_marginTop="70dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_marginBottom="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            tools:listitem="@layout/recycler_view_item">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;        </ListView>&ndash;&gt;-->
+    <!--    </androidx.recyclerview.widget.RecyclerView>-->
+=======
 <!--    <TextView-->
 <!--        android:id="@+id/coordList"-->
 <!--        android:layout_width="match_parent"-->
@@ -303,4 +338,5 @@
 
 <!--&lt;!&ndash;        </ListView>&ndash;&gt;-->
 <!--    </androidx.recyclerview.widget.RecyclerView>-->
+>>>>>>> 63a1bc766a99638c11a99223b4dbb5ebcd7bf868
 </androidx.drawerlayout.widget.DrawerLayout>

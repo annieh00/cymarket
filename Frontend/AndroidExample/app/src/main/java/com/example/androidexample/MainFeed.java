@@ -254,13 +254,13 @@ public class MainFeed extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-              Intent intent = new Intent(getApplicationContext(), ViewPosts.class);
-              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(getApplicationContext(), ViewPosts.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //              intent.putExtra("URL", website); IDK ABOUT THIS LINE
-              getApplicationContext().startActivity(intent);
+                getApplicationContext().startActivity(intent);
 
 
-              nDrawerLayout.closeDrawers();
+                nDrawerLayout.closeDrawers();
 
                 return false;
             }
@@ -334,66 +334,65 @@ public class MainFeed extends AppCompatActivity {
 
     }
 
-        private void makeJsonArrayReq () {
+    private void makeJsonArrayReq () {
 
         coordListing.setText("");
-            JsonArrayRequest jsonArrReq = new JsonArrayRequest(
-                    Request.Method.GET,
-                    server_url_list,
-                    null, // Pass null as the request body since it's a GET request
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.d("Volley Response", response.toString());
+        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
+                Request.Method.GET,
+                server_url_list,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("Volley Response", response.toString());
 
 
 
-                            StringBuilder stringBuilder = new StringBuilder();
-                            // Parse the JSON array and add data to the adapter
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject jsonObject = response.getJSONObject(i);
-                                    String x = jsonObject.getString("x");
-                                    String y = jsonObject.getString("y");
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // Parse the JSON array and add data to the adapter
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String x = jsonObject.getString("x");
+                                String y = jsonObject.getString("y");
 
-                                    // Create a ListItemObject and add it to the adapter
+                                // Create a ListItemObject and add it to the adapter
 //                                    ListItemObjectCoords item = new ListItemObjectCoords(x, y);
 //                                    adapter.add(item);
-                                    stringBuilder.append("X: ").append(x).append(", Y: ").append(y).append("\n");
+                                stringBuilder.append("X: ").append(x).append(", Y: ").append(y).append("\n");
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                        }
 
-                            coordListing.setText(stringBuilder.toString());
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("Volley Error", error.toString());
-                        }
-                    }) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String, String> headers = new HashMap<>();
+                        coordListing.setText(stringBuilder.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
 //                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
 //                headers.put("Content-Type", "application/json");
-                    return headers;
-                }
+                return headers;
+            }
 
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
 //                params.put("param1", "value1");
 //                params.put("param2", "value2");
-                    return params;
-                }
-            };
+                return params;
+            }
+        };
 
-            // Adding request to request queue
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
-        }
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
     }
-
+}

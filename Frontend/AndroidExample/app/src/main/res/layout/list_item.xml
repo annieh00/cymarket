@@ -32,6 +32,19 @@
         android:text="username"
         android:textSize="18sp"
         android:textColor="#888888" />
+<<<<<<< HEAD
+</LinearLayout>
+    <!--=======-->
+    <!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:padding="16dp"-->
+    <!--    android:ellipsize="end"-->
+    <!--    android:maxLines="1"-->
+    <!--    android:textAppearance="?attr/textAppearanceSubtitle1">-->
+
+    <!--</TextView>-->
+=======
  </LinearLayout>
 <!--=======-->
 <!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
@@ -43,3 +56,4 @@
 <!--    android:textAppearance="?attr/textAppearanceSubtitle1">-->
 
 <!--</TextView>-->
+>>>>>>> 63a1bc766a99638c11a99223b4dbb5ebcd7bf868
