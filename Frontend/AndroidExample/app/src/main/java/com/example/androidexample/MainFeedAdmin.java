@@ -103,6 +103,15 @@ public class MainFeedAdmin extends AppCompatActivity {
 //        displayUsersBtn = findViewById(R.id.displayUsersBtn);
         mQueue = Volley.newRequestQueue(this);
         deleteBtn = findViewById(R.id.deleteButton);
+
+        adminTitle = findViewById(R.id.DescTitle);
+        adminMessage = findViewById(R.id.announcementText);    // link to confirm edtext in the Signup activity XML
+        sendMsgBtn = findViewById(R.id.sendMsgBtn);
+        displayUsersBtn = findViewById(R.id.displayUsersBtn);
+        allUsersTxt = findViewById(R.id.displayUsersTxt);
+//        displayUsersBtn = findViewById(R.id.displayUsersBtn);
+        mQueue = Volley.newRequestQueue(this);
+        deleteBtn = findViewById(R.id.deleteButton);
         deleteUser = findViewById(R.id.deleteTxt);
         oldEmail = findViewById(R.id.oldEmail);
         oldPassword = findViewById(R.id.oldPassword);
