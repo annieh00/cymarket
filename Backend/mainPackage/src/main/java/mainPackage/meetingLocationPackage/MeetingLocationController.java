@@ -50,9 +50,9 @@ public class MeetingLocationController {
             // Save the updated MeetingLocation
             meetingLocationRepository.save(existingMeetingLocation);
 
-            return "\"status\": \"Meeting location with ID \"" + id + "\" updated successfully.\"";
+            return "Meeting location with ID " + id + " updated successfully.";
         } else {
-            return "\"status\": \"Invalid meeting location data provided.\"";
+            return "Invalid meeting location data provided.";
         }
     }
 
