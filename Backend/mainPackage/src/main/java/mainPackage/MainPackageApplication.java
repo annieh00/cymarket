@@ -1,7 +1,7 @@
 package mainPackage;
 
 import mainPackage.dbmsPackage.ConnectToDB;
-import mainPackage.websocket.DirectChat;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

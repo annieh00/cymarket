@@ -12,6 +12,9 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
+
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,19 +34,16 @@ import org.springframework.stereotype.Controller;
  * The server provides functionality for broadcasting messages to all connected
  * users and sending messages to specific users.
  */
-@ServerEndpoint("/chat/{username1}/{username2}")
+@ServerEndpoint("/chat/{chatID}/{username}")
 @Component
 
 public class DirectChat {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
-    private static Map < Session, String > sessionUsername1Map = new Hashtable <>();
-    private static Map < String, Session > username1SessionMap = new Hashtable <>();
+    private static Map < Session, String > sessionUsernameMap = new Hashtable <>();
+    private static Map < String, Session > usernameSessionMap = new Hashtable <>();
 
-    private static Map < Session, String > sessionUsername2Map = new Hashtable <>();
-    private static Map < String, Session > username2SessionMap = new Hashtable <>();
-    private static Map <String, String> oneToOneSessionUsersMap = new Hashtable<>();
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(DirectChat.class);
@@ -52,38 +52,36 @@ public class DirectChat {
      * This method is called when a new WebSocket connection is established.
      *
      * @param session represents the WebSocket session for the connected user.
-     * @param username1 username1 specified in path parameter.
-     * @param username2 username2 specified in path parameter.
+     * @param username username1 specified in path parameter.
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("username1") String username1, @PathParam("username2") String username2) throws IOException {
+    public void onOpen(Session session, @PathParam("username") String username, @PathParam("chatID") String chatID) throws IOException {
 
         // server side log
-        logger.info("[onOpen] ChatSession between  " + username1 + " and " + username2);
+        logger.info("[onOpen] ChatSession ID " + chatID + "joine user: " + username);
 
 
         // Handle the case of a duplicate username
-        if (username1SessionMap.containsKey(username1) && oneToOneSessionUsersMap.get(username1).equals(username2)) {
-            session.getBasicRemote().sendText("duplicate session");
+        if (usernameSessionMap.containsKey(username)) {
+            session.getBasicRemote().sendText("duplicate user");
             session.close();
         }else {
             // map current session with username
-            sessionUsername1Map.put(session, username1);
-            sessionUsername2Map.put(session, username2);
+            sessionUsernameMap.put(session, username);
+
 
             // map current username with session
-            username1SessionMap.put(username1, session);
-            username2SessionMap.put(username2, session);
+            usernameSessionMap.put(username, session);
 
-            oneToOneSessionUsersMap.put(username1,username2);
-            oneToOneSessionUsersMap.put(username2,username1);
+
+
 
             // send to the user joining in
-            sendMessageToPArticularUser(username1, "Chat with "+username2);
-            sendMessageToPArticularUser(username2, "Chat with "+username1);
+            sendMessageToPArticularUser(username, "user connected: "+username);
+
 
             // send to everyone in the chat
-            //broadcast("User: " + username + " has Joined the Chat");
+            broadcast("User: " + username + " has Joined the Chat");
         }
     }
 
@@ -91,17 +89,17 @@ public class DirectChat {
      * Handles incoming WebSocket messages from a client.
      *
      * @param session The WebSocket session representing the client's connection.
-     * @param message The message received from the client.
+     * @param message The message sent from the client.
      */
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
 
         // get the username by session
-        String username1 = sessionUsername1Map.get(session);
-        String username2 = oneToOneSessionUsersMap.get(username1);
+        String username = sessionUsernameMap.get(session);
+
 
         // server side log
-        //logger.info("[onMessage] from: " + username1 + "\"" + message + "\" to: " + username2);
+
 
         // Direct message to
             // split by space
@@ -112,10 +110,9 @@ public class DirectChat {
             for (int i = 1; i < split_msg.length; i++) {
                 actualMessageBuilder.append(split_msg[i]).append(" ");
             }
-
+            logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
             String actualMessage = actualMessageBuilder.toString();
-            sendMessageToPArticularUser(username2, "[DM from " + username1 + "]: " + actualMessage);
-            sendMessageToPArticularUser(username1, "[DM from " + username2 + "]: " + actualMessage);
+            sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
     }
 
 
@@ -129,19 +126,19 @@ public class DirectChat {
     public void onClose(Session session) throws IOException {
 
         // get the username from session-username mapping
-        String username1 = sessionUsername1Map.get(session);
+        String username = sessionUsernameMap.get(session);
 
         // server side log
-        logger.info("[onClose] " + username1);
+        logger.info("[onClose] " + username);
 
         // remove user from memory mappings
-        sessionUsername1Map.remove(session);
-        username1SessionMap.remove(username1);
+        sessionUsernameMap.remove(session);
+        usernameSessionMap.remove(username);
 
-        oneToOneSessionUsersMap.remove(username1);
+
 
         // send the message to chat
-        //broadcast(username + " disconnected");
+        broadcast(username + " disconnected");
     }
 
     /**
@@ -154,7 +151,7 @@ public class DirectChat {
     public void onError(Session session, Throwable throwable) {
 
         // get the username from session-username mapping
-        String username = sessionUsername1Map.get(session);
+        String username = sessionUsernameMap.get(session);
 
         // do error handling here
         logger.info("[onError]" + username + ": " + throwable.getMessage());
@@ -168,10 +165,8 @@ public class DirectChat {
      */
     private void sendMessageToPArticularUser(String username, String message) {
         try {
-            if(username1SessionMap.containsKey(username)) {
-                username1SessionMap.get(username).getBasicRemote().sendText(message);
-            }else if(username2SessionMap.containsKey(username)){
-                username2SessionMap.get(username).getBasicRemote().sendText(message);
+            if(usernameSessionMap.containsKey(username)) {
+                usernameSessionMap.get(username).getBasicRemote().sendText(message);
             }
         } catch (IOException e) {
             logger.info("[DM Exception] " + e.getMessage());
@@ -183,13 +178,13 @@ public class DirectChat {
      *
      * @param message The message to be broadcasted to all users.
      */
-//    private void broadcast(String message) {
-//        sessionUsernameMap.forEach((session, username) -> {
-//            try {
-//                session.getBasicRemote().sendText(message);
-//            } catch (IOException e) {
-//                logger.info("[Broadcast Exception] " + e.getMessage());
-//            }
-//        });
-//    }
+    private void broadcast(String message) {
+        sessionUsernameMap.forEach((session, username) -> {
+            try {
+                session.getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                logger.info("[Broadcast Exception] " + e.getMessage());
+            }
+        });
+    }
 }
