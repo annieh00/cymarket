@@ -1,9 +1,11 @@
 package mainPackage.postService;
 
 import com.google.gson.Gson;
+import jakarta.websocket.server.PathParam;
 import mainPackage.errorMsg.ErrorMsg;
 import mainPackage.usersPackage.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ public class SellPostController {
         String json = new Gson().toJson(mylist);
         return "{ \"posts\" :" +json + "}";
     }
+
 
     private void updatePost(Posting db, Posting userRequest){
         if(userRequest.getUserName() != null){
@@ -106,3 +109,5 @@ public class SellPostController {
     }
 }
 //testing
+
+
