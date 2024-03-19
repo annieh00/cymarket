@@ -54,9 +54,9 @@ public class adminController {
             // Save the updated announcement
             announcementRepository.save(existingAnnouncement);
 
-            return "\"status\": \"Announcement updated successfully.\"";
+            return "Announcement with ID " + id + " updated successfully.";
         } else {
-            return "\"status\": \"Invalid announcement data provided.\"";
+            return "Invalid announcement data provided.";
         }
     }
 
