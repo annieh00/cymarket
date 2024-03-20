@@ -1,6 +1,7 @@
 package mainPackage;
 
 import mainPackage.dbmsPackage.ConnectToDB;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -22,6 +23,7 @@ public class MainPackageApplication {
 				connection.close();
 			}
 			SpringApplication.run(MainPackageApplication.class, args);
+			//SpringApplication.run(DirectChat.class, args);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
