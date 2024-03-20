@@ -16,43 +16,54 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidExample"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31"
-        >
-
-<!--        <activity-->
-<!--            android:name=".ViewAnnouncementAdmin"-->
-<!--            android:exported="false" />-->
+        tools:targetApi="31">
         <activity
-            android:name=".ViewPostActivity"
-            android:exported="true" /> <!-- //changed this activity to true for testing purposes -->
-        <activity
-            android:name=".MainFeedAdmin"
-            android:exported="true" >
-<!--            <intent-filter>-->
-<!--            <action android:name="android.intent.action.MAIN" />-->
-
-<!--            <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-
-        <activity
-            android:name=".MainFeed"
+            android:name=".DonationsActivity"
             android:exported="false" />
         <activity
+            android:name=".AuctionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FlaggedPostsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InboxActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainFeedOrganizer"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".ViewAnnouncementAdmin" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".ViewPostActivity" -->
+        <!-- android:exported="true" /> &lt;!&ndash; //changed this activity to true for testing purposes &ndash;&gt; -->
+        <activity
+            android:name=".MainFeedAdmin"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".MainFeed"
+            android:exported="true" />
+        <activity
             android:name=".ProfileSetUpActivity"
-            android:exported="false"/>
-<!--        <activity-->
-<!--            android:name=".ProfileSetUpActivity"-->
-<!--            android:exported="false"/>-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".ProfileSetUpActivity" -->
+        <!-- android:exported="false"/> -->
         <activity
             android:name=".SignupActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".ProfileSetUpActivity"-->
-<!--            android:exported="false" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".ProfileSetUpActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".CreatePostActivity"
             android:exported="true" />
@@ -60,12 +71,17 @@
             android:name=".postActivity"
             android:exported="true" />
         <activity
+            android:name=".ViewAnnouncementAdmin"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

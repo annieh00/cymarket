@@ -54,7 +54,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
-    private EditText categoryEditTxt;
+//    private EditText categoryEditTxt;
     private HorizontalScrollView images;
     private ImageView image1 = null;
     private ImageView image2 = null;
@@ -93,7 +93,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         /* initialize UI elements */
         //Text
-        categoryEditTxt = findViewById(R.id.categoryEditText);
+//        categoryEditTxt = findViewById(R.id.categoryEditText);
         titleEditText = findViewById(R.id.Title);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         username = findViewById(R.id.usernameEditTxt);
@@ -160,12 +160,12 @@ public class CreatePostActivity extends AppCompatActivity{
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, body, response -> {
             Log.d(TAG, response.toString());
             try {
-                postSuccessful = response.getBoolean("postSuccessful");
+                createPostSuccess = response.getBoolean("postSuccessful");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            if (postSuccessful == true) {
+            if (createPostSuccess == true) {
                 Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);

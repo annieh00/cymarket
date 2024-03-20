@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Website">
+    <item android:title="Regular User">
         <menu>
+
             <item
-            android:id="@+id/thing1"
-                android:title="Thing1"
+                android:id="@+id/sell"
+                android:title="Sell"
                 >
 
             </item>
-
             <item
-                android:id="@+id/thing2"
-                android:title="thing2">
+                android:id="@+id/Auction"
+                android:title="Auction"
+                >
 
             </item>
+            <item
+                android:id="@+id/inbox"
+                android:title="Inbox">
+
+            </item>
+            <item
+                android:id="@+id/Announcements"
+                android:title="Announcements">
+
+            </item>
+            <item
+                android:id="@+id/profile"
+                android:title="Profile"
+                >
+
+            </item>
+            <item
+                android:id="@+id/Settings"
+                android:title="Settings">
+
+            </item>
+
         </menu>
     </item>
 </menu>
