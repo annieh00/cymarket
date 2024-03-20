@@ -42,7 +42,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainFeedAdmin extends AppCompatActivity {
+public class MainFeedOrganizer extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
     private String itemSelected;
@@ -67,7 +67,7 @@ public class MainFeedAdmin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_feed_admin);
+        setContentView(R.layout.activity_main_feed_organizer);
 
 //        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
 //        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, items);
@@ -86,7 +86,7 @@ public class MainFeedAdmin extends AppCompatActivity {
 //            }
 //        });
 
-        builder = new AlertDialog.Builder(MainFeedAdmin.this);
+        builder = new AlertDialog.Builder(MainFeedOrganizer.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -113,9 +113,9 @@ public class MainFeedAdmin extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
-                    case "Flagged Posts":
+                    case "Donations":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), FlaggedPostsActivity.class);
+                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
                         startActivity(intent);
                         break;
                     case "Announcements":
@@ -455,7 +455,4 @@ public class MainFeedAdmin extends AppCompatActivity {
 
 
 }
-
-
-
 

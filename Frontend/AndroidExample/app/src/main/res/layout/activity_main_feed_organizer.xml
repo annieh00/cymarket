@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer"
     android:fitsSystemWindows="true"
-    tools:context=".MainFeed">
+    tools:context=".MainFeedOrganizer">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
@@ -68,7 +68,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/menu_navigation"
+        app:menu="@menu/menu_navigation_organization"
         app:headerLayout="@layout/navheader"
         >
 

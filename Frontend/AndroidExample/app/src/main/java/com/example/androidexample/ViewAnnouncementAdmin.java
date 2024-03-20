@@ -187,8 +187,9 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                                     String description = jsonObject.getString("description");
 
                                     // Create a ListItemObject and add it to the adapter
-                                    ListItemObject item = new ListItemObject(title, description);
-                                    adapter.add(item);
+                                    //commented out for testing purposes
+//                                    ListItemObject item = new ListItemObject(title, description);
+//                                    adapter.add(item);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();

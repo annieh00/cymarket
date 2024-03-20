@@ -100,9 +100,9 @@ public class SignupActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             if (signupSuccess){
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SignupActivity.this, ProfileSetUpActivity.class);
                 startActivity(intent);
-                Toast.makeText(SignupActivity.this, "Please login now", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignupActivity.this, "Please make your profile", Toast.LENGTH_LONG).show();
             }else{
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 Toast.makeText(SignupActivity.this, "User already in database", Toast.LENGTH_LONG).show();

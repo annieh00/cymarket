@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Administrator">
+    <item android:title="Organization">
         <menu>
             <item
-                android:id="@+id/flaggedPosts"
-                android:title="Flagged Posts"
+                android:id="@+id/Donations"
+                android:title="Donations"
                 >
 
             </item>
-            <item
-                android:id="@+id/Announcements"
-                android:title="Announcements"
-                >
 
-            </item>
             <item
                 android:id="@+id/settings"
                 android:title="Settings">
