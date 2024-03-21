@@ -18,6 +18,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".WebSocketListener"
+            android:exported="false"
+            android:label="@string/title_activity_web_socket_listener"
+            android:theme="@style/Theme.AndroidExample" />
+        <activity
             android:name=".DonationsActivity"
             android:exported="false" />
         <activity

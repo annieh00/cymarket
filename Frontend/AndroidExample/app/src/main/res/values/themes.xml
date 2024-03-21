@@ -33,12 +33,17 @@
         <item name="colorSwitchThumbNormal">#FFFFFF</item>
         <item name="android:colorForeground">#99FFFFFF</item>
     </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AndroidExample" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 
 
     <!-- Theme Style for Night Mode Switch -->
-<!--    <style name="nightModeSwitch" parent="Theme.AppCompat.Light">-->
-<!--        <item name="colorControlActivated">@color/night_mode</item>-->
-<!--        <item name="colorSwitchThumbNormal">#FFFFFF</item>-->
-<!--        <item name="android:foreground">#99FFFFFF</item>-->
-<!--    </style>-->
+    <!--    <style name="nightModeSwitch" parent="Theme.AppCompat.Light">-->
+    <!--        <item name="colorControlActivated">@color/night_mode</item>-->
+    <!--        <item name="colorSwitchThumbNormal">#FFFFFF</item>-->
+    <!--        <item name="android:foreground">#99FFFFFF</item>-->
+    <!--    </style>-->
 </resources>
