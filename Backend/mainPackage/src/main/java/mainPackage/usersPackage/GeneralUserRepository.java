@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * */
 @Repository
 public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
-    public GeneralUser findGeneralUserByUserName(String uid);
+    public GeneralUser findGeneralUserByUserName(String userName);
     public ArrayList<GeneralUser> findGeneralUsersByUserType(int userType);
 
     public GeneralUser findGeneralUserByEmailAndPassword(String email, String password);
