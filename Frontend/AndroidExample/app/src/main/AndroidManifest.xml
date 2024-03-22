@@ -18,6 +18,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.AndroidExample" />
+        <activity
             android:name=".WebSocketListener"
             android:exported="false"
             android:label="@string/title_activity_web_socket_listener"
@@ -71,10 +76,9 @@
         <!-- android:exported="false" /> -->
         <activity
             android:name=".CreatePostActivity"
-            android:exported="true" />
-        <activity
-            android:name=".postActivity"
-            android:exported="true" />
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".postActivity" -->
+        <!-- android:exported="true" /> -->
         <activity
             android:name=".ViewAnnouncementAdmin"
             android:exported="false" />

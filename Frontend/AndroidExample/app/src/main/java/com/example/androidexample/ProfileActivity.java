@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileSetUpActivity extends AppCompatActivity{
+public class ProfileActivity extends AppCompatActivity{
     private EditText titleEditText;
     private ImageButton addImageBtn;
     private EditText descriptionEditText;
@@ -247,11 +247,11 @@ public class ProfileSetUpActivity extends AppCompatActivity{
             }
 
             if (createPostSuccess == true) {
-//                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(ProfileSetUpActivity.this, MainFeed.class);
+                Toast.makeText(ProfileActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(ProfileActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
-//                Toast.makeText(CreatePostActivity.this, "Post failed sd", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProfileActivity.this, "Post failed sd", Toast.LENGTH_LONG).show();
             }
 
 
@@ -260,7 +260,7 @@ public class ProfileSetUpActivity extends AppCompatActivity{
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-//            Toast.makeText(CreatePostActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(ProfileActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
 

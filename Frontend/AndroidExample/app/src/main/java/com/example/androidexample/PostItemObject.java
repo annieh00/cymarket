@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.icu.text.CaseMap;
+import android.net.Uri;
 
 //public class ListItemObject {
 //    private String x;
@@ -57,24 +58,21 @@ import android.icu.text.CaseMap;
 //
 //}
 
-public class ListItemObject {
+public class PostItemObject {
+    private Uri picture;
     private String title;
-    private String description;
-    private int userName;
-    public ListItemObject(String name, String email, int username) {
-        this.title = name;
-        this.description= email;
-        this.userName = username;
+    public PostItemObject(Uri picture, String title) {
+        this.title = title;
+        this.picture= picture;
     }
 
-    public String getName() {
+    public String getTitle() {
         return title;
     }
 
-    public String getEmail() {
-        return description;
+    public Uri getPicture() {
+        return picture;
     }
-    public int getUsername(){ return userName;
-    }
+
 }
 
