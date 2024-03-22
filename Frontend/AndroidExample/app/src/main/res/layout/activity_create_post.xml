@@ -13,40 +13,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
+     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/vwebtoolbar1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/cardinal"
+            app:navigationIcon="?attr/homeAsUpIndicator">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cymarket_logos_white">
+
+            </ImageView>
 
 
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:background="@color/cardinal"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
+        </androidx.appcompat.widget.Toolbar>
 
 
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/cymarket_logos_white">
-
-                </ImageView>
-
-
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
+    </com.google.android.material.appbar.AppBarLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
@@ -67,7 +60,7 @@
                 android:background="@drawable/border"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.987"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.101" />
@@ -128,10 +121,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.519" />
 
+
             <EditText
                 android:id="@+id/DescriptionEditText"
-                android:layout_width="372dp"
-                android:layout_height="266dp"
+                android:layout_width="371dp"
+                android:layout_height="215dp"
                 android:layout_margin="15dip"
                 android:layout_marginStart="15dip"
                 android:layout_marginTop="15dip"
@@ -140,10 +134,10 @@
                 android:background="@drawable/border"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.111"
+                app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.88" />
+                app:layout_constraintVertical_bias="0.818" />
 
             <Button
                 android:id="@+id/post_button"
@@ -156,7 +150,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.976" />
-
 
             <ImageButton
                 android:id="@+id/addImageButton"
@@ -185,55 +178,57 @@
 
                 <LinearLayout
                     android:id="@+id/scroll_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/image1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/image" />
+                        android:id="@+id/imageSelView1"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent" />
 
                     <ImageView
-                        android:id="@+id/image2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image" />
+                        android:id="@+id/imageSelView2"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"/>
 
                     <ImageView
-                        android:id="@+id/image3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image"
-
-                        />
+                        android:id="@+id/imageSelView3"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent" />
 
                     <ImageView
-                        android:id="@+id/image4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image" />
+                        android:id="@+id/imageSelView4"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent" />
 
 
                     <ImageView
-                        android:id="@+id/image5"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image" />
-
+                        android:id="@+id/imageSelView5"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content" />
 
                     <ImageView
-                        android:id="@+id/image6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/image" />
+                        android:id="@+id/imageSelView6"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent" />
 
 
                 </LinearLayout>
 
             </HorizontalScrollView>
+
+            <CheckBox
+                android:id="@+id/auctionCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Auction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.051"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.919" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
