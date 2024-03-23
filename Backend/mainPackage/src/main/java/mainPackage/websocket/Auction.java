@@ -3,6 +3,7 @@ package mainPackage.websocket;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 
 @Controller
-@ServerEndpoint(value = "/auction/{auctionID}/{username}")
+@ServerEndpoint(value = "/auction/{associatedPostID}/{username}")
 public class Auction {
     //manually allocating causes the error
 
@@ -49,12 +50,17 @@ public class Auction {
     public void setAuctionTableRepository(AuctionTableRepository repo) {
         auctionTableRepository= repo;  // we are setting the static variable
     }
+
+    //only stores the current "live" session & user pair
     private static HashMap< Session, String > usernameFromSession = new HashMap<>();
 
+    //only stores the current "live" session & user pair
     private static HashMap <String, Session> sessionFromUsername = new HashMap<>();
     private static HashMap < String, HashMap<String, Boolean>> participatingAuctionsFromUsername = new HashMap<>();
 
-    private static HashMap < String, HashMap<String, Boolean>> participatingUsersFromAuctionID = new HashMap<>();
+    private static HashMap <String, HashMap<String, Boolean>> participatingUsersFromAuctionID = new HashMap<>();
+
+    private static HashMap<Session, String> auctionIDFromSession = new HashMap<>();
 
 
     private final Logger logger = LoggerFactory.getLogger(Auction.class);
@@ -63,12 +69,15 @@ public class Auction {
 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username, @PathParam("auctionID") String auctionID) throws IOException {
-        if(username == null || username == ""){
+    public void onOpen(Session session, @PathParam("username") String username, @PathParam("associatedPostID") String auctionID) throws IOException {
+        if(username == null || username == ""
+                || generalUserRepository.findGeneralUserByUserName(username) == null
+                || auctionTableRepository.getAuctionTableById(auctionID) == null){
+            session.close();
             return;
         }
 
-        logger.info("[onOpen] auctionID " + auctionID + " user joined: " + username);
+        logger.info("[onOpen] Auction associatedPostID: " + auctionID + " user joined: " + username);
 
 
         //user is trying to participate in an auction, but did not close the previous session properly
@@ -78,9 +87,9 @@ public class Auction {
             //close the previous session before joining a new one.
             //Thus, in this case, we should remove the user from the hashmap to reset the session
 
+            usernameFromSession.remove(sessionFromUsername.get(username));
             sessionFromUsername.get(username).getBasicRemote().sendText("Closed session");
             sessionFromUsername.get(username).close();
-
         }
 
         //put current session that the user just joined
@@ -104,9 +113,6 @@ public class Auction {
         participatingUsersFromAuctionID.get(auctionID).put(username,true);
 
 
-
-
-
         // send to the user that they joined the auction (from DB)
         sendMessageToPArticularUser(username, "user connected: "+username);
 
@@ -114,16 +120,33 @@ public class Auction {
         broadcast("User: " + username + " has Joined the Auction");
 
 
-
         //we need to add new auction, as the user is trying to join a new auction
         GeneralUser user = generalUserRepository.findGeneralUserByUserName(username);
-        System.out.println(user.getUserName());
         Set<AuctionTable> participatingAuctions = user.getConnectedSessions();
 
-        //This should be changed to auctiontableRepository.findAuctionTableById();
-        AuctionTable auction = new AuctionTable(auctionID,user);
-        participatingAuctions.add(auction);
-        auctionTableRepository.save(auction);
+
+
+        AuctionTable auction = auctionTableRepository.getAuctionTableById(auctionID.trim());
+        if(auction != null){
+            participatingAuctions.add(auction);
+            auction.getConnectedUsers().add(user);
+            auctionTableRepository.save(auction);
+            generalUserRepository.save(user);
+            String m = auction.getBidHistory();
+            if(m != null && m != ""){
+                System.out.println(m);
+                String[] split_msg =  m.split("\\s+");
+
+                for(int i = 0; i < split_msg.length; i++){
+                    int splitPoint = split_msg[0].indexOf("-");
+                    String msg = split_msg[i].substring(0,splitPoint) + " bid $ " +  split_msg[i].substring(splitPoint+1);
+                    sendMessageToPArticularUser(username,msg);
+                }
+            }
+        }
+        auctionIDFromSession.put(session,auctionID);
+
+
 
 
 
@@ -140,7 +163,7 @@ public class Auction {
 
         // get the username by session
         String username = usernameFromSession.get(session);
-
+        String auctionId = auctionIDFromSession.get(session);
 
         // server side log
 
@@ -149,14 +172,24 @@ public class Auction {
         // split by space
         String[] split_msg =  message.split("\\s+");
 
-        // Combine the rest of message
-        StringBuilder actualMessageBuilder = new StringBuilder();
-        for (int i = 1; i < split_msg.length; i++) {
-            actualMessageBuilder.append(split_msg[i]).append(" ");
+        //first text should be a number
+
+        int bid = Integer.parseInt(split_msg[0]);
+        if(auctionId != "" && auctionId != null){
+            AuctionTable a = auctionTableRepository.getAuctionTableById(auctionId);
+            if( bid > a.getHighestBidAmount()){
+                a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
+                a.setHighestBidAmount(bid);
+                String msg = username + " bid $" + bid + ":";
+                a.setBidHistory(a.getBidHistory()+username+"-"+bid+" ");
+                auctionTableRepository.save(a);
+                broadcast(username + " bid $" + bid);
+            }
         }
-        logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
-        String actualMessage = actualMessageBuilder.toString();
-        sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
+
+        //logger.info("[onMessage] bid placed from: " + username + "\"" + message + "\" to: " + split_msg[0]);
+
+        //sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
     }
 
 
