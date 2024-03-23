@@ -3,30 +3,27 @@ package com.example.androidexample;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.view.View;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.CustomZoomButtonsDisplay;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.util.ArrayList;
 
@@ -36,6 +33,9 @@ public class SetLocationActivity extends AppCompatActivity {
     private MapView map = null;
 
     private Marker marker;
+
+    private ScaleBarOverlay scaleBarOverlay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +58,19 @@ public class SetLocationActivity extends AppCompatActivity {
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
+        // Enable multi-touch controls for panning and zooming
+//        map.setMultiTouchControls(true);
 
 
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
-                 Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
         IMapController mapController = map.getController();
 
-        // Set zoom level
+//        // Set zoom level
         mapController.setZoom(17.0);
 
         // Set center point to Ames campus location
@@ -76,15 +78,44 @@ public class SetLocationActivity extends AppCompatActivity {
         mapController.setCenter(amesCampus);
 
 
-        map.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) event.getX(), (int) event.getY());
+        map.setMultiTouchControls(true);
+
+
+        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                // Handle double tap event (if needed)
+                return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                // Handle single tap event by adding a marker
+                GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) e.getX(), (int) e.getY());
                 addMarker(point);
                 return true;
             }
-            return false;
         });
+
+        map.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
+
+
+//        //having trouble with getting zoom controls and touch to work at the same time
+//                map.setOnTouchListener((v, event) -> {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) event.getX(), (int) event.getY());
+//                addMarker(point);
+//                return true;
+//            }
+//            return false;
+//        });
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -138,14 +169,14 @@ public class SetLocationActivity extends AppCompatActivity {
     }
 
 
+
     private void addMarker(GeoPoint point) {
         if (marker != null) {
             map.getOverlays().remove(marker); // Remove existing marker
         }
         marker = new Marker(map);
         marker.setPosition(point);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(marker);
         map.invalidate(); // Refresh the map to display the marker
     }
-    }
+}
