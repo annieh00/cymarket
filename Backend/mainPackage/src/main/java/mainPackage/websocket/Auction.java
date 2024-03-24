@@ -144,6 +144,7 @@ public class Auction {
                 }
             }
         }
+        //
         auctionIDFromSession.put(session,auctionID);
 
 
