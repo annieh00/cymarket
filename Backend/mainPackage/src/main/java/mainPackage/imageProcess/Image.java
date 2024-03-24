@@ -1,11 +1,12 @@
 package mainPackage.imageProcess;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
+@TableGenerator(
+        name = "imageGenerator",
+        allocationSize = 1,
+        initialValue = 1)
 @Table(name="images")
 public class Image {
     @Column(name = "fileName")
@@ -14,8 +15,20 @@ public class Image {
     private String base64Encoding;
 
     @Id
+    @GeneratedValue(
+            strategy=GenerationType.TABLE,
+            generator="imageGenerator")
     @Column(name="id")
     private int id;
+
+    // Constructor with filename and Base64 encoding
+    public Image(String fileName, String base64Encoding) {
+        this.fileName = fileName;
+        this.base64Encoding = base64Encoding;
+    }
+
+    public Image() {
+    }
 
     public int getId(){
         return id;

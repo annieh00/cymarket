@@ -1,6 +1,8 @@
 package mainPackage.websocket;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -13,10 +15,14 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
 
-
-
+import mainPackage.imageProcess.Image;
+import mainPackage.imageProcess.ImageProcessingController;
+import mainPackage.imageProcess.ImageRepository;
+import org.antlr.v4.runtime.misc.LogManager;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -36,7 +42,7 @@ import org.springframework.stereotype.Controller;
  */
 @ServerEndpoint("/chat/{chatID}/{username}")
 @Component
-
+@Controller
 public class DirectChat {
 
     // Store all socket session and their corresponding username
@@ -44,6 +50,13 @@ public class DirectChat {
     private static Map < Session, String > sessionUsernameMap = new Hashtable <>();
     private static Map < String, Session > usernameSessionMap = new Hashtable <>();
 
+    private static ImageRepository imageRepository;
+
+    private static int count = 0;
+    @Autowired
+    public void setImageRepository(ImageRepository ir) {
+        imageRepository = ir;
+    }
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(DirectChat.class);
@@ -54,12 +67,12 @@ public class DirectChat {
      * @param session represents the WebSocket session for the connected user.
      * @param username username1 specified in path parameter.
      */
+
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username, @PathParam("chatID") String chatID) throws IOException {
 
         // server side log
         logger.info("[onOpen] ChatSession ID " + chatID + "joine user: " + username);
-
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
@@ -69,19 +82,40 @@ public class DirectChat {
             // map current session with username
             sessionUsernameMap.put(session, username);
 
-
             // map current username with session
             usernameSessionMap.put(username, session);
 
-
-
-
             // send to the user joining in
-            sendMessageToPArticularUser(username, "user connected: "+username);
-
+            sendMessageToParticularUser(username, "user connected: "+username);
 
             // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
+            broadcast("User: " + username + " has joined the chat.");
+        }
+    }
+
+    /**
+     * Helper method for OnMessage. Can't use ImageProcessingController within onMessage.
+     */
+    private String onMessageHelper(Image img, String fn) {
+        try {
+            nu.pattern.OpenCV.loadLocally();
+
+            byte[] decoded = Base64.getDecoder().decode(img.getBase64Encoding());
+            img.setFileName(fn);
+            String fileName = img.getFileName();
+
+            // Save the decoded image to the specified file path
+            FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+
+            // Read the saved image as bytes again
+            byte[] savedImageBytes = FileUtils.readFileToByteArray(new File(fileName));
+
+            // Encode the saved image bytes as Base64 string
+            imageRepository.save(img);
+            return Base64.getEncoder().encodeToString(savedImageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "internal server error";
         }
     }
 
@@ -97,14 +131,36 @@ public class DirectChat {
         // get the username by session
         String username = sessionUsernameMap.get(session);
 
-
         // server side log
-
+        logger.info("[onMessage] from: " + username + " message: " + message);
 
         // Direct message to
-            // split by space
-            String[] split_msg =  message.split("\\s+");
+        // split by space
+        String[] split_msg =  message.split("\\s+");
 
+        /**
+         user1 sends base64 encoded string
+         user2 receives base64 encoded string
+         */
+
+        // Check if the message starts with the specific command for saving an image
+        if (message.startsWith("!saveimage ")) {
+            String encodedImageString = split_msg[2]; // Assuming 12 characters for "!saveimage "
+
+            // Create an Image object with the extracted Base64 string
+            Image imageToSave = new Image(null, encodedImageString);
+            try {
+                // Call the saveImage method from ImageProcessingController to save and return Base64 string
+                String savedImageB64 = onMessageHelper(imageToSave, username + count + ".jpg");
+                count++;
+                // Send the processed (saved) image Base64 string back to the user
+                sendMessageToParticularUser(split_msg[1], "[DM from " + username + "]: " + savedImageB64);
+                logger.info("[onMessage] from: " + username + "\"" + savedImageB64 + "\" to: " + split_msg[0]);
+            } catch (Exception e) {
+                logger.error("[Image Save Error] for user " + username + ": " + e.getMessage());
+                sendMessageToParticularUser(username, "Error saving image. Please try again.");
+            }
+        } else {
             // Combine the rest of message
             StringBuilder actualMessageBuilder = new StringBuilder();
             for (int i = 1; i < split_msg.length; i++) {
@@ -112,9 +168,10 @@ public class DirectChat {
             }
             logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
             String actualMessage = actualMessageBuilder.toString();
-            sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
-    }
+            sendMessageToParticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
+        }
 
+    }
 
 
     /**
@@ -134,8 +191,6 @@ public class DirectChat {
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
-
-
 
         // send the message to chat
         broadcast(username + " disconnected");
@@ -163,7 +218,7 @@ public class DirectChat {
      * @param username The username of the recipient.
      * @param message  The message to be sent.
      */
-    private void sendMessageToPArticularUser(String username, String message) {
+    private void sendMessageToParticularUser(String username, String message) {
         try {
             if(usernameSessionMap.containsKey(username)) {
                 usernameSessionMap.get(username).getBasicRemote().sendText(message);
