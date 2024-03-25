@@ -76,7 +76,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText getCategoryEditTxt;
     private Boolean auction;
     private static final String url2 = "http://10.0.2.2/android_db_pool/fileupload.php";
-    String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/testCreatePost";
+    String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data4";
     private ActivityResultLauncher<String> mGetContent;
 
     Uri selectiedUri;
@@ -111,7 +111,6 @@ public class CreatePostActivity extends AppCompatActivity{
                 uri -> {
                     // Handle the returned Uri
                     Log.d("URI", "Received URI: " + uri);
-
                     if (uri != null) {
                         selectiedUri = uri;
                         images.add(uri);
@@ -154,7 +153,7 @@ public class CreatePostActivity extends AppCompatActivity{
                 /* when post button is pressed, use intent to switch to Signup Activity */
 //                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
 //                startActivity(intent);  // go to SignupActivity
-                sendJsonObjReq();
+//                sendJsonObjReq();
             }
         });
 
