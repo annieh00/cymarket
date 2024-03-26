@@ -3,7 +3,13 @@ package mainPackage.usersPackage;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import mainPackage.websocket.Auction;
+import mainPackage.websocket.AuctionTable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Junhyung Shim
@@ -43,6 +49,22 @@ public class GeneralUser {
     @Column(name = "userName",unique = true)
     private String userName;
 
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<AuctionTable> connectedSessions = new HashSet<>();
+
+    public Set<AuctionTable> getConnectedSessions() {
+        return connectedSessions;
+    }
+
+    public void setConnectedSessions(Set<AuctionTable> connectedSessions) {
+        this.connectedSessions = connectedSessions;
+    }
+
+    public void addConnectedSessions(AuctionTable a){
+        this.connectedSessions.add(a);
+    }
 
     public String getFirstName() {
         return firstName;
