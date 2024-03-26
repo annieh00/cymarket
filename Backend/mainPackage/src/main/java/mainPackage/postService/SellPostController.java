@@ -26,10 +26,6 @@ public class SellPostController {
     private PostingRepository postingRepository;
 
     @Autowired
-    private Post2UserMappingRepository post2UserMappingRepository;
-    //DO NOT DROP sequence table in db
-
-    @Autowired
     private GeneralUserRepository generalUserRepository;
 
     private static AuctionTableRepository auctionTableRepository;
@@ -41,7 +37,8 @@ public class SellPostController {
     //create
     @PostMapping("/posts")
     public String createPost(@RequestBody Posting p){
-        if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
+        GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
+        if(u2 == null){
             //System.out.println("user "+p.getUserName()+ " does not exist");
             ErrorMsg e = new ErrorMsg();
             e.setErrormsg("user does not exist, and therefore cannot create post");
@@ -49,6 +46,8 @@ public class SellPostController {
         }
 
         postingRepository.save(p);
+        u2.getPublishedPosts().add(p);
+        generalUserRepository.save(u2);
 
         if(p.getIsAuction()){//this post is an auction
             GeneralUser u = generalUserRepository.findGeneralUserByUserName(p.getUserName());

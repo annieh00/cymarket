@@ -1,7 +1,12 @@
 package mainPackage.usersPackage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import mainPackage.websocket.AuctionTable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Junhyung Shim
@@ -17,7 +22,7 @@ public class Posting {
 
     //@OneToOne(cascade = CascadeType.ALL)
     @Column(name = "userName")
-    //@JoinColumn(name="email")
+    @JoinColumn(name="email")
     private String userName;
 
     @Column(name = "title")
@@ -49,6 +54,8 @@ public class Posting {
 
     @Column(name = "timeAliveInMinutes")
     private int timeAliveInMinutes;
+
+
 
     @Id
     @GeneratedValue(
