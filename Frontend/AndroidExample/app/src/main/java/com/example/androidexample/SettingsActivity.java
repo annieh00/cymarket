@@ -9,6 +9,9 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+/**
+ * Settings activity will allow you to change up the settings of the user profile
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     Button editProfileButton;
@@ -29,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         /* Initialize UI elements  */
-        editProfileButton = findViewById(R.id.editProfileButton);
+//        editProfileButton = findViewById(R.id.editProfileButton);
         nightModeSwitch = findViewById(R.id.nightModeSwitch);
         notificationsSwitch = findViewById(R.id.notificationsSwitch);
         privateAccountSwitch = findViewById(R.id.privateAccouuntSwitch);
@@ -46,8 +49,8 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /* when login button is pressed, use intent to switch to Login Activity */
-                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                /* when login button is pressed, use intent to switch to Profile SetUp Activity */
+                Intent intent = new Intent(SettingsActivity.this, ProfileSetUpActivity.class);
                 startActivity(intent);  // go to LoginActivity
             }
         });

@@ -43,47 +43,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/profile_icon" />
+<!--            <ImageView-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:src="@drawable/profile_icon" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:text="John Kartos"
-                android:textColor="#FFFFFF"
-                android:textSize="22sp"
-                android:textStyle="bold"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="John Kartos"-->
+<!--                android:textColor="#FFFFFF"-->
+<!--                android:textSize="22sp"-->
+<!--                android:textStyle="bold"/>-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+56 65985 45698"
-                android:textColor="#CCFFFFFF"
-                android:textSize="12sp"
-                android:layout_gravity="center"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="+56 65985 45698"-->
+<!--                android:textColor="#CCFFFFFF"-->
+<!--                android:textSize="12sp"-->
+<!--                android:layout_gravity="center"/>-->
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="20dp"
-                android:paddingStart="30dp"
-                android:layout_gravity="center"
-                android:id="@+id/editProfileButton"
-                android:background="@drawable/round_back_secondary_100"
-                android:text="Edit Profile"
-                android:textAllCaps="false"
-                android:textColor="@color/primary"
-                android:paddingEnd="30dp"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:paddingStart="30dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:id="@+id/editProfileButton"-->
+<!--                android:background="@drawable/round_back_secondary_100"-->
+<!--                android:text="Edit Profile"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/primary"-->
+<!--                android:paddingEnd="30dp"-->
+<!--                android:textSize="16dp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textAlignment="center"-->
+<!--                />-->
 
             <LinearLayout
                 android:background="@drawable/round_back_white10_20"

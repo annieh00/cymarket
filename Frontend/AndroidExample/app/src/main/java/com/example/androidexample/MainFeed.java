@@ -89,6 +89,9 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.androidexample.R.menu.*;
 
+/**
+ * Main feed displays the current posts.
+ */
 public class MainFeed extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
@@ -245,7 +248,9 @@ public class MainFeed extends AppCompatActivity {
 //            }
 //        });
 
-        //link to createPostActivity
+        /** If a certain screen is pressed, it will go to that certain screen.
+         *
+         */
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -42,6 +42,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Auction Activity will be a screen where if the auction checkbox is checked in create post, it will be an auction
+ * listview.
+ */
 public class AuctionActivity extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;

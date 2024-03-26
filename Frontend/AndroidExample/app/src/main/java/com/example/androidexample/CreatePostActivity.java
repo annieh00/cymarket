@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The create post activity makes the user to be able to post items based off of the given information. 
+ */
 public class CreatePostActivity extends AppCompatActivity{
     private EditText titleEditText;
     private ImageButton addImageBtn;
@@ -91,7 +94,6 @@ public class CreatePostActivity extends AppCompatActivity{
 
         /* initialize UI elements */
         //Text
-//        categoryEditTxt = findViewById(R.id.categoryEditText);
         titleEditText = findViewById(R.id.titleEditTxt);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
@@ -145,22 +147,29 @@ public class CreatePostActivity extends AppCompatActivity{
         });
 
 
-        /* click listener on signup button pressed */
+        /*
+        *  click listener on post button pressed
+        */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendJsonObjReq();
                 /* when post button is pressed, use intent to switch to Signup Activity */
-//                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-//                startActivity(intent);  // go to SignupActivity
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);  // go to SignupActivity
 //                sendJsonObjReq();
             }
         });
 
+        /*
+         * click listener for adding an image
+         */
         addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
-        postBtn.setOnClickListener(v -> uploadImage());
-//        postBtn.setOnClickListener(v -> uploadImage());
 
+        /*
+         * click listener for uploading the post
+         */
+        postBtn.setOnClickListener(v -> uploadImage());
 
 
         /* click listener on login button pressed */
@@ -204,6 +213,13 @@ public class CreatePostActivity extends AppCompatActivity{
 
     int i;
 
+    /**
+     * Send a JSON Object request to server that posts the data for a new post.
+     * This method constructs a JSON Object containing post data and sends it to the server
+     * using Volley library's JsonObjectRequest. Upon a successful post, the user is redirected
+     * to the main feed activity. Upon an unsuccessful post, the user stays on that screen and
+     * Toast outputs "Post unsuccessful."
+     */
     private void sendJsonObjReq() {
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();
@@ -250,7 +266,7 @@ public class CreatePostActivity extends AppCompatActivity{
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post failed sd", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
 
 
