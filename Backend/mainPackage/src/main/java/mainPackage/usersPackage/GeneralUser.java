@@ -29,7 +29,6 @@ public class GeneralUser {
     @Column(name = "lastName")
     private String lastName;
 
-
     @Column(name = "email",unique = true)
     private String email;
 
