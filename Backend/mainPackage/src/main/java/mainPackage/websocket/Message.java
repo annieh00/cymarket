@@ -2,24 +2,22 @@ package mainPackage.websocket;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 
 import lombok.Data;
 
 @Entity
 @Table(name = "messages")
+@TableGenerator(
+        name = "messageGenerator",
+        allocationSize = 1,
+        initialValue = 1)
 @Data
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy=GenerationType.TABLE,
+            generator="messageGenerator")
     private Long id;
 
     @Column
