@@ -1,6 +1,6 @@
 package com.example.androidexample;
 
-
+// Import necessary Android classes and libraries
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,26 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+// Import WebSocket handshake class
 import org.java_websocket.handshake.ServerHandshake;
 
 import android.content.Intent;
-//import android.content.res.Configuration;
 import android.location.GpsStatus.Listener;
-import android.os.Bundle;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
+// Import necessary AndroidX classes
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+// Import necessary osmdroid classes
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -39,150 +36,84 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
+/**
+ * The InboxActivity class represents the main activity of the application.
+ * It extends AppCompatActivity and implements WebSocketListener interface.
+ */
+public class InboxActivity extends AppCompatActivity implements WebSocketListener {
 
-public class InboxActivity extends AppCompatActivity implements WebSocketListener  {
-//    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-//    private MapView map = null;
-//
-//    private MinimapOverlay mMinimapOverlay;
-//
-    private Button btnShowMap;
-    //    @Override
+    private Button btnShowMap; // Declare Button variable
+
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down
+     *                           then this Bundle contains the data it most recently supplied in
+     *                           onSaveInstanceState(Bundle). Otherwise, it is null.
+     */
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_inbox);
-        //handle permissions first, before map is created. not depicted here
 
-        //load/initialize the osmdroid configuration, this can be done
-//        Context ctx = getApplicationContext();
-//        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //setting this before the layout is inflated is a good idea
-        //it 'should' ensure that the map has a writable location for the map cache, even without permissions
-        //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
-        //see also StorageUtils
-        //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's
-        //tile servers will get you banned based on this string
-
-        //inflate and create the map
+        // Set the content view to the layout defined in activity_inbox.xml
         setContentView(R.layout.activity_inbox);
 
-//        map = (MapView) findViewById(R.id.map);
-//        map.setTileSource(TileSourceFactory.MAPNIK);
+        // Initialize the button by finding it in the layout by its id
         btnShowMap = findViewById(R.id.btn_show_map);
 
         // Set click listener for the button
         btnShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                // Hide the button when the map is shown
-//                btnShowMap.setVisibility(View.GONE);
-//                // Show the map when the button is clicked
-//                map.setVisibility(View.VISIBLE);
-//
-//                // Request necessary permissions
-//                requestPermissionsIfNecessary(new String[]{
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                });
-//
-//                // Set map controller to default viewpoint
-//                IMapController mapController = map.getController();
-//                mapController.setZoom(17.0); // Zoom level (adjust as needed)
-//                GeoPoint startPoint = new GeoPoint(42.0267, -93.6465); // Coordinates for Ames, Iowa (Iowa State campus)
-//                mapController.setCenter(startPoint);
-
-
+                // Create an Intent to navigate to SetLocationActivity
                 Intent intent = new Intent(getApplicationContext(), SetLocationActivity.class);
+                // Start the activity
                 startActivity(intent);
-//
-//        requestPermissionsIfNecessary(new String[]{
-//                // if you need to show the current location, uncomment the line below
-//                Manifest.permission.ACCESS_FINE_LOCATION,
-//                // WRITE_EXTERNAL_STORAGE is required in order to show the map
-//
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE
             }
         });
-//        addIconsToMap();
-        //code for minimap in the corner
-//        DisplayMetrics dm = getResources().getDisplayMetrics();
-//        mMinimapOverlay = new MinimapOverlay(this, map.getTileRequestCompleteHandler());
-//        mMinimapOverlay.setWidth(dm.widthPixels / 5);
-//        mMinimapOverlay.setHeight(dm.heightPixels / 5);
-//        map.getOverlays().add(mMinimapOverlay);
     }
 
-//        @Override
-//        public void onResume() {
-//            super.onResume();
-//            //this will refresh the osmdroid configuration on resuming.
-//            //if you make changes to the configuration, use
-//            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//            //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-//            map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
-//        }
-//
-//        @Override
-//        public void onPause() {
-//            super.onPause();
-//            //this will refresh the osmdroid configuration on resuming.
-//            //if you make changes to the configuration, use
-//            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//            //Configuration.getInstance().save(this, prefs);
-//            map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
-//        }
-//
-//        @Override
-//        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//            ArrayList<String> permissionsToRequest = new ArrayList<>();
-//            for (int i = 0; i < grantResults.length; i++) {
-//                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-//                    permissionsToRequest.add(permissions[i]);
-//                }
-//            }
-//            if (!permissionsToRequest.isEmpty()) {
-//                ActivityCompat.requestPermissions(
-//                        this,
-//                        permissionsToRequest.toArray(new String[0]),
-//                        REQUEST_PERMISSIONS_REQUEST_CODE);
-//            }
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults); // Add this line
-//        }
-//
-//        private void requestPermissionsIfNecessary(String[] permissions) {
-//            ArrayList<String> permissionsToRequest = new ArrayList<>();
-//            for (String permission : permissions) {
-//                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-//                    permissionsToRequest.add(permission);
-//                }
-//            }
-//            if (!permissionsToRequest.isEmpty()) {
-//                ActivityCompat.requestPermissions(
-//                        this,
-//                        permissionsToRequest.toArray(new String[0]),
-//                        REQUEST_PERMISSIONS_REQUEST_CODE);
-//            }
-//        }
+    // WebSocketListener interface methods
 
+    /**
+     * Method called when WebSocket connection is opened.
+     *
+     * @param handshakedata Information about the handshake
+     */
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {
-
+        // Method called when WebSocket connection is opened
     }
 
+    /**
+     * Method called when a message is received via WebSocket.
+     *
+     * @param message The received message
+     */
     @Override
     public void onWebSocketMessage(String message) {
-
+        // Method called when a message is received via WebSocket
     }
 
+    /**
+     * Method called when WebSocket connection is closed.
+     *
+     * @param code   The code indicating the reason for closure
+     * @param reason The reason for closure
+     * @param remote Whether the closure was initiated by the remote endpoint
+     */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
-
+        // Method called when WebSocket connection is closed
     }
 
+    /**
+     * Method called when there's an error with WebSocket connection.
+     *
+     * @param ex The exception representing the error
+     */
     @Override
     public void onWebSocketError(Exception ex) {
-
+        // Method called when there's an error with WebSocket connection
     }
-
 }
