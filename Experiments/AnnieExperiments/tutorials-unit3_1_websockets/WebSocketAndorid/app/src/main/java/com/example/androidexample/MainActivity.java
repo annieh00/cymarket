@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity implements WebSocketListener{
 
     private String BASE_URL = "ws://10.0.2.2:8080/chat/";
+//    private String BASE_URL = "ws://192.168.0.104:8080/chat/";
 
     private Button connectBtn, sendBtn;
     private EditText usernameEtx, msgEtx;

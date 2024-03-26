@@ -19,7 +19,7 @@ import java.io.IOException;
  * along with text data as part of a single request. It's commonly used for file uploads.
  *
  **/
- public class MultipartRequest extends Request<String> {
+public class MultipartRequest extends Request<String> {
 
     private final Response.Listener<String> mListener;
     private final Response.ErrorListener mErrorListener;

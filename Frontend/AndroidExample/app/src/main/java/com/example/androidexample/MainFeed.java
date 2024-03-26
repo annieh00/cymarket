@@ -11,9 +11,11 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -25,6 +27,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.navigation.NavigationView;
@@ -86,16 +89,23 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.androidexample.R.menu.*;
 
+/**
+ * Main feed displays the current posts.
+ */
 public class MainFeed extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
 
 
     AlertDialog.Builder builder;
+    public static final String URL_IMAGE = "http://10.0.2.2:8080/images/1";
 
     private ListAdapter adapter;
     private ListView listView;
     private String itemSelected;
+
+    private ImageView imageView;
+
 
 
 
@@ -238,7 +248,9 @@ public class MainFeed extends AppCompatActivity {
 //            }
 //        });
 
-        //link to createPostActivity
+        /** If a certain screen is pressed, it will go to that certain screen.
+         *
+         */
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -412,4 +424,37 @@ public class MainFeed extends AppCompatActivity {
 //        // Adding request to request queue
 //        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
 //    }
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                URL_IMAGE,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        imageView.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
 }
+
+

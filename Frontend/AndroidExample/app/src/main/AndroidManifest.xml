@@ -74,10 +74,9 @@
         <!-- android:exported="false" /> -->
         <activity
             android:name=".CreatePostActivity"
-            android:exported="true" />
-        <activity
-            android:name=".postActivity"
-            android:exported="true" />
+            android:exported="true" /> <!-- <activity -->
+        <!-- android:name=".postActivity" -->
+        <!-- android:exported="true" /> -->
         <activity
             android:name=".ViewAnnouncementAdmin"
             android:exported="false" />

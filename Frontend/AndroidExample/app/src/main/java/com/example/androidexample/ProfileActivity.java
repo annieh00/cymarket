@@ -38,18 +38,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The profile setup activity will be a screen that the user will be redirected to immediately after signup.
+ * The profile activity will display the selected user's profile.
  */
-public class ProfileSetUpActivity extends AppCompatActivity {
-
+public class ProfileActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profilesetup);            // link to Login activity XML
-
-
+        setContentView(R.layout.activity_profile);            // link to Login activity XML
     }
+
 }
 
 

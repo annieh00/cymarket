@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.example.androidexample'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.androidexample"
@@ -24,6 +24,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 //
