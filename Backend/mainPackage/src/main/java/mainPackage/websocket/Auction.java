@@ -3,7 +3,8 @@ package mainPackage.websocket;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 import jakarta.websocket.OnClose;
@@ -16,101 +17,140 @@ import jakarta.websocket.server.ServerEndpoint;
 
 
 
+import mainPackage.usersPackage.GeneralUser;
+import mainPackage.usersPackage.GeneralUserRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+
+
 
 @Controller
-@ServerEndpoint(value = "/auction/{auctionID}/{username}")
+@ServerEndpoint(value = "/auction/{associatedPostID}/{username}")
 public class Auction {
+    //manually allocating causes the error
+
+
+    private static GeneralUserRepository generalUserRepository;
+
+    @Autowired
+    public void setGeneralUserRepository(GeneralUserRepository repo) {
+        generalUserRepository = repo;  // we are setting the static variable
+    }
+
+    private static AuctionTableRepository auctionTableRepository;
+
+    @Autowired
+    public void setAuctionTableRepository(AuctionTableRepository repo) {
+        auctionTableRepository= repo;  // we are setting the static variable
+    }
+
+    //only stores the current "live" session & user pair
     private static HashMap< Session, String > usernameFromSession = new HashMap<>();
-    private static HashMap < String, Session > sessionFromUsername = new HashMap<>();
 
-    private static HashMap <Session, String> AuctionIDFromSession = new HashMap<>();
+    //only stores the current "live" session & user pair
+    private static HashMap <String, Session> sessionFromUsername = new HashMap<>();
+    private static HashMap < String, HashMap<String, Boolean>> participatingAuctionsFromUsername = new HashMap<>();
 
-    private static HashMap <String,HashMap<Session,Boolean>> connectedSessionsFromAuctionId = new HashMap<>();
+    private static HashMap <String, HashMap<String, Boolean>> participatingUsersFromAuctionID = new HashMap<>();
+
+    private static HashMap<Session, String> auctionIDFromSession = new HashMap<>();
 
 
     private final Logger logger = LoggerFactory.getLogger(Auction.class);
 
 
+
+
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username, @PathParam("auctionID") String auctionID) throws IOException {
-        if(username == null || username == ""){
+    public void onOpen(Session session, @PathParam("username") String username, @PathParam("associatedPostID") String auctionID) throws IOException {
+        if(username == null || username == ""
+                || generalUserRepository.findGeneralUserByUserName(username) == null
+                || auctionTableRepository.getAuctionTableById(auctionID) == null){
+            session.close();
             return;
         }
 
-        logger.info("[onOpen] auctionID " + auctionID + " user joined: " + username);
+        logger.info("[onOpen] Auction associatedPostID: " + auctionID + " user joined: " + username);
 
 
-        // Handle the case of a duplicate session
+        //user is trying to participate in an auction, but did not close the previous session properly
         if (sessionFromUsername.containsKey(username)) {
             //case1: user is trying to join another auction
             //Normally, this would not be the case, as the app should have properly sent a signal to
             //close the previous session before joining a new one.
             //Thus, in this case, we should remove the user from the hashmap to reset the session
 
-            if(usernameFromSession.containsKey(sessionFromUsername.get(username))){
-                usernameFromSession.remove(sessionFromUsername.get(username));
-            }
-
-
-
-            if(AuctionIDFromSession.containsKey(sessionFromUsername.get(username))){
-
-                if(connectedSessionsFromAuctionId.containsKey(AuctionIDFromSession.get(sessionFromUsername.get(username)))){
-                    HashMap<Session,Boolean> sMap = connectedSessionsFromAuctionId.get(AuctionIDFromSession.get(sessionFromUsername.get(username)));
-                    if(sMap.containsKey(sessionFromUsername.get(username))){
-                        sMap.remove(sessionFromUsername.get(username));
-                    }
-                }
-
-                AuctionIDFromSession.remove(sessionFromUsername.get(username));
-            }
-
-
-            sessionFromUsername.get(username).getBasicRemote().sendText("Closed session because you are trying to open another session without closing the other one");
+            usernameFromSession.remove(sessionFromUsername.get(username));
+            sessionFromUsername.get(username).getBasicRemote().sendText("Closed session");
             sessionFromUsername.get(username).close();
-            sessionFromUsername.remove(username);
-
-
-            //db.get auction name that is related to this session (use AuctionID)
-            session.getBasicRemote().sendText("Please Try Again");
-            session.close();
-
-        }else {
-            // map current session with username
-            usernameFromSession.put(session, username);
-
-            // map current username with session
-            sessionFromUsername.put(username, session);
-
-            //map current session with auctionID
-            AuctionIDFromSession.put(session,auctionID);
-
-            //check if there is an arraylist of sessions corresponding to a unique auction ID
-            if(connectedSessionsFromAuctionId.containsKey(auctionID)){
-                HashMap<Session,Boolean> temp = connectedSessionsFromAuctionId.get(auctionID);
-                if(temp != null){
-                    temp.put(session,true);
-                }else{
-                    temp = new HashMap<>();
-                    temp.put(session,true);
-                    connectedSessionsFromAuctionId.put(auctionID,temp);
-                }
-
-            }
-
-
-
-            // send to the user that they joined the auction (from DB)
-            sendMessageToPArticularUser(username, "user connected: "+username);
-
-            // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Auction");
         }
+
+        //put current session that the user just joined
+        sessionFromUsername.put(username,session);
+
+        // map current session with username
+        usernameFromSession.put(session, username);
+
+        //add the auction to the user's participation map
+        if(!participatingAuctionsFromUsername.containsKey(username)){
+            participatingAuctionsFromUsername.put(username,new HashMap<String,Boolean>());
+        }
+
+        participatingAuctionsFromUsername.get(username).put(auctionID,true);
+
+        //this should have been in the DB from the moment seller posts
+        if(!participatingUsersFromAuctionID.containsKey(auctionID)){
+            participatingUsersFromAuctionID.put(auctionID, new HashMap<String,Boolean>());
+        }
+
+        participatingUsersFromAuctionID.get(auctionID).put(username,true);
+
+
+        // send to the user that they joined the auction (from DB)
+        sendMessageToPArticularUser(username, "user connected: "+username);
+
+        // send to everyone in the chat
+        broadcast("User: " + username + " has Joined the Auction");
+
+
+        //we need to add new auction, as the user is trying to join a new auction
+        GeneralUser user = generalUserRepository.findGeneralUserByUserName(username);
+        Set<AuctionTable> participatingAuctions = user.getConnectedSessions();
+
+
+
+        AuctionTable auction = auctionTableRepository.getAuctionTableById(auctionID.trim());
+        if(auction != null){
+            participatingAuctions.add(auction);
+            auction.getConnectedUsers().add(user);
+            auctionTableRepository.save(auction);
+            generalUserRepository.save(user);
+            String m = auction.getBidHistory();
+            if(m != null && m != ""){
+                System.out.println(m);
+                String[] split_msg =  m.split("\\s+");
+
+                for(int i = 0; i < split_msg.length; i++){
+                    int splitPoint = split_msg[0].indexOf("-");
+                    String msg = split_msg[i].substring(0,splitPoint) + " bid $ " +  split_msg[i].substring(splitPoint+1);
+                    sendMessageToPArticularUser(username,msg);
+                }
+            }
+        }
+        //
+        auctionIDFromSession.put(session,auctionID);
+
+
+
+
+
     }
 
     /**
@@ -124,7 +164,7 @@ public class Auction {
 
         // get the username by session
         String username = usernameFromSession.get(session);
-
+        String auctionId = auctionIDFromSession.get(session);
 
         // server side log
 
@@ -133,14 +173,24 @@ public class Auction {
         // split by space
         String[] split_msg =  message.split("\\s+");
 
-        // Combine the rest of message
-        StringBuilder actualMessageBuilder = new StringBuilder();
-        for (int i = 1; i < split_msg.length; i++) {
-            actualMessageBuilder.append(split_msg[i]).append(" ");
+        //first text should be a number
+
+        int bid = Integer.parseInt(split_msg[0]);
+        if(auctionId != "" && auctionId != null){
+            AuctionTable a = auctionTableRepository.getAuctionTableById(auctionId);
+            if( bid > a.getHighestBidAmount()){
+                a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
+                a.setHighestBidAmount(bid);
+                String msg = username + " bid $" + bid + ":";
+                a.setBidHistory(a.getBidHistory()+username+"-"+bid+" ");
+                auctionTableRepository.save(a);
+                broadcast(username + " bid $" + bid);
+            }
         }
-        logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
-        String actualMessage = actualMessageBuilder.toString();
-        sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
+
+        //logger.info("[onMessage] bid placed from: " + username + "\"" + message + "\" to: " + split_msg[0]);
+
+        //sendMessageToPArticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
     }
 
 
