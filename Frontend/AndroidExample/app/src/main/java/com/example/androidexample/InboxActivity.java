@@ -5,39 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-// Import WebSocket handshake class
 import org.java_websocket.handshake.ServerHandshake;
 
 import android.content.Intent;
-import android.location.GpsStatus.Listener;
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
+
 import android.view.View;
 
-// Import necessary AndroidX classes
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-// Import necessary osmdroid classes
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.MinimapOverlay;
-import org.osmdroid.views.overlay.OverlayItem;
-
-import java.util.ArrayList;
 
 /**
- * The InboxActivity class represents the main activity of the application.
+ * The InboxActivity class chat represents the chat feature of the application.
  * It extends AppCompatActivity and implements WebSocketListener interface.
  */
 public class InboxActivity extends AppCompatActivity implements WebSocketListener {
