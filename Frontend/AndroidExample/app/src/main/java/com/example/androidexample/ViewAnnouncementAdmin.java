@@ -1,5 +1,6 @@
 package com.example.androidexample;
 
+// Import necessary Android classes and libraries
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -10,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,78 +18,64 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * The ViewAnnouncementAdmin class displays announcements for administrators.
+ * It extends AppCompatActivity.
+ */
 public class ViewAnnouncementAdmin extends AppCompatActivity {
 
-
+    // Declare UI elements and variables
     private Button btnJsonArrReq;
     private Button deleteBtn;
     private Button updateAnnouncement;
-
     private EditText id;
     private EditText updatedTitle;
     private EditText newUpdatedBody;
-
     private int announcementID;
-
-
     private Toolbar toolbar;
     private static final String URL_JSON_ARRAY_DEL = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/";
-
     private static final String URL_JSON_ARRAY_UPDATE = "http://coms-309-060.class.las.iastate.edu:8080/announcements/update/";
-
-
-
-    //    private static final String URL_JSON_ARRAY = "https://jsonplaceholder.typicode.com/users";
-//    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
     private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
     private ListAdapter adapter;
     private ListView listView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_announcement_admin);
 
-
+        // Initialize UI elements
         btnJsonArrReq = findViewById(R.id.announcementsBtn);
         updateAnnouncement = findViewById(R.id.updateBtn);
         deleteBtn = findViewById(R.id.deleteBtn);
-
         id = findViewById(R.id.idToUpdate);
         updatedTitle = findViewById(R.id.titleToUpdate);
         newUpdatedBody = findViewById(R.id.bodyToUpdate);
-
-
         listView = findViewById(R.id.adminListView);
-
-
         toolbar = findViewById(R.id.vwebtoolbar1);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
-        // Initialize the adapter with an empty list (data will be added later)
+        // Initialize adapter with empty list
         adapter = new ListAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
+        // Set click listeners for buttons
         btnJsonArrReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makeJsonArrayReq();
             }
         });
-
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,9 +95,9 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int announcementId = Integer.parseInt(id.getText().toString());
-//                String deleteAnnouncementUrl = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/" + announcementId;
-                String deleteAnnouncementUrl = URL_JSON_ARRAY_DEL + announcementId ;
+                String deleteAnnouncementUrl = URL_JSON_ARRAY_DEL + announcementId;
 
+                // Create DELETE request
                 StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, deleteAnnouncementUrl,
                         new Response.Listener<String>() {
                             @Override
@@ -126,46 +112,48 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                                 Log.e("Volley Error", "Error deleting announcement: " + error.getMessage());
                                 // Handle error response (if needed)
                             }
-
                         });
                 VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(deleteRequest);
-
-
             }
         });
     }
 
+    /**
+     * Makes a PUT request to update an announcement.
+     */
+    private void makeUpdateToAnnouncement() {
+        announcementID = Integer.parseInt(id.getText().toString());
+        String updatedTitleText = updatedTitle.getText().toString();
+        String updatedBodyText = newUpdatedBody.getText().toString();
 
-        private void makeUpdateToAnnouncement () {
-            announcementID = Integer.parseInt(id.getText().toString());
-            String updatedTitleText = updatedTitle.getText().toString();
-            String updatedBodyText = newUpdatedBody.getText().toString();
+        String updateAnnouncementUrl = URL_JSON_ARRAY_UPDATE + announcementID;
 
-            String updateAnnouncementUrl = URL_JSON_ARRAY_UPDATE + announcementID;
-
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("title", updatedTitleText);
-                jsonObject.put("description", updatedBodyText);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d("Volley Response", "Announcement updated successfully");
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
-                }
-            });
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", updatedTitleText);
+            jsonObject.put("description", updatedBodyText);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
+        // Create PUT request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Volley Response", "Announcement updated successfully");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
+            }
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+    }
 
+    /**
+     * Makes a GET request to fetch announcements as a JSON array.
+     */
         private void makeJsonArrayReq () {
 
             adapter.clear();
@@ -186,10 +174,6 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                                     String title = jsonObject.getString("title");
                                     String description = jsonObject.getString("description");
 
-                                    // Create a ListItemObject and add it to the adapter
-                                    //commented out for testing purposes
-//                                    ListItemObject item = new ListItemObject(title, description);
-//                                    adapter.add(item);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -207,8 +191,6 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                 @Override
                 public Map<String, String> getHeaders() {
                     Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
                     return headers;
                 }
 

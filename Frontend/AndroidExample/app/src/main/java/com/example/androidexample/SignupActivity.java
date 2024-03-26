@@ -28,6 +28,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The signup activity class grants the user to be able to sign up with credentials. It extends AppCompatActivity.
+ */
 public class SignupActivity extends AppCompatActivity {
 
     private EditText emailEditText;  // define username edittext variable
@@ -45,9 +48,12 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         /* initialize UI elements */
+        //Text
         emailEditText = findViewById(R.id.signup_username_edt);  // link to username edtext in the Signup activity XML
         passwordEditText = findViewById(R.id.signup_password_edt);  // link to password edtext in the Signup activity XML
         confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edtext in the Signup activity XML
+
+        //Buttons
         loginButton = findViewById(R.id.signup_login_btn);    // link to login button in the Signup activity XML
         signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
 
@@ -77,6 +83,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Send data as a post request to the server. This data will be email and password, and it will create a user based
+     * off of the given credentials. The response will be a boolean that says if the creation is successful or not.
+     */
     private void sendJsonObjReq() {
         JSONObject jsonObject = new JSONObject();
         try {

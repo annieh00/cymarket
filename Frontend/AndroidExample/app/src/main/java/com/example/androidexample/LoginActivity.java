@@ -30,6 +30,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The login activity will be a screen where the user can log in if given the right credentials.
+ */
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTxt, passwordTxt;  //these text boxes are where the user enters their credentials
     private Button loginButton;         // the login button is used to submit the credentials of the user
@@ -117,6 +120,10 @@ public class LoginActivity extends AppCompatActivity {
 
     String URL_POST_LOGIN_USER = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/user1";
 
+    /**
+     *     Sends a post request to the server to post the login info. If the credentials are already in the database, it will log in
+     *     (because a boolean is sent as true). If not, it will send back a boolean that is false which means that the user is not in the system.
+     */
     private void sendJsonObjReq() {
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();

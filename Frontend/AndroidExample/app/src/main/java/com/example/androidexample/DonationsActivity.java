@@ -4,6 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+
+/**
+ * Donations activity will be a feature for organization users. Items that have been marked as donations
+ * will appear in the screen.
+ */
 public class DonationsActivity extends AppCompatActivity {
 
     @Override

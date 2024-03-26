@@ -60,7 +60,7 @@ import android.icu.text.CaseMap;
 public class ListItemObject {
     private String title;
     private String description;
-private int userName;
+    private int userName;
     public ListItemObject(String name, String email, int username) {
         this.title = name;
         this.description= email;
