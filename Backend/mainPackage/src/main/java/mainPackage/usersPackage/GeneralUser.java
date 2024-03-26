@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 
-import java.util.Set;
-
 /**
  * @author Junhyung Shim
  * implementation of normal user
