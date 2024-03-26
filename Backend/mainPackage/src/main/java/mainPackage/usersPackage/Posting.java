@@ -1,6 +1,7 @@
 package mainPackage.usersPackage;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 /**
  * @author Junhyung Shim
@@ -24,6 +25,11 @@ public class Posting {
     @Column(name = "description")
     private String description;
 
+
+
+    @Column(name = "isAuction")
+    private boolean isAuction;
+
     @Column(name = "picture1")
     private String picture1;
 
@@ -40,6 +46,9 @@ public class Posting {
 //
 //    @Column(name = "picture6")
 //    private String picture6;
+
+    @Column(name = "timeAliveInMinutes")
+    private int timeAliveInMinutes;
 
     @Id
     @GeneratedValue(
@@ -98,6 +107,23 @@ public class Posting {
 
     public int getId() {
         return id;
+    }
+
+    public boolean getIsAuction() {
+        return isAuction;
+    }
+    public void setIsAuction(boolean auction) {
+        isAuction = auction;
+    }
+
+
+
+    public int getTimeAliveInMinutes() {
+        return timeAliveInMinutes;
+    }
+
+    public void setTimeAliveInMinutes(int timeAliveInMinutes) {
+        this.timeAliveInMinutes = timeAliveInMinutes;
     }
 
 //    public String getPicture4() {

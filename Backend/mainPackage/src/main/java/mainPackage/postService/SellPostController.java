@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import jakarta.websocket.server.PathParam;
 import mainPackage.errorMsg.ErrorMsg;
 import mainPackage.usersPackage.*;
+import mainPackage.websocket.AuctionTable;
+import mainPackage.websocket.AuctionTableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.*;
@@ -30,21 +32,36 @@ public class SellPostController {
     @Autowired
     private GeneralUserRepository generalUserRepository;
 
+    private static AuctionTableRepository auctionTableRepository;
 
+    @Autowired
+    public void setAuctionTableRepository(AuctionTableRepository repo) {
+        auctionTableRepository= repo;  // we are setting the static variable
+    }
     //create
     @PostMapping("/posts")
     public String createPost(@RequestBody Posting p){
-//        if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
-//            //System.out.println("user "+p.getUserName()+ " does not exist");
-//            ErrorMsg e = new ErrorMsg();
-//            e.setErrormsg("user does not exist, and therefore cannot create post");
-//            return e;
-//        }
+        if(generalUserRepository.findGeneralUserByUserName(p.getUserName()) == null){
+            //System.out.println("user "+p.getUserName()+ " does not exist");
+            ErrorMsg e = new ErrorMsg();
+            e.setErrormsg("user does not exist, and therefore cannot create post");
+            return "{\"serverResponse\" : false}";
+        }
+
         postingRepository.save(p);
-        //Post2UserMapping p2u = new Post2UserMapping();
-        //p2u.setPid(p.getId());
-        //p2u.setUid(p.getUserName());
-        //post2UserMappingRepository.save(p2u);
+
+        if(p.getIsAuction()){//this post is an auction
+            GeneralUser u = generalUserRepository.findGeneralUserByUserName(p.getUserName());
+            AuctionTable auction = new AuctionTable();
+            auction.setPost(p);
+            auction.setHighestBidder(u); //no one has placed a bid yet
+            auction.setId(u.getUserName()+p.getTitle());
+            if(p.getTimeAliveInMinutes() == 0){
+                p.setTimeAliveInMinutes(5);
+            }
+            auctionTableRepository.save(auction);
+        }
+
         return "{\"serverResponse\" : true}";
     }
 
@@ -103,7 +120,10 @@ public class SellPostController {
         if(p==null){
             return "{ \"serverResponse\" : false}";
         }
-
+        AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
+        if(a != null){
+            auctionTableRepository.delete(a);
+        }
         postingRepository.delete(p);
         return  "{ \"serverResponse\" : true}";
     }
