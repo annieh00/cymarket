@@ -27,13 +27,6 @@ public class GeneralUser {
     @Column(name = "lastName")
     private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<GeneralUser> friends;
-
-    // GeneralUser.getFriends // returns the set
-    // .add(userId) // send a friend request
-
     @Column(name = "email",unique = true)
     private String email;
 
