@@ -20,7 +20,7 @@ public class Message {
             generator="messageGenerator")
     private Long id;
 
-    @Column
+    @Column(name = "user_name")
     private String userName;
 
     @Lob

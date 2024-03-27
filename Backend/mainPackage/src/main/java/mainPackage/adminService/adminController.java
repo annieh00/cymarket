@@ -20,13 +20,14 @@ public class adminController {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
-    @Operation(summary = "Get a product by id", description = "Returns a product as per the id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "Sd")
-    })
     // Create
     @PostMapping("/announcements/create")
+    @Operation(summary = "Create a new announcement",
+            description = "Creates a new announcement and saves it to the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Announcement created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid announcement data provided")
+    })
     public String createAnnouncement(@RequestBody Announcement a) {
         a.setDate(new Date());
         announcementRepository.save(a);
@@ -37,12 +38,25 @@ public class adminController {
 
     // Read
     @GetMapping("/announcements/{id}")
+    @Operation(summary = "Get an announcement by ID",
+            description = "Returns an announcement based on the provided ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Announcement retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Announcement not found")
+    })
     public Announcement readAnnouncement(@PathVariable(name = "id") int id) {
         return announcementRepository.findAnnouncementById(id);
     }
 
     // Update
     @PutMapping("/announcements/update/{id}")
+    @Operation(summary = "Update an announcement",
+            description = "Updates an existing announcement with the provided data in the request body.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Announcement updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid announcement data provided"),
+            @ApiResponse(responseCode = "404", description = "Announcement not found")
+    })
     public String updateAnnouncement(@PathVariable("id") int id, @RequestBody Announcement a) {
         Announcement existingAnnouncement = announcementRepository.findAnnouncementById(id);
 
@@ -72,6 +86,12 @@ public class adminController {
 
     // Delete
     @DeleteMapping("/announcements/del/{id}")
+    @Operation(summary = "Delete an announcement",
+            description = "Deletes an announcement based on the provided ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Announcement deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Announcement not found")
+    })
     public String deleteAnnouncement(@PathVariable(name = "id") int id) {
         Announcement a = announcementRepository.findAnnouncementById(id);
         if (a == null) {
@@ -84,6 +104,10 @@ public class adminController {
 
     // List
     @GetMapping("/announcements")
+    @Operation(summary = "Get all announcements", description = "Returns a list of all announcements")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Announcements retrieved successfully")
+    })
     public List<Announcement> getAllAnnouncements() {
         return announcementRepository.findAll();
     }

@@ -1,6 +1,11 @@
 package mainPackage.imageProcess;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.commons.io.FileUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,17 +16,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.util.Base64;
 
-@Component
+@RestController
 public class ImageProcessingController {
     @Autowired
     private ImageRepository imageRepository;
 
     //create
     @GetMapping("/rotateImage")
+    @Operation(summary = "Rotate an image", description = "Rotates an image 90 degrees clockwise.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Image rotated successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public Object rotateImage(){
         Image img = new Image();
         try {
@@ -49,6 +60,11 @@ public class ImageProcessingController {
 
     // Create Image
     @PostMapping("img/save")
+    @Operation(summary = "Save an image", description = "Saves an image to a file based on provided Base64 encoding.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Image saved successfully", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public Object saveImage(@RequestBody Image img){
         try {
             nu.pattern.OpenCV.loadLocally();
