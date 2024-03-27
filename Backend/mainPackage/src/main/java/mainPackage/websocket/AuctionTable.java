@@ -3,6 +3,7 @@ package mainPackage.websocket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import mainPackage.announcementPackage.Announcement;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.Posting;
 
@@ -43,6 +44,20 @@ public class AuctionTable {
     @Lob
     private String bidHistory;
 
+
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Chat winnerChat;
+
+
+    public Chat getWinnerChat() {
+        return winnerChat;
+    }
+
+    public void setWinnerChat(Chat winnerChat) {
+        this.winnerChat = winnerChat;
+    }
 
 
     public AuctionTable(){

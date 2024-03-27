@@ -3,6 +3,8 @@ package mainPackage.usersPackage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import mainPackage.announcementPackage.Announcement;
+import mainPackage.imageProcess.Image;
 import mainPackage.websocket.AuctionTable;
 
 import java.util.HashSet;
@@ -29,6 +31,11 @@ public class Posting {
     private String title;
     @Column(name = "description")
     private String description;
+
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Image> images = new HashSet<>();
 
 
 
@@ -123,6 +130,13 @@ public class Posting {
         isAuction = auction;
     }
 
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
 
 
     public int getTimeAliveInMinutes() {
