@@ -1,5 +1,10 @@
 package mainPackage.loginService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.dbmsPackage.ConnectToDB;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
@@ -25,7 +30,12 @@ public class LogInController {
     @Autowired
     private GeneralUserRepository generalUserRepository;
 
-    //read
+
+    @Operation(summary = "Check for login", description = "Checks whether given user data is in the DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "There is a user in DB where it matches the username and password; returns true", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "user does not exist in DB")
+    })
     @PostMapping("/login")
     public String checkUser(@RequestBody GeneralUser generalUser){
 
@@ -45,6 +55,11 @@ public class LogInController {
     /*REMOVE METHODS BELOW AFTER DEMO2*/
 
     //list/read
+    @Operation(summary = "lists all users in the DB", description = "lists all users in the DB, used for admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "returns JSON array of users", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "401", description = "Unathorized access: not admin")
+    })
     @GetMapping("/login/getAllUsers")
     public String getUsers(){
         ArrayList<GeneralUser> mylist = generalUserRepository.findAll();
@@ -73,6 +88,13 @@ public class LogInController {
     }
 
     //update
+    @Operation(summary = "updates specific user in DB", description = "updates specific user in DB, password is required")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "user updated successfully", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "No match for given user data found"),
+            @ApiResponse(responseCode = "401", description = "Unathorized access, you are not the user")
+
+    })
     @PutMapping("/login/editUser")
     public String updateUser(@RequestBody HashMap<String,ArrayList<GeneralUser>> editList){
 
@@ -113,6 +135,13 @@ public class LogInController {
 //        return "{\"deleteUser\" : true}";
 //    }
 
+    @Operation(summary = "deletes specific user in DB", description = "deletes specific user in DB, password is required")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "user deleted successfully", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "No match for given user data found"),
+            @ApiResponse(responseCode = "401", description = "Unathorized deletion, you are not the user")
+
+    })
     @PostMapping("/login/deleteUser")
     public String deleteUser(@RequestBody GeneralUser userToEdit){
         System.out.println(userToEdit.getEmail());
