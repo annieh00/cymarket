@@ -32,8 +32,9 @@ public class PostAdapter<T> extends ArrayAdapter<T> {
         }
 
         // Lookup view for data population
-        TextView itemName = convertView.findViewById(R.id.itemName);
+        TextView itemName = convertView.findViewById(R.id.itemTitle);
         ImageView picture = convertView.findViewById(R.id.imageSelView1);
+        TextView price = convertView.findViewById(R.id.itemPrice);
 //        TextView itemUsername = convertView.findViewById(R.id.itemUsername);
 
         // Populate the data into the template view using the data object
@@ -41,6 +42,7 @@ public class PostAdapter<T> extends ArrayAdapter<T> {
 
         itemName.setText(items.getTitle());
         picture.setImageURI(items.getPicture());
+        price.setText(items.getPrice());
 
         // Return the completed view to render on screen
         return convertView;
