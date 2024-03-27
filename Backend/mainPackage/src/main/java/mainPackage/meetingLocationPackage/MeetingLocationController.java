@@ -1,5 +1,8 @@
 package mainPackage.meetingLocationPackage;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.meetingLocationPackage.MeetingLocation;
 import mainPackage.meetingLocationPackage.MeetingLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,12 @@ public class MeetingLocationController {
 
     // Create
     @PostMapping("/meetinglocation/create")
+    @Operation(summary = "Create a new meeting location",
+            description = "Creates a new meeting location and saves it to the database.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Meeting location created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid meeting location data provided")
+    })
     public String createMeetingLocation(@RequestBody MeetingLocation m) {
         meetingLocationRepository.save(m);
         String response = "Meeting location created.";
@@ -24,12 +33,25 @@ public class MeetingLocationController {
 
     // Read
     @GetMapping("/meetinglocation/{id}")
+    @Operation(summary = "Get a meeting location by ID",
+            description = "Returns a meeting location based on the provided ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Meeting location retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Meeting location not found")
+    })
     public MeetingLocation readMeetingLocation(@PathVariable(name = "id") int id) {
         return meetingLocationRepository.findMeetingLocationById(id);
     }
 
     // Update
     @PutMapping("/meetinglocation/update/{id}")
+    @Operation(summary = "Update a meeting location",
+            description = "Updates an existing meeting location with the provided data in the request body.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Meeting location updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid meeting location data provided"),
+            @ApiResponse(responseCode = "404", description = "Meeting location not found")
+    })
     public String updateMeetingLocation(@PathVariable("id") int id, @RequestBody MeetingLocation m) {
         MeetingLocation existingMeetingLocation = meetingLocationRepository.findMeetingLocationById(id);
 
@@ -59,6 +81,13 @@ public class MeetingLocationController {
 
     // Delete
     @DeleteMapping("/meetinglocation/del/{id}")
+    @Operation(summary = "Delete a meeting location",
+            description = "Deletes a meeting location based on the provided ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Meeting location deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Meeting location not found")
+    })
+
     public String deleteMeetingLocation(@PathVariable(name = "id") int id) {
         MeetingLocation m = meetingLocationRepository.findMeetingLocationById(id);
         if (m == null) {
@@ -71,6 +100,10 @@ public class MeetingLocationController {
 
     // List
     @GetMapping("/meetinglocation")
+    @Operation(summary = "Get all meeting locations", description = "Returns a list of all meeting locations.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Meeting locations retrieved successfully")
+    })
     public List<MeetingLocation> getAllMeetingLocations() {
         return meetingLocationRepository.findAll();
     }

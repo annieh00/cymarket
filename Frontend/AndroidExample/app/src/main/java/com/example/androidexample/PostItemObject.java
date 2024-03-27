@@ -61,9 +61,11 @@ import android.net.Uri;
 public class PostItemObject {
     private Uri picture;
     private String title;
-    public PostItemObject(Uri picture, String title) {
+    private int price;
+    public PostItemObject(Uri picture, String title, int price) {
         this.title = title;
         this.picture= picture;
+        this.price = price;
     }
 
     public String getTitle() {
@@ -74,5 +76,6 @@ public class PostItemObject {
         return picture;
     }
 
+    public int getPrice(){ return price; }
 }
 

@@ -5,8 +5,11 @@ package mainPackage.usersPackage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import mainPackage.announcementPackage.Announcement;
 import mainPackage.websocket.Auction;
 import mainPackage.websocket.AuctionTable;
+import mainPackage.websocket.Chat;
+import org.hibernate.dialect.pagination.FetchLimitHandler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +55,23 @@ public class GeneralUser {
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
+
+
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Posting> publishedPosts = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Chat> connectedChats = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Announcement> announcements = new HashSet<>();
+
+
+
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -115,5 +135,13 @@ public class GeneralUser {
 
     public int getId() {
         return id;
+    }
+
+    public Set<Posting> getPublishedPosts() {
+        return publishedPosts;
+    }
+
+    public void setPublishedPosts(Set<Posting> publishedPosts) {
+        this.publishedPosts = publishedPosts;
     }
 }

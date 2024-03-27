@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -86,6 +87,9 @@ public class CreatePostActivity extends AppCompatActivity{
 
     ArrayList<Uri> images = new ArrayList<>();
 
+    private EditText priceEditTxt;
+    private TextView base64;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,7 @@ public class CreatePostActivity extends AppCompatActivity{
         image4 = findViewById(R.id.imageSelView4);
         image5 = findViewById(R.id.imageSelView5);
         image6 = findViewById(R.id.imageSelView6);
+        priceEditTxt = findViewById(R.id.priceEditTxt);
 
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
@@ -142,7 +147,11 @@ public class CreatePostActivity extends AppCompatActivity{
                             if (imageView != null) {
                                 imageView.setImageURI(uri);
                             }
+                        }else{
+                            Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
                         }
+
+
                     }
         });
 
@@ -179,6 +188,18 @@ public class CreatePostActivity extends AppCompatActivity{
 //            }
 //        });
     }
+
+    public void convertImg(){
+        View imageView = null;
+        imageView.buildDrawingCache();
+        Bitmap bm = imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b , Base64.DEFAULT);
+        base64.setText(encodedImage);
+    }
+
 
     /**
      * Uploads an image to a remote server using a multipart Volley request.
@@ -230,6 +251,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //            jsonObject.put("category", categoryEditTxt.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
             jsonObject.put("category", getCategoryEditTxt.getText().toString());
+            jsonObject.put("price", priceEditTxt.getText().toString());
             int index = 0;
             while (index < images.size() - 1) {
                 switch (index) {
@@ -337,6 +359,8 @@ public class CreatePostActivity extends AppCompatActivity{
         }
         return null;
     }
+
+
 
 
 

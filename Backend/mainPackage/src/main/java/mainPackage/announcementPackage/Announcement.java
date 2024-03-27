@@ -1,6 +1,8 @@
 package mainPackage.announcementPackage;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
@@ -17,9 +19,12 @@ public class Announcement {
     @GeneratedValue(
             strategy=GenerationType.TABLE,
             generator="announcementsGenerator")
+
     private int id;
 
     @Column(name = "title")
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String title;
 
     @Column(name = "date_created")
@@ -27,6 +32,8 @@ public class Announcement {
     private Date date;
 
     @Column(name = "description")
+    @NotBlank
+    @Size(max = 1000)
     private String description;
 
     public int getId() {
