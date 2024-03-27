@@ -1,5 +1,9 @@
 package mainPackage.adminService;
 
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.announcementPackage.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,11 @@ public class adminController {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
+    @Operation(summary = "Get a product by id", description = "Returns a product as per the id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Sd")
+    })
     // Create
     @PostMapping("/announcements/create")
     public String createAnnouncement(@RequestBody Announcement a) {
