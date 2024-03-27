@@ -1,7 +1,14 @@
 package mainPackage.usersPackage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import mainPackage.announcementPackage.Announcement;
+import mainPackage.imageProcess.Image;
+import mainPackage.websocket.AuctionTable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Junhyung Shim
@@ -17,13 +24,18 @@ public class Posting {
 
     //@OneToOne(cascade = CascadeType.ALL)
     @Column(name = "userName")
-    //@JoinColumn(name="email")
+    @JoinColumn(name="email")
     private String userName;
 
     @Column(name = "title")
     private String title;
     @Column(name = "description")
     private String description;
+
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Image> images = new HashSet<>();
 
 
 
@@ -49,6 +61,8 @@ public class Posting {
 
     @Column(name = "timeAliveInMinutes")
     private int timeAliveInMinutes;
+
+
 
     @Id
     @GeneratedValue(
@@ -116,6 +130,13 @@ public class Posting {
         isAuction = auction;
     }
 
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
+    }
 
 
     public int getTimeAliveInMinutes() {
