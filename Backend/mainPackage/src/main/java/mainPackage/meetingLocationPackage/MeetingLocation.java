@@ -1,6 +1,7 @@
 package mainPackage.meetingLocationPackage;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @TableGenerator(
@@ -18,9 +19,11 @@ public class MeetingLocation {
     private int id;
 
     @Column(name = "map_x")
+    @NotBlank
     private String x;
 
     @Column(name = "map_y")
+    @NotBlank
     private String y;
 
     public String getY() {
