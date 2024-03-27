@@ -1,6 +1,11 @@
 package mainPackage.postService;
 
 import com.google.gson.Gson;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.websocket.server.PathParam;
 import mainPackage.errorMsg.ErrorMsg;
 import mainPackage.usersPackage.*;
@@ -35,6 +40,11 @@ public class SellPostController {
         auctionTableRepository= repo;  // we are setting the static variable
     }
     //create
+    @Operation(summary = "create post in DB", description = "creates a post (listing) in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Post successfully got stored into DB", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "The required fields aren't filled out or the author does not exist")
+    })
     @PostMapping("/posts")
     public String createPost(@RequestBody Posting p){
         GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
@@ -66,6 +76,11 @@ public class SellPostController {
 
 
     //Read/list
+    @Operation(summary = "get all posts in DB", description = "gets all posts in DB, only for admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "401", description = "Access denied, not admin")
+    })
     @GetMapping("/getAllPosts")
     public String getPosts(){
         ArrayList<Posting> mylist = postingRepository.findAll();
@@ -97,6 +112,11 @@ public class SellPostController {
 
     }
 
+    @Operation(summary = "update post in DB", description = "updates a post (listing) in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Post successfully got updated", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
+    })
     //update
     @PostMapping("/posts/update")
     public String updatePost(@RequestBody Posting editpost){
@@ -113,6 +133,11 @@ public class SellPostController {
         return "{\"serverResponse\" : true}";
     }
 
+    @Operation(summary = "delete a post in DB", description = "deletes a post (listing) in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Post successfully got deleted", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
+    })
     @PostMapping("/posts/delete")
     public String deletePost(@RequestBody Posting delete){
         Posting p = postingRepository.findPostingById(delete.getId());
