@@ -37,8 +37,7 @@
             android:id="@+id/signup_username_edt"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:hint="Enter Username Here">
-        </EditText>
+            android:hint="Enter Username Here"></EditText>
 
     </LinearLayout>
 
@@ -95,27 +94,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/signup_login_btn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="Login"
-            android:textSize="20sp"
-            android:textColor="#ffffff">
-        </Button>
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/signup_signup_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="Signup"
             android:textSize="20sp"
             android:textColor="#ffffff">
         </Button>
+
+        <TextView
+            android:id="@+id/loginTxtBtn"
+            android:text="Already a user? Login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true">
+        </TextView>
 
     </LinearLayout>
 

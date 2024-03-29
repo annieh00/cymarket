@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
  //   public static String username;    //the user's full name given to Iowa State
     private String TAG = LoginActivity.class.getSimpleName(); //the tag used to identify JSON object requests
 //    public static int userID = 0;       //id of the user who is currently logged in
-//    public static int permission = 0; //0=admin, 1=organizer, 2=normal user
+    public static int permission = 0; //0=admin, 1=organizer, 2=normal user
 //    public static String profilePicture;        //the user's profile picture
     public static String password;      //the user's password
     public static String firstName;//
@@ -66,21 +66,30 @@ public class LoginActivity extends AppCompatActivity {
 
         //Buttons
         loginButton = findViewById(R.id.login_login_btn);    // link to login button in the Login activity XML
-        signupButton = findViewById(R.id.login_signup_btn);  // link to signup button in the Login activity XML
-
+//        signupButton = findViewById(R.id.login_signup_btn);  // link to signup button in the Login activity XML
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
 
 
         /* click listener on signup button pressed */
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        signupButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                /* when signup button is pressed, use intent to switch to Signup Activity */
+//                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+//                startActivity(intent);  // go to SignupActivity
+//            }
+//        });
 
-                /* when signup button is pressed, use intent to switch to Signup Activity */
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);  // go to SignupActivity
+        //asking if the user hasn't created an account yet
+        TextView txtRegister = (TextView)findViewById(R.id.signupTxtBtn);
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                  Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                  startActivity(intent);  // go to SignupActivity
             }
         });
-
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,20 +151,27 @@ public class LoginActivity extends AppCompatActivity {
 //                email = response.getString("email");
 //                password = response.getString("password");
                 validUser = response.getBoolean("fromServer");
+                permission = response.getInt("permission");
 //                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
 
-            if (validUser){
+            if (validUser && permission == 0){
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
+                startActivity(intent);
+            }else if (validUser && permission == 1) {
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
+                startActivity(intent);
+            }else if (validUser && permission == 2){
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
-
-
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());

@@ -54,19 +54,29 @@ public class SignupActivity extends AppCompatActivity {
         confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edtext in the Signup activity XML
 
         //Buttons
-        loginButton = findViewById(R.id.signup_login_btn);    // link to login button in the Signup activity XML
+//        loginButton = findViewById(R.id.signup_login_btn);    // link to login button in the Signup activity XML
         signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
 
-        /* click listener on login button pressed */
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                /* when login button is pressed, use intent to switch to Login Activity */
+        //asking if the user already has an account
+        TextView txtRegister = (TextView)findViewById(R.id.loginTxtBtn);
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);  // go to LoginActivity
+                startActivity(intent);  // go to SignupActivity
             }
         });
+        /* click listener on login button pressed */
+//        loginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                /* when login button is pressed, use intent to switch to Login Activity */
+//                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+//                startActivity(intent);  // go to LoginActivity
+//            }
+//        });
 
         /* click listener on signup button pressed */
         signupButton.setOnClickListener(new View.OnClickListener() {

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -88,7 +87,6 @@ public class CreatePostActivity extends AppCompatActivity{
     ArrayList<Uri> images = new ArrayList<>();
 
     private EditText priceEditTxt;
-    private TextView base64;
 
 
     @Override
@@ -188,18 +186,6 @@ public class CreatePostActivity extends AppCompatActivity{
 //            }
 //        });
     }
-
-    public void convertImg(){
-        View imageView = null;
-        imageView.buildDrawingCache();
-        Bitmap bm = imageView.getDrawingCache();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(b , Base64.DEFAULT);
-        base64.setText(encodedImage);
-    }
-
 
     /**
      * Uploads an image to a remote server using a multipart Volley request.
