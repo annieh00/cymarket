@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import android.content.DialogInterface;
@@ -104,10 +105,25 @@ public class MainFeed extends AppCompatActivity {
     private ListView listView;
     private String itemSelected;
 
+    /**
+     *
+     */
     private ImageView imageView;
 
+    /**
+     * This is the adapter.
+     */
+    private PostAdapter postAdapter;
+    /**
+     * this is a tag that is attached to the log
+     */
+    private String TAG = MainFeed.class.getSimpleName();
 
 
+    /**|
+     * this is the recycler view
+     */
+    private RecyclerView mRecyclerView;
 
 
 
@@ -363,6 +379,20 @@ public class MainFeed extends AppCompatActivity {
 
     }
 
+    private void jsonParse(){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("posts");
+                        for (int i = 0; i < jsonArray.length(); i++){
+
+                        }
+                    }catch(JSONException e){
+                        throw new RuntimeException(e);
+                    }
+                })
+
+    }
 //    private void makeJsonArrayReq () {
 //
 //        coordListing.setText("");
