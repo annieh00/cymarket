@@ -1,0 +1,14 @@
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/CourseRegistration.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/post/TagRepository.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/CourseRatingKey.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/Student.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/post/Post.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/CourseRepository.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/post/Tag.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/StudentRepository.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/post/PostRepository.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/TutorialApplication.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/Course.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/CourseRating.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/course/StudentController.java
+/Users/jimmyle/COMS309/ta4_5/Experiments/JimmyLeExperiments/U3_1M2M/tutorials-springboot_unit3_1_manytomany/manytomany/tutorial/src/main/java/com/cs309/tutorial/post/PostController.java
