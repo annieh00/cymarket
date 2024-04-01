@@ -62,6 +62,8 @@ public class Posting {
     @Column(name = "timeAliveInMinutes")
     private int timeAliveInMinutes;
 
+    @Column(name = "price")
+    private int price;
 
 
     @Id
@@ -145,6 +147,14 @@ public class Posting {
 
     public void setTimeAliveInMinutes(int timeAliveInMinutes) {
         this.timeAliveInMinutes = timeAliveInMinutes;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
 //    public String getPicture4() {
