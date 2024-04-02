@@ -21,6 +21,12 @@
 
             </item>
             <item
+                android:id="@+id/Friends"
+                android:title="Friends">
+
+            </item>
+
+            <item
                 android:id="@+id/Announcements"
                 android:title="Announcements">
 

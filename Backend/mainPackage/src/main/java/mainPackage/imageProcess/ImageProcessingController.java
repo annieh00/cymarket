@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import mainPackage.usersPackage.Posting;
 import org.apache.commons.io.FileUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -65,21 +66,21 @@ public class ImageProcessingController {
             @ApiResponse(responseCode = "200", description = "Image saved successfully", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public Object saveImage(@RequestBody Image img){
+    public Object saveImage(@RequestBody Posting img){
         try {
             nu.pattern.OpenCV.loadLocally();
-
-            byte[] decoded = Base64.getDecoder().decode(img.getBase64Encoding());
-            String fileName = img.getFileName();
-
+            System.out.println(img.getPicture1());
+            byte[] decoded = Base64.getDecoder().decode(img.getPicture1());
+            String fileName = "./fromUser.png";
+            System.out.println(img.getPicture1());
             // Save the decoded image to the specified file path
             FileUtils.writeByteArrayToFile(new File(fileName), decoded);
 
             // Read the saved image as bytes again
-            byte[] savedImageBytes = FileUtils.readFileToByteArray(new File(fileName));
+            //byte[] savedImageBytes = FileUtils.readFileToByteArray(new File(fileName));
 
             // Encode the saved image bytes as Base64 string
-            return Base64.getEncoder().encodeToString(savedImageBytes);
+            return null; //Base64.getEncoder().encodeToString("hi");
             // FileUtils.writeByteArrayToFile(new File(img.getFileName()),decoded);
 //            imageRepository.save(img);
 
@@ -88,6 +89,8 @@ public class ImageProcessingController {
             return "internal server error";
         }
     }
+
+
 
 
 }

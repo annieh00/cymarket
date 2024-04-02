@@ -37,7 +37,7 @@ public class SignUpController {
             if(generalUserRepository.findGeneralUserByEmail(generalUser.getEmail()) != null){
                 return "{\"fromServer\" : false}";
             }
-
+            generalUser.setUserType(2);
             generalUserRepository.save(generalUser);
         }catch (Exception e){
             e.printStackTrace();

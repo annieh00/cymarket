@@ -49,7 +49,10 @@ public class LogInController {
         }
         //return "welcome back! " + user.getUserName() ;
         System.out.println("returned true!");
-        return "{\"fromServer\" : true}";
+        // 0 admin
+        // 1 organization
+        // 2 normal user
+        return "{\"fromServer\" : true, \"permission\" :" + user.getUserType()+"}";
     }
 
     /*REMOVE METHODS BELOW AFTER DEMO2*/
