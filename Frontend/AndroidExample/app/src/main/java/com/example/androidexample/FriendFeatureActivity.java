@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,20 +46,20 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
         listViewFriends = findViewById(R.id.FriendList);
         listViewFriendRequests = findViewById(R.id.FriendRequestList);
 
-        FloatingActionButton OpenBottomSheet = findViewById(R.id.open_modal_bottom_sheet);
-
-        OpenBottomSheet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                        FriendFeatureActivity.this, com.google.android.material.R.style.Base_Theme_Material3_Light_BottomSheetDialog);
-                View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                        .inflate(R.layout.modal_bottom_sheet, null);
-
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
-            }
-        });
+//        FloatingActionButton OpenBottomSheet = findViewById(R.id.open_modal_bottom_sheet);
+//
+//        OpenBottomSheet.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+//                        FriendFeatureActivity.this, com.google.android.material.R.style.Base_Theme_Material3_Light_BottomSheetDialog);
+//                View bottomSheetView = LayoutInflater.from(getApplicationContext())
+//                        .inflate(R.layout.modal_bottom_sheet, null);
+//
+//                bottomSheetDialog.setContentView(bottomSheetView);
+//                bottomSheetDialog.show();
+//            }
+//        });
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +159,22 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
             adapter.notifyDataSetChanged();
         }
 
+    }
+
+    public void showModalBottomSheet(Friend friend) {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                FriendFeatureActivity.this, com.google.android.material.R.style.Base_Theme_Material3_Light_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                .inflate(R.layout.modal_bottom_sheet, null);
+
+        // Set friend's details in the bottom sheet view
+        TextView nameTextView = bottomSheetView.findViewById(R.id.friend_name);
+        nameTextView.setText(friend.getFirstName() + " " + friend.getLastName());
+
+        // You can set other details similarly...
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 
 //    private List<FriendRequest> parseFriendRequestsJson(JSONArray jsonArray)

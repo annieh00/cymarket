@@ -45,16 +45,19 @@ public class ListFriends extends ArrayAdapter<Friend> implements FriendAcceptedL
         nameTextView.setTextSize(30); // Set text size
         nameTextView.setTypeface(null, Typeface.NORMAL); // Set text style to bold
 
+        // Get the current friend
+        final Friend current = friendList.get(position);
+
+        // More info button
         ImageButton moreInfo = listItemView.findViewById(R.id.moreInfo);
         moreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call the interface method when moreInfo button is clicked
-                if (listener != null) {
-                    listener.onFriendAccepted();
-                }
+                // Call method in activity to show modal bottom sheet
+                ((FriendFeatureActivity) context).showModalBottomSheet(currentFriend);
             }
         });
+
 
 
 
