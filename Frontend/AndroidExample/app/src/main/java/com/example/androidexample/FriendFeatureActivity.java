@@ -3,7 +3,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -13,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,14 +24,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.Button;
 
-public class FriendFeatureActivity extends AppCompatActivity {
+public class FriendFeatureActivity extends AppCompatActivity implements FriendAcceptedListener {
 
     private Toolbar toolbar;
     private ListView listViewFriends;
     private ListView listViewFriendRequests;
     private List<Friend> friendList;
     private List<Friend> friendRequestList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,21 @@ public class FriendFeatureActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.vwebtoolbar1);
         listViewFriends = findViewById(R.id.FriendList);
         listViewFriendRequests = findViewById(R.id.FriendRequestList);
+
+        FloatingActionButton OpenBottomSheet = findViewById(R.id.open_modal_bottom_sheet);
+
+        OpenBottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                        FriendFeatureActivity.this, com.google.android.material.R.style.Base_Theme_Material3_Light_BottomSheetDialog);
+                View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                        .inflate(R.layout.modal_bottom_sheet, null);
+
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+            }
+        });
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +102,7 @@ public class FriendFeatureActivity extends AppCompatActivity {
         queue.add(jsonArrayRequest);
     }
 
+
     private void fetchFriendRequestsData() {
         String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/freindrequests";        RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -91,7 +114,7 @@ public class FriendFeatureActivity extends AppCompatActivity {
                         friendRequestList = parseFriendsJson(response);
 
                         // Populate ListView with friend requests data
-                        ListFriendRequests adapter = new ListFriendRequests(FriendFeatureActivity.this, friendRequestList);
+                        ListFriendRequests adapter = new ListFriendRequests(FriendFeatureActivity.this, friendRequestList, FriendFeatureActivity.this);
                         listViewFriendRequests.setAdapter(adapter);
                     }
                 },
@@ -112,10 +135,12 @@ public class FriendFeatureActivity extends AppCompatActivity {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("firstName");
-                String email = jsonObject.getString("lastName");
+                String first = jsonObject.getString("firstName");
+                String last = jsonObject.getString("lastName");
+                int uid = jsonObject.getInt("uid");
 
-                Friend friend = new Friend(name, email);
+
+                Friend friend = new Friend(first, last, uid);
                 friends.add(friend);
             }
         } catch (JSONException e) {
@@ -123,6 +148,16 @@ public class FriendFeatureActivity extends AppCompatActivity {
         }
 
         return friends;
+    }
+
+    @Override
+    public void onFriendAccepted() {
+        // Update the ListFriends adapter when a friend is accepted
+        ListFriends adapter = (ListFriends) listViewFriends.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
 //    private List<FriendRequest> parseFriendRequestsJson(JSONArray jsonArray)
