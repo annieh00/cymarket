@@ -23,5 +23,6 @@ public class Const {
     public static final String URL_DELETE_POST = DOMAIN + "/posts" + "/delete";
     //URL updates a post with a given title
     public static final String URL_UPDATE_POST = DOMAIN + "/posts" + "/update";
+    public static final String URL_IMAGES = DOMAIN + "/img/save";
 
 }

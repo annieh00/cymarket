@@ -125,7 +125,7 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(SignupActivity.this, "Please make your profile", Toast.LENGTH_LONG).show();
             }else{
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                Toast.makeText(SignupActivity.this, "User already in database", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignupActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
                 startActivity(intent);
             }
 
