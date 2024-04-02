@@ -271,6 +271,11 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), CreatePostActivity.class);
                         startActivity(intent);
                         break;
+                    case "Friends":
+                        // Handle click on the second item
+                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+                        startActivity(intent);
+                        break;
                     case "Inbox":
                         // Handle click on the third item
                         intent = new Intent(getApplicationContext(), InboxActivity.class);

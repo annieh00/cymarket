@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/friend_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Friend Name"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/seeFriendsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="See Friends"
+        android:backgroundTint="@color/cardinal"/>
+
+    <Button
+        android:id="@+id/sendMessageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Message"
+        android:backgroundTint="@color/cardinal"/>
+
+    <Button
+        android:id="@+id/unfriendButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unfriend"
+        android:backgroundTint="@color/cardinal"/>
+
+    <Button
+        android:id="@+id/blockButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Block"
+        android:backgroundTint="@color/cardinal"/>
+
+</LinearLayout>
