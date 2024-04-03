@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,85 +19,31 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.view.View;
-import android.view.MenuItem.OnMenuItemClickListener;
-import java.util.ArrayList;
-import android.view.View;
-import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
+import java.util.ArrayList;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.androidexample.Post.PostAdapter;
-import com.example.androidexample.Post.PostItemObject;
-import com.example.androidexample.Post.PostViewHolder;
+import com.example.androidexample.Post.PostItem;
 import com.google.android.material.navigation.NavigationView;
-import android.widget.Button;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import android.util.Log;
+
 import java.util.List;
-import com.example.androidexample.ListAdapter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import com.example.androidexample.R.menu.*;
 
 /**
  * Main feed displays the current posts.
  */
-public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemClickListener{
+public class MainFeed extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
 
@@ -106,7 +51,7 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
     AlertDialog.Builder builder;
     public static final String URL_IMAGE = "http://10.0.2.2:8080/images/1";
 
-//    private ListAdapter adapter;
+    private ListAdapter adapter;
     private ListView listView;
     private String itemSelected;
 
@@ -115,26 +60,12 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
      */
     private ImageView imageView;
 
-    /**
-     * This is the adapter.
-     */
-//    private PostAdapter adapter;
-
     private List<String> dataList = new ArrayList<>();
     /**
      * this is a tag that is attached to the log
      */
     private String TAG = MainFeed.class.getSimpleName();
 
-
-    /**
-     * this is
-     */
-
-    /**|
-     * this is the recycler view
-     */
-    private RecyclerView mRecyclerView;
 
     /**
      * the following variables hole the keys for the items to pass to vote poll activity
@@ -159,21 +90,12 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
 
 
     /**
-     * this is the adapter.
+     * recyclerview related variables
      */
     private PostAdapter mPostAdapter;
-    /**
-     * this is an empty poll adapter
-     */
+    private RecyclerView mRecyclerView;
+    ArrayList<PostItem> mPostList = new ArrayList<>();
 
-    private PostAdapter EMPTYPostAdapter;
-
-    /**
-     * this is a list of type array list
-     */
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
-
-    ArrayList<PostItemObject> EmptyPostList = new ArrayList<>();
 
     /**
      * this is the tag itself
@@ -216,16 +138,11 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
 //        updatedY = findViewById(R.id.updateY);
 
 
-
         builder = new AlertDialog.Builder(MainFeed.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//
-//        adapter = new ListAdapter(this, new ArrayList<>());
-//        listView.setAdapter(adapter);
-
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
@@ -342,11 +259,6 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
                         intent = new Intent(getApplicationContext(), CreatePostActivity.class);
                         startActivity(intent);
                         break;
-                    case "Friends":
-                        // Handle click on the second item
-                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-                        startActivity(intent);
-                        break;
                     case "Inbox":
                         // Handle click on the third item
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
@@ -437,59 +349,57 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
 //        });
 
 
-        List<PostItemObject> items = new ArrayList<PostItemObject>();
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        adapter = new PostAdapter(dataList);
-//        items.add();
+//        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
+//            @Override public void onItemClick(PostItem item) {
+//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(getApplicationContext(), PostDetails.class);
+//                startActivity(intent);
+//                // intent to the detail activity
+//            }
+//        });
 
-        mRecyclerView.setAdapter(new PostAdapter(getApplicationContext(), items));
+//        mRecyclerView.setAdapter(mPostAdapter);
+//        fetchPosts();
+//    }
     }
 
-    private void jsonParse(){
-        String url = Const.URL_GET_ALL_POSTS;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+    private void fetchPosts() {
+        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        JSONArray jsonArray = response.getJSONArray("post");
-                        for(int i = 0; i < jsonArray.length(); i++){
-                            JSONObject post = jsonArray.getJSONObject(i);
-                            JSONObject user = post.isNull("user") ? null : post.getJSONObject("user");
-//                            System.out.println("THIS IS USER: " + user);
-                            int userID = 0;
-                            String username = "";
-                            if (user != null) {
-                                username = user.getString("userName");
-//                                System.out.println("THIS IS USER NAME: " + username);
-                                userID = user.getInt("userId");
-//                                System.out.println("THIS IS USER ID: " + UserID);
-                            }
-                            String Options = post.getString("answers");
-                            System.out.println(Options);
-                            int postID = post.getInt("postId");
-                            System.out.println("THIS IS POLL ID: " + postID);
-                            int TotalVotes = post.getInt("totalVotes");
-                            String question = post.getString("question");
-                            System.out.printf("User ID is %d", userID);
-//                            dataList.add(new PostItemObject(postID, TotalVotes, question, Options, username, userID));
-//                            System.out.println(PostItemObject);
-
-
+//                        JSONArray jsonArray = response.getJSONArray();
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            String title = jsonObject.getString("title");
+                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            String description = jsonObject.getString("description");
+                            Uri picture1 = null; // placeholder
+                            Uri picture2 = null; // placeholder
+                            Uri picture3 = null; // placeholder
+                            Uri picture4 = null; // placeholder
+                            Uri picture5 = null; // placeholder
+                            Uri picture6 = null; // placeholder
+                            String date = "date"; // placeholder
+                            String category = "category"; // placeholder
+                            Boolean auction = true; // placeholder
+                            int flagCount = 0; // placeholder
+                            int userID = 0; // placeholder
+                            int postID = 0; // placeholder
+                            mPostList.add(new PostItem(picture1,picture2,picture3,picture4,picture5,picture6,title,price,date,category,auction,flagCount, description,userID,postID));
                         }
-//                        adapter = new PostAdapter(MainFeed.this, dataList);
-//                        mRecyclerView.setAdapter(adapter);
-//                        adapter.setOnItemClickListener(MainFeed.this);
 
+                        mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
-
-                }, error -> error.printStackTrace());
-
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request, tag_json_obj);
-
-
-
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
 //    private void jsonParse(){
@@ -568,84 +478,66 @@ public class MainFeed extends AppCompatActivity implements PostAdapter.OnItemCli
 //
 //        // Adding request to request queue
 //        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
+////    }
+//    /**
+//     * Making image request
+//     * */
+//    private void makeImageRequest() {
+//
+//        ImageRequest imageRequest = new ImageRequest(
+//                URL_IMAGE,
+//                new Response.Listener<Bitmap>() {
+//                    @Override
+//                    public void onResponse(Bitmap response) {
+//                        // Display the image in the ImageView
+//                        imageView.setImageBitmap(response);
+//                    }
+//                },
+//                0, // Width, set to 0 to get the original width
+//                0, // Height, set to 0 to get the original height
+//                ImageView.ScaleType.FIT_XY, // ScaleType
+//                Bitmap.Config.RGB_565, // Bitmap config
+//
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // Handle errors here
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }
+//        );
+//
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
 //    }
-    /**
-     * Making image request
-     * */
-    private void makeImageRequest() {
 
-        ImageRequest imageRequest = new ImageRequest(
-                URL_IMAGE,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        // Display the image in the ImageView
-                        imageView.setImageBitmap(response);
-                    }
-                },
-                0, // Width, set to 0 to get the original width
-                0, // Height, set to 0 to get the original height
-                ImageView.ScaleType.FIT_XY, // ScaleType
-                Bitmap.Config.RGB_565, // Bitmap config
 
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle errors here
-                        Log.e("Volley Error", error.toString());
-                    }
-                }
-        );
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
-    }
-
-//    public static final Uri EXTRA_postPicture1 = null;
-//    public static final Uri EXTRA_postPicture2 = null;
-//    public static final Uri EXTRA_postPicture3 = null;
-//    public static final Uri EXTRA_postPicture4 = null;
-//    public static final Uri EXTRA_postPicture5 = null;
-//    public static final Uri EXTRA_postPicture6 = null;
-//
-//    public static final String EXTRA_postTitle = "postTitle";
-//    public static final int EXTRA_postPrice = 0;
-//    public static final String EXTRA_postDate = "date";
-//    public static final String EXTRA_postCategory = "category";
-//    public static final int EXTRA_postFlagCount = 0;
-//    public static final Boolean EXTRA_postAuction = false;
-//
-//    public static final int EXTRA_userID = 0;
-//
-//    public static final int EXTRA_postID = 0;
 
     /**
-     * this sets up an intent and send them Vote Poll Activity
+     * this sets up an intent and send them Vote Post Activity
      * @param position
      */
     @Override
     public void onItemClick(int position) {
         Intent detailIntent = new Intent(this, MainFeed.class);
-        PostItemObject clickeditem = mPostList.get(position);
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickeditem.getPicture1());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickeditem.getPicture2());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickeditem.getPicture3());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickeditem.getPicture4());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickeditem.getPicture5());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickeditem.getPicture6());
-        detailIntent.putExtra(EXTRA_postTitle, clickeditem.getTitle());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickeditem.getPrice());
-        detailIntent.putExtra(EXTRA_postDate, clickeditem.getDate());
-        detailIntent.putExtra(EXTRA_postCategory, clickeditem.getCategory());
-        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickeditem.getFlagCount());
-        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickeditem.getAuction());
-        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickeditem.getUserID());
-        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickeditem.getPostID());
+        PostItem clickedItem = mPostList.get(position);
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickedItem.getPicture1());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickedItem.getPicture2());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickedItem.getPicture3());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickedItem.getPicture4());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickedItem.getPicture5());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickedItem.getPicture6());
+        detailIntent.putExtra(EXTRA_postTitle, clickedItem.getTitle());
+        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickedItem.getPrice());
+        detailIntent.putExtra(EXTRA_postDate, clickedItem.getDate());
+        detailIntent.putExtra(EXTRA_postCategory, clickedItem.getCategory());
+        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickedItem.getFlagCount());
+        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickedItem.getAuction());
+        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickedItem.getUserID());
+        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickedItem.getPostID());
         startActivity(detailIntent);
 
     }
 
 
 }
-
-

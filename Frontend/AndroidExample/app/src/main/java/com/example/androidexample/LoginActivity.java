@@ -150,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
 //                email = response.getString("email");
 //                password = response.getString("password");
+                username = response.getString("userName");
                 validUser = response.getBoolean("fromServer");
                 permission = response.getInt("permission");
 //                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
