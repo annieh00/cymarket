@@ -1,5 +1,7 @@
 package com.example.androidexample;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -27,15 +29,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.androidexample.Post.PostAdapter;
-import com.example.androidexample.Post.PostItem;
+import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -94,7 +99,7 @@ public class MainFeed extends AppCompatActivity {
      */
     private PostAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<PostItem> mPostList = new ArrayList<>();
+    ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
 
     /**
@@ -136,6 +141,7 @@ public class MainFeed extends AppCompatActivity {
 //        updateLocationBtn = findViewById(R.id.updateCoord);
 //        updatedX = findViewById(R.id.updateX);
 //        updatedY = findViewById(R.id.updateY);
+
 
 
         builder = new AlertDialog.Builder(MainFeed.this);
@@ -349,20 +355,19 @@ public class MainFeed extends AppCompatActivity {
 //        });
 
 
+
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
-//            @Override public void onItemClick(PostItem item) {
-//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getApplicationContext(), PostDetails.class);
-//                startActivity(intent);
-//                // intent to the detail activity
-//            }
-//        });
+        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
+            @Override public void onItemClick(PostItemObject item) {
+                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
-//        mRecyclerView.setAdapter(mPostAdapter);
-//        fetchPosts();
-//    }
+                // intent to the detail activity
+            }
+        });
+
+        mRecyclerView.setAdapter(mPostAdapter);
+        fetchPosts();
     }
 
     private void fetchPosts() {
@@ -371,25 +376,20 @@ public class MainFeed extends AppCompatActivity {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-//                        JSONArray jsonArray = response.getJSONArray();
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject jsonObject = response.getJSONObject(i);
                             String title = jsonObject.getString("title");
                             int price = Integer.parseInt(jsonObject.getString("price"));
                             String description = jsonObject.getString("description");
-                            Uri picture1 = null; // placeholder
-                            Uri picture2 = null; // placeholder
-                            Uri picture3 = null; // placeholder
-                            Uri picture4 = null; // placeholder
-                            Uri picture5 = null; // placeholder
-                            Uri picture6 = null; // placeholder
+
                             String date = "date"; // placeholder
                             String category = "category"; // placeholder
                             Boolean auction = true; // placeholder
                             int flagCount = 0; // placeholder
                             int userID = 0; // placeholder
                             int postID = 0; // placeholder
-                            mPostList.add(new PostItem(picture1,picture2,picture3,picture4,picture5,picture6,title,price,date,category,auction,flagCount, description,userID,postID));
+
+                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
                         }
 
                         mPostAdapter.notifyDataSetChanged();
@@ -478,66 +478,82 @@ public class MainFeed extends AppCompatActivity {
 //
 //        // Adding request to request queue
 //        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
-////    }
-//    /**
-//     * Making image request
-//     * */
-//    private void makeImageRequest() {
-//
-//        ImageRequest imageRequest = new ImageRequest(
-//                URL_IMAGE,
-//                new Response.Listener<Bitmap>() {
-//                    @Override
-//                    public void onResponse(Bitmap response) {
-//                        // Display the image in the ImageView
-//                        imageView.setImageBitmap(response);
-//                    }
-//                },
-//                0, // Width, set to 0 to get the original width
-//                0, // Height, set to 0 to get the original height
-//                ImageView.ScaleType.FIT_XY, // ScaleType
-//                Bitmap.Config.RGB_565, // Bitmap config
-//
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // Handle errors here
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }
-//        );
-//
-//        // Adding request to request queue
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
 //    }
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
 
+        ImageRequest imageRequest = new ImageRequest(
+                URL_IMAGE,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        imageView.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
 
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
+
+//    public static final Uri EXTRA_postPicture1 = null;
+//    public static final Uri EXTRA_postPicture2 = null;
+//    public static final Uri EXTRA_postPicture3 = null;
+//    public static final Uri EXTRA_postPicture4 = null;
+//    public static final Uri EXTRA_postPicture5 = null;
+//    public static final Uri EXTRA_postPicture6 = null;
+//
+//    public static final String EXTRA_postTitle = "postTitle";
+//    public static final int EXTRA_postPrice = 0;
+//    public static final String EXTRA_postDate = "date";
+//    public static final String EXTRA_postCategory = "category";
+//    public static final int EXTRA_postFlagCount = 0;
+//    public static final Boolean EXTRA_postAuction = false;
+//
+//    public static final int EXTRA_userID = 0;
+//
+//    public static final int EXTRA_postID = 0;
 
     /**
-     * this sets up an intent and send them Vote Post Activity
+     * this sets up an intent and send them Vote Poll Activity
      * @param position
      */
-    @Override
-    public void onItemClick(int position) {
-        Intent detailIntent = new Intent(this, MainFeed.class);
-        PostItem clickedItem = mPostList.get(position);
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickedItem.getPicture1());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickedItem.getPicture2());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickedItem.getPicture3());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickedItem.getPicture4());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickedItem.getPicture5());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickedItem.getPicture6());
-        detailIntent.putExtra(EXTRA_postTitle, clickedItem.getTitle());
-        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickedItem.getPrice());
-        detailIntent.putExtra(EXTRA_postDate, clickedItem.getDate());
-        detailIntent.putExtra(EXTRA_postCategory, clickedItem.getCategory());
-        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickedItem.getFlagCount());
-        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickedItem.getAuction());
-        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickedItem.getUserID());
-        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickedItem.getPostID());
-        startActivity(detailIntent);
-
-    }
+//    @Override
+//    public void onItemClick(int position) {
+//        Intent detailIntent = new Intent(this, MainFeed.class);
+//        PostItemObject clickeditem = mPostList.get(position);
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickeditem.getPicture1());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickeditem.getPicture2());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickeditem.getPicture3());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickeditem.getPicture4());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickeditem.getPicture5());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickeditem.getPicture6());
+//        detailIntent.putExtra(EXTRA_postTitle, clickeditem.getTitle());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickeditem.getPrice());
+//        detailIntent.putExtra(EXTRA_postDate, clickeditem.getDate());
+//        detailIntent.putExtra(EXTRA_postCategory, clickeditem.getCategory());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickeditem.getFlagCount());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickeditem.getAuction());
+//        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickeditem.getUserID());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickeditem.getPostID());
+//        startActivity(detailIntent);
+//
+//    }
 
 
 }

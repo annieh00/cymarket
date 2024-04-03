@@ -35,7 +35,7 @@ public class PostDetails extends AppCompatActivity {
 
 //        viewPager = findViewById(R.id.viewPager);
 //        imageAdapter = new ImageAdapter(this, imageResources);
-        viewPager.setAdapter(imageAdapter);
+//        viewPager.setAdapter(imageAdapter);
 
 //        ImageView previousArrow = findViewById(R.id.previousArrow);
 //        ImageView nextArrow = findViewById(R.id.nextArrow);
@@ -63,6 +63,7 @@ public class PostDetails extends AppCompatActivity {
 //                viewPager.setCurrentItem(currentPosition, true);
 //            }
 //        });
+
     }
 
 }
