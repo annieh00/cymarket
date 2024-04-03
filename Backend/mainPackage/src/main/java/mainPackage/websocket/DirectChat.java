@@ -1,10 +1,7 @@
 package mainPackage.websocket;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -13,7 +10,6 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
-
 
 import mainPackage.imageProcess.Image;
 import mainPackage.imageProcess.ImageProcessingController;
@@ -47,12 +43,30 @@ public class DirectChat {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
-    private static Map < Session, String > sessionUsernameMap = new Hashtable <>();
-    private static Map < String, Session > usernameSessionMap = new Hashtable <>();
+    private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
     private static ImageRepository imageRepository;
 
+
+    // cannot autowire static directly (instead we do it by the below
+    // method
+    private static MessageRepository msgRepo;
+
+    /*
+     * Grabs the MessageRepository singleton from the Spring Application
+     * Context.  This works because of the @Controller annotation on this
+     * class and because the variable is declared as static.
+     * There are other ways to set this. However, this approach is
+     * easiest.
+     */
+    @Autowired
+    public void setMessageRepository(MessageRepository repo) {
+        msgRepo = repo;  // we are setting the static variable
+    }
+
     private static int count = 0;
+
     @Autowired
     public void setImageRepository(ImageRepository ir) {
         imageRepository = ir;
@@ -64,7 +78,7 @@ public class DirectChat {
     /**
      * This method is called when a new WebSocket connection is established.
      *
-     * @param session represents the WebSocket session for the connected user.
+     * @param session  represents the WebSocket session for the connected user.
      * @param username username1 specified in path parameter.
      */
 
@@ -72,13 +86,13 @@ public class DirectChat {
     public void onOpen(Session session, @PathParam("username") String username, @PathParam("chatID") String chatID) throws IOException {
 
         // server side log
-        logger.info("[onOpen] ChatSession ID " + chatID + "join user: " + username);
+        logger.info("[onOpen] ChatSession ID " + chatID + " joined user: " + username);
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
             session.getBasicRemote().sendText("duplicate user");
             session.close();
-        }else {
+        } else {
             // map current session with username
             sessionUsernameMap.put(session, username);
 
@@ -136,7 +150,7 @@ public class DirectChat {
 
         // Direct message to
         // split by space
-        String[] split_msg =  message.split("\\s+");
+        String[] split_msg = message.split("\\s+");
 
         /**
          user1 sends base64 encoded string
@@ -168,6 +182,7 @@ public class DirectChat {
             }
             logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
             String actualMessage = actualMessageBuilder.toString();
+            sendMessageToParticularUser(username, "[DM sent to " + split_msg[0] + "]: " + actualMessage);
             sendMessageToParticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
         }
 
@@ -220,7 +235,7 @@ public class DirectChat {
      */
     private void sendMessageToParticularUser(String username, String message) {
         try {
-            if(usernameSessionMap.containsKey(username)) {
+            if (usernameSessionMap.containsKey(username)) {
                 usernameSessionMap.get(username).getBasicRemote().sendText(message);
             }
         } catch (IOException e) {
@@ -242,4 +257,18 @@ public class DirectChat {
             }
         });
     }
+
+    // Gets the Chat history from the repository
+    private String getChatHistory() {
+        List<Message> messages = msgRepo.findAll();
+        // convert the list to a string
+        StringBuilder sb = new StringBuilder();
+        if(messages != null && messages.size() != 0) {
+            for (Message message : messages) {
+                sb.append(message.getUserName() + ": " + message.getContent() + "\n");
+            }
+        }
+        return sb.toString();
+    }
+
 }
