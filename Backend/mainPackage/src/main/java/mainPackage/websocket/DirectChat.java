@@ -72,7 +72,7 @@ public class DirectChat {
     public void onOpen(Session session, @PathParam("username") String username, @PathParam("chatID") String chatID) throws IOException {
 
         // server side log
-        logger.info("[onOpen] ChatSession ID " + chatID + "joine user: " + username);
+        logger.info("[onOpen] ChatSession ID " + chatID + "join user: " + username);
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
@@ -86,7 +86,7 @@ public class DirectChat {
             usernameSessionMap.put(username, session);
 
             // send to the user joining in
-            sendMessageToParticularUser(username, "user connected: "+username);
+            sendMessageToParticularUser(username, "user connected: " + username);
 
             // send to everyone in the chat
             broadcast("User: " + username + " has joined the chat.");
