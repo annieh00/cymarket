@@ -42,15 +42,21 @@ public class ImageProcessingController {
             String fname = "IowaStateUpLgoRight.jpg";
             byte[] fileContent = FileUtils.readFileToByteArray(new File(fname));
             String encodedString = Base64.getEncoder().encodeToString(fileContent);
-            img.setFileName(fname);
-            img.setBase64Encoding(encodedString);
-            //imageRepository.save(img);
+            System.out.println(encodedString);
+            System.out.println();
+            System.out.println("hi");
+            //File f = new File("encodedString.txt");
+            //f.createNewFile();
 
-            Mat imageToProcess = Imgcodecs.imread(fname);
-            Mat dst = new Mat();
-            //Mat imageToSave = Imgcodecs.imread(fname);
-            Core.rotate(imageToProcess,dst,Core.ROTATE_90_CLOCKWISE);
-            Imgcodecs.imwrite("rotatedImage.jpg",dst);
+//            img.setFileName(fname);
+//            img.setBase64Encoding(encodedString);
+//            //imageRepository.save(img);
+//
+//            Mat imageToProcess = Imgcodecs.imread(fname);
+//            Mat dst = new Mat();
+//            //Mat imageToSave = Imgcodecs.imread(fname);
+//            Core.rotate(imageToProcess,dst,Core.ROTATE_90_CLOCKWISE);
+//            Imgcodecs.imwrite("rotatedImage.jpg",dst);
             //HighGui.imshow("rotated",dst);
         }catch (Exception e){
             e.printStackTrace();
