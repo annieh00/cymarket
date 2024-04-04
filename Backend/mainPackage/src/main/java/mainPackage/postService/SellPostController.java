@@ -62,68 +62,8 @@ public class SellPostController {
         }
 
         try {
-            nu.pattern.OpenCV.loadLocally();
-
-
-            String img1 = p.getPicture1();
-            if((img1 != null) && !img1.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic1.png";
-                p.setPicture1(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture1("");
-            }
-
-            String img2 = p.getPicture2();
-            if((img2 != null) && !img2.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic2.png";
-                p.setPicture2(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture2("");
-            }
-
-            String img3 = p.getPicture3();
-            if((img3 != null) && !img3.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic3.png";
-                p.setPicture3(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture3("");
-            }
-
-            String img4 = p.getPicture1();
-            if((img4 != null) && !img4.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic4.png";
-                p.setPicture4(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture4("");
-            }
-
-            String img5 = p.getPicture1();
-            if((img5 != null) && !img5.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic5.png";
-                p.setPicture5(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture5("");
-            }
-
-            String img6 = p.getPicture1();
-            if((img6 != null) && !img6.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic6.png";
-                p.setPicture6(fileName);
-                byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
-            }else{
-                p.setPicture6("");
-            }
+            //nu.pattern.OpenCV.loadLocally();
+            setPictures(p);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -197,9 +137,9 @@ public class SellPostController {
 
             String img1 = p.getPicture1();
             if((img1 != null) && !img1.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic1.png";
-                p.setPicture1(fileName);
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic1.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture1(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture1("");
@@ -207,9 +147,9 @@ public class SellPostController {
 
             String img2 = p.getPicture2();
             if((img2 != null) && !img2.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic2.png";
-                p.setPicture2(fileName);
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic2.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture2(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture2("");
@@ -217,39 +157,39 @@ public class SellPostController {
 
             String img3 = p.getPicture3();
             if((img3 != null) && !img3.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic3.png";
-                p.setPicture3(fileName);
+                String fileName ="./"+ p.getUserName() + p.getTitle()+"Pic3.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture3(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture3("");
             }
 
-            String img4 = p.getPicture1();
+            String img4 = p.getPicture4();
             if((img4 != null) && !img4.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic4.png";
-                p.setPicture4(fileName);
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic4.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture4(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture4("");
             }
 
-            String img5 = p.getPicture1();
+            String img5 = p.getPicture5();
             if((img5 != null) && !img5.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic5.png";
-                p.setPicture5(fileName);
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic5.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture5(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture5("");
             }
 
-            String img6 = p.getPicture1();
+            String img6 = p.getPicture6();
             if((img6 != null) && !img6.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic6.png";
-                p.setPicture6(fileName);
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic6.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
+                p.setPicture6(fileName);
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture6("");
@@ -281,7 +221,7 @@ public class SellPostController {
 
             String img1 = p.getPicture1();
             if((img1 != null) && !img1.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic1.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic1.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
@@ -296,7 +236,7 @@ public class SellPostController {
 
             String img2 = p.getPicture2();
             if((img2 != null) && !img2.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic2.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic2.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
@@ -311,7 +251,7 @@ public class SellPostController {
 
             String img3 = p.getPicture3();
             if((img3 != null) && !img3.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic3.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic3.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
@@ -324,9 +264,9 @@ public class SellPostController {
                 p.setPicture3("");
             }
 
-            String img4 = p.getPicture1();
+            String img4 = p.getPicture4();
             if((img4 != null) && !img4.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic4.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic4.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
@@ -339,9 +279,9 @@ public class SellPostController {
                 p.setPicture4("");
             }
 
-            String img5 = p.getPicture1();
+            String img5 = p.getPicture5();
             if((img5 != null) && !img5.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic5.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic5.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
@@ -354,9 +294,9 @@ public class SellPostController {
                 p.setPicture5("");
             }
 
-            String img6 = p.getPicture1();
+            String img6 = p.getPicture6();
             if((img6 != null) && !img6.equals("") ){
-                String fileName = p.getUserName() + p.getTitle()+"Pic6.png";
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic6.png";
                 File f = new File(fileName);
                 if(f.exists()){
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
