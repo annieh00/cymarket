@@ -2,9 +2,12 @@ package mainPackage.websocket;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.Data;
+import lombok.Getter;
+import mainPackage.usersPackage.GeneralUser;
 
 @Entity
 @Table(name = "messages")
@@ -20,9 +23,6 @@ public class Message {
             generator="messageGenerator")
     private Long id;
 
-    @Column(name = "user_name")
-    private String userName;
-
     @Lob
     private String content;
 
@@ -30,11 +30,26 @@ public class Message {
     @Column(name = "sent")
     private Date sent = new Date();
 
+    @JsonIgnore
+    @ManyToOne
+    private GeneralUser userSent;
+
+    @JsonIgnore
+    @ManyToOne
+    private GeneralUser userReceived;
+
     public Message() {};
 
-    public Message(String userName, String content) {
-        this.userName = userName;
+    public Message(GeneralUser userSent, String content) {
+        this.userSent = userSent;
         this.content = content;
+        this.userReceived = null;
+    }
+
+    public Message(GeneralUser userSent, GeneralUser userReceived, String content) {
+        this.userSent = userSent;
+        this.content = content;
+        this.userReceived = userReceived;
     }
 
     public Long getId() {
@@ -43,14 +58,6 @@ public class Message {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getContent() {
@@ -69,6 +76,13 @@ public class Message {
         this.sent = sent;
     }
 
+    public GeneralUser getUserSent() { return userSent; }
+
+    public void setUserSent(GeneralUser userSent) { this.userSent = userSent; }
+
+    public GeneralUser getUserReceived() { return userReceived; }
+
+    public void setUserReceived(GeneralUser userReceived) { this.userReceived = userReceived; }
 
 }
 

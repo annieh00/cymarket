@@ -14,6 +14,8 @@ import jakarta.websocket.server.ServerEndpoint;
 import mainPackage.imageProcess.Image;
 import mainPackage.imageProcess.ImageProcessingController;
 import mainPackage.imageProcess.ImageRepository;
+import mainPackage.usersPackage.GeneralUser;
+import mainPackage.usersPackage.GeneralUserRepository;
 import org.antlr.v4.runtime.misc.LogManager;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -36,7 +38,7 @@ import org.springframework.stereotype.Controller;
  * The server provides functionality for broadcasting messages to all connected
  * users and sending messages to specific users.
  */
-@ServerEndpoint("/chat/{chatID}/{username}")
+@ServerEndpoint("/chat/{username}")
 @Component
 @Controller
 public class DirectChat {
@@ -46,12 +48,11 @@ public class DirectChat {
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
+    private static GeneralUserRepository generalUserRepository;
     private static ImageRepository imageRepository;
-
-
     // cannot autowire static directly (instead we do it by the below
     // method
-    private static MessageRepository msgRepo;
+    private static MessageRepository messageRepository;
 
     /*
      * Grabs the MessageRepository singleton from the Spring Application
@@ -61,19 +62,18 @@ public class DirectChat {
      * easiest.
      */
     @Autowired
-    public void setMessageRepository(MessageRepository repo) {
-        msgRepo = repo;  // we are setting the static variable
-    }
-
-    private static int count = 0;
+    public void setMessageRepository(MessageRepository mr) { messageRepository = mr; }
 
     @Autowired
-    public void setImageRepository(ImageRepository ir) {
-        imageRepository = ir;
-    }
+    public void setImageRepository(ImageRepository ir) { imageRepository = ir; }
+
+    @Autowired
+    public void setGeneralUserRepository(GeneralUserRepository gur) { generalUserRepository = gur; }
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(DirectChat.class);
+
+    private static int count = 0;
 
     /**
      * This method is called when a new WebSocket connection is established.
@@ -83,28 +83,21 @@ public class DirectChat {
      */
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username, @PathParam("chatID") String chatID) throws IOException {
+    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
 
         // server side log
-        logger.info("[onOpen] ChatSession ID " + chatID + " joined user: " + username);
+        logger.info("[onOpen] " + username + " has joined.");
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
             session.getBasicRemote().sendText("duplicate user");
             session.close();
-        } else {
-            // map current session with username
-            sessionUsernameMap.put(session, username);
-
-            // map current username with session
-            usernameSessionMap.put(username, session);
-
-            // send to the user joining in
-            sendMessageToParticularUser(username, "user connected: " + username);
-
-            // send to everyone in the chat
-            broadcast("User: " + username + " has joined the chat.");
         }
+
+        // Send messages and broadcast
+        sendMessageToParticularUser(username, "user connected: " + username);
+        sendMessageToParticularUser(username, getChatHistory());
+        broadcast("User: " + username + " has joined the chat.");
     }
 
     /**
@@ -151,6 +144,7 @@ public class DirectChat {
         // Direct message to
         // split by space
         String[] split_msg = message.split("\\s+");
+        String otherUser = split_msg[0];
 
         /**
          user1 sends base64 encoded string
@@ -175,15 +169,26 @@ public class DirectChat {
                 sendMessageToParticularUser(username, "Error saving image. Please try again.");
             }
         } else {
-            // Combine the rest of message
-            StringBuilder actualMessageBuilder = new StringBuilder();
-            for (int i = 1; i < split_msg.length; i++) {
-                actualMessageBuilder.append(split_msg[i]).append(" ");
+            // Check if the other user is in the session to send a message to them
+            if (sessionUsernameMap.containsValue(otherUser)) {
+                // Combine the rest of message
+                StringBuilder actualMessageBuilder = new StringBuilder();
+                for (int i = 1; i < split_msg.length; i++) {
+                    actualMessageBuilder.append(split_msg[i]).append(" ");
+                }
+                logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + otherUser);
+                String actualMessage = actualMessageBuilder.toString();
+                sendMessageToParticularUser(username, "[DM sent to " + otherUser + "]: " + actualMessage);
+                sendMessageToParticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
+
+                GeneralUser loggedInUser = generalUserRepository.findGeneralUserByUserName(username);
+                GeneralUser sendingToUser = generalUserRepository.findGeneralUserByUserName(otherUser);
+                messageRepository.save(new Message(loggedInUser, sendingToUser, message));
+            } else {
+                // Send a response to the user instructing them to start the message with the username
+                sendMessageToParticularUser(username, "Error: Please start your message with the " +
+                        "username you are trying to message, followed by a space, followed by your message.");
             }
-            logger.info("[onMessage] from: " + username + "\"" + message + "\" to: " + split_msg[0]);
-            String actualMessage = actualMessageBuilder.toString();
-            sendMessageToParticularUser(username, "[DM sent to " + split_msg[0] + "]: " + actualMessage);
-            sendMessageToParticularUser(split_msg[0], "[DM from " + username + "]: " + actualMessage);
         }
 
     }
@@ -222,7 +227,6 @@ public class DirectChat {
 
         // get the username from session-username mapping
         String username = sessionUsernameMap.get(session);
-
         // do error handling here
         logger.info("[onError]" + username + ": " + throwable.getMessage());
     }
@@ -260,12 +264,12 @@ public class DirectChat {
 
     // Gets the Chat history from the repository
     private String getChatHistory() {
-        List<Message> messages = msgRepo.findAll();
+        List<Message> messages = messageRepository.findAll();
         // convert the list to a string
         StringBuilder sb = new StringBuilder();
-        if(messages != null && messages.size() != 0) {
+        if(!messages.isEmpty()) {
             for (Message message : messages) {
-                sb.append(message.getUserName() + ": " + message.getContent() + "\n");
+                sb.append(message.getUserSent() + ": " + message.getContent() + "\n");
             }
         }
         return sb.toString();
