@@ -154,59 +154,59 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
     /**
      * Makes a GET request to fetch announcements as a JSON array.
      */
-    private void makeJsonArrayReq () {
+        private void makeJsonArrayReq () {
 
-        adapter.clear();
+            adapter.clear();
 
-        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
-                Request.Method.GET,
-                URL_JSON_ARRAY,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("Volley Response", response.toString());
+            JsonArrayRequest jsonArrReq = new JsonArrayRequest(
+                    Request.Method.GET,
+                    URL_JSON_ARRAY,
+                    null, // Pass null as the request body since it's a GET request
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.d("Volley Response", response.toString());
 
-                        // Parse the JSON array and add data to the adapter
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                String title = jsonObject.getString("title");
-                                String description = jsonObject.getString("description");
+                            // Parse the JSON array and add data to the adapter
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    JSONObject jsonObject = response.getJSONObject(i);
+                                    String title = jsonObject.getString("title");
+                                    String description = jsonObject.getString("description");
 
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.notifyDataSetChanged();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                return headers;
-            }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Volley Error", error.toString());
+                        }
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    return headers;
+                }
 
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
 //                params.put("param1", "value1");
 //                params.put("param2", "value2");
-                return params;
-            }
-        };
+                    return params;
+                }
+            };
 
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
+            // Adding request to request queue
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
+        }
     }
-}
 
 
 

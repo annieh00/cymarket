@@ -392,6 +392,7 @@ public class MainFeed extends AppCompatActivity {
                             int userID = 0; // placeholder
                             int postID = 0; // placeholder
 
+
                             mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
                         }
 
@@ -560,7 +561,5 @@ public class MainFeed extends AppCompatActivity {
 
 
 }
-
-
 
 

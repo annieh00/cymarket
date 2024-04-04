@@ -54,7 +54,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
-    //    private EditText categoryEditTxt;
+//    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
     private ImageView image1 = null;
@@ -160,12 +160,12 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
                     }
-                });
+        });
 
 
         /*
-         *  click listener on post button pressed
-         */
+        *  click listener on post button pressed
+        */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +215,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //
 //        return Base64.encodeToString(byteArray, Base64.DEFAULT);
 //    }
-
+    
     /**
      * Uploads an image to a remote server using a multipart Volley request.
      *

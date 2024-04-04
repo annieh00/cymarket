@@ -1,4 +1,4 @@
-package com.example.androidexample.Post;
+package com.example.androidexample.Auction;
 
 import android.net.Uri;
 

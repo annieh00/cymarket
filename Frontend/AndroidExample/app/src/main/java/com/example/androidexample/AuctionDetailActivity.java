@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 
-public class PostDetailActivity extends AppCompatActivity {
+public class AuctionDetailActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView msgResponse;
