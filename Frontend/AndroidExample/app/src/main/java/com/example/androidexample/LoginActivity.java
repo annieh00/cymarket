@@ -153,7 +153,9 @@ public class LoginActivity extends AppCompatActivity {
 //                password = response.getString("password");
                 validUser = response.getBoolean("fromServer");
                 permission = response.getInt("permission");
-//                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
+                //I, jess added these two lines
+                username = response.getString("username");
+                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }

@@ -35,7 +35,7 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
 //    private String serverUrl = "ws://10.0.2.2:8080/chat/";
 
-    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/1/userName123";
+    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/%7B" + LoginActivity.username + "%7D";
 
 
     private ImageButton sendBtn, setLocation;
@@ -100,7 +100,7 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
                                 double latitude = result.getData().getDoubleExtra("latitude", 0.0);
                                 double longitude = result.getData().getDoubleExtra("longitude", 0.0);
                                 // Now you can use these coordinates as needed
-                                String coordinates = "Latitude: " + latitude + ", Longitude: " + longitude;
+                                String coordinates =  "!location " + latitude + " " + longitude;
                                 msgEtx.setText(coordinates);
 
 
