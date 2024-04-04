@@ -33,12 +33,6 @@ public class Posting {
     private String description;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<Image> images = new HashSet<>();
-
-
-
     @Column(name = "isAuction")
     private boolean isAuction;
 
@@ -61,8 +55,6 @@ public class Posting {
     @Column(name = "picture6")
     private String picture6;
 
-    @Column(name = "timeAliveInMinutes")
-    private int timeAliveInMinutes;
 
     @Column(name = "price")
     private int price;
@@ -134,6 +126,7 @@ public class Posting {
         isAuction = auction;
     }
 
+/*
     public Set<Image> getImages() {
         return images;
     }
@@ -150,6 +143,7 @@ public class Posting {
     public void setTimeAliveInMinutes(int timeAliveInMinutes) {
         this.timeAliveInMinutes = timeAliveInMinutes;
     }
+*/
 
     public int getPrice() {
         return price;

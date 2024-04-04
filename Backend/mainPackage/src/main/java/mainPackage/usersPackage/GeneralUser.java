@@ -53,7 +53,7 @@ public class GeneralUser {
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
 
