@@ -1,4 +1,6 @@
 package com.example.androidexample;
+import static com.example.androidexample.CurrentUser.setCurrentUser;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -54,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
     //    private Boolean userValidity = true; //this boolean is meant to validate the user
     private Boolean txtValidity = true;
     public Boolean validUser;
+
+
+    public String currentUser;
+
+    public CurrentUser current;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +175,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }else if (validUser && permission == 2){
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                //setting the currentUser
+//                setCurrentUser();
+                //calling method to get currentUser
+                getCurrentUser(emailTxt.getText().toString().trim());
+
                 Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
@@ -204,5 +216,48 @@ public class LoginActivity extends AppCompatActivity {
         //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
 
+    }
+
+
+    // im not sure what the correct endpoint is but it is something about these lines
+    // but idk
+    private void getCurrentUser(String email) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "YOUR_API_ENDPOINT_HERE?email=" + email;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Parse the response to get the username
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String username = jsonObject.getString("userName");
+
+                            currentUser = username;
+
+                            current.setCurrentUser(username);
+
+
+
+                            // Do something with the retrieved username
+                            Log.d(TAG, "Username: " + username);
+                            // You can set the retrieved username to a TextView or any other UI element if needed
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error
+                Toast.makeText(LoginActivity.this, "Error retrieving username", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }

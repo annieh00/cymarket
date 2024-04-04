@@ -1,18 +1,26 @@
 package com.example.androidexample;
 
 // Import necessary Android classes and libraries
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -20,6 +28,16 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 
 /**
  * The SetLocationActivity class allows users to set a location on the map.
@@ -31,6 +49,14 @@ public class SetLocationActivity extends AppCompatActivity {
     private MapView map = null; // MapView object
     private Marker marker; // Marker object for indicating the selected location
 
+    private double markerLatitude; // Latitude of the marker
+    private double markerLongitude; // Longitude of the marker
+
+    private BottomSheetDialog dialog; // Declare dialog as a class-level variable
+
+    String server_url_create = "http://coms-309-060.class.las.iastate.edu:8080/chat/userName123";
+
+    AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +93,8 @@ public class SetLocationActivity extends AppCompatActivity {
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 // Handle single tap event by adding a marker
                 GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+
+                //i would send the json data here
                 addMarker(point);
                 return true;
             }
@@ -144,5 +172,88 @@ public class SetLocationActivity extends AppCompatActivity {
         marker.setPosition(point);
         map.getOverlays().add(marker);
         map.invalidate(); // Refresh the map to display the marker
+
+        // Store the latitude and longitude of the marker
+        markerLatitude = point.getLatitude();
+        markerLongitude = point.getLongitude();
+
+        showBottomSheet();
     }
+
+    private void showBottomSheet() {
+        // Inflate the layout for the bottom sheet
+        View view = getLayoutInflater().inflate(R.layout.modal_bottom_sheet_location, null);
+
+        // Find buttons by their IDs
+        Button btnYes = view.findViewById(R.id.yes);
+
+
+        // Set onClickListener for the "Yes" button
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d("Marker Coordinates", "Latitude: " + markerLatitude + ", Longitude: " + markerLongitude);
+
+                Intent intent = new Intent();
+                intent.putExtra("latitude", markerLatitude);
+                intent.putExtra("longitude", markerLongitude);
+                setResult(RESULT_OK, intent);
+
+                setLocation(markerLatitude, markerLongitude);
+                finish(); // Close the SetLocationActivity
+
+            }
+        });
+
+        // Set onClickListener for the "No" button
+
+
+        // Create the BottomSheetDialog
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setContentView(view);
+
+        // Show the dialog
+        dialog.show();
+    }
+
+    private void setLocation(double markerLatitude, double markerLongitude) {
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("x", markerLatitude);
+            jsonBody.put("y", markerLongitude);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                builder.setTitle("Server Response");
+                try {
+                    builder.setMessage("Response " + response.getString("status"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Handle positive button click
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SetLocationActivity.this, "Error....", Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        });
+
+        VolleySingleton.getInstance(SetLocationActivity.this).addToRequestQueue(jsonObjReq);
+    }
+
+
 }
