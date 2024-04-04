@@ -6,10 +6,8 @@ package mainPackage.usersPackage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import mainPackage.announcementPackage.Announcement;
-import mainPackage.websocket.Auction;
 import mainPackage.websocket.AuctionTable;
-import mainPackage.websocket.Chat;
-import org.hibernate.dialect.pagination.FetchLimitHandler;
+import mainPackage.websocket.Message;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,27 +49,29 @@ public class GeneralUser {
     @Column(name = "userName",unique = true)
     private String userName;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
-
-
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<Chat> connectedChats = new HashSet<>();
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Announcement> announcements = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Message> userSent;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Message> userReceived;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GeneralUser> friends;
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
