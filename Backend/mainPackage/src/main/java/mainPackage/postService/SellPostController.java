@@ -12,6 +12,7 @@ import mainPackage.usersPackage.*;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.AuctionTableRepository;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -20,6 +21,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -107,7 +111,7 @@ public class SellPostController {
 
         try {
             for(int i = 0; i < mylist.size(); i++){
-                Posting p = getPictures(mylist.get(i));
+                Posting p = getPicturePaths(mylist.get(i));
                 if(p != null){
                     mylist.set(i,p);
                 }
@@ -120,7 +124,44 @@ public class SellPostController {
         return "{ \"posts\" :" +json + "}";
     }
 
-    @GetMapping("/image/{imageName}")
+    @GetMapping("/image/{postId}/{imageID}")
+    private @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
+        Posting p = postingRepository.findPostingById(postId);
+        String imgName = "";
+        if(p != null){
+            switch (imageID){
+                case 1:
+                    imgName = p.getPicture1();
+                    break;
+                case 2:
+                    imgName = p.getPicture2();
+                    break;
+                case 3:
+                    imgName = p.getPicture3();
+                    break;
+                case 4:
+                    imgName = p.getPicture4();
+                    break;
+
+                case 5:
+                    imgName = p.getPicture5();
+                    break;
+
+                case 6:
+                    imgName = p.getPicture6();
+                    break;
+            }
+            if(!imgName.equals("") && imgName != null){
+                File initialFile = new File("./"+imgName);
+                InputStream in = new FileInputStream(initialFile);
+                return IOUtils.toByteArray(in);
+            }
+
+        }
+
+        return new byte[0];
+
+    }
 
 
 
@@ -306,6 +347,109 @@ public class SellPostController {
                     byte[] fileContent = FileUtils.readFileToByteArray(f);
                     String encodedString = Base64.getEncoder().encodeToString(fileContent);
                     p.setPicture6(encodedString);
+                }else{
+                    p.setPicture6("");
+                }
+            }else{
+                p.setPicture6("");
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+
+        return p;
+    }
+
+
+    private Posting getPicturePaths(Posting p){
+        GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
+        if(u2 == null){
+            u2 = generalUserRepository.findById(p.getId());
+            if(u2 == null){
+                return null;
+            }
+        }
+
+
+
+        try {
+            nu.pattern.OpenCV.loadLocally();
+
+
+            String img1 = p.getPicture1();
+            if((img1 != null) && !img1.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic1.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
+                }else{
+                    p.setPicture1("");
+                }
+            }else{
+                p.setPicture1("");
+            }
+
+            String img2 = p.getPicture2();
+            if((img2 != null) && !img2.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic2.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic2.png");
+                }else{
+                    p.setPicture2("");
+                }
+            }else{
+                p.setPicture2("");
+            }
+
+            String img3 = p.getPicture3();
+            if((img3 != null) && !img3.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic3.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic3.png");
+                }else{
+                    p.setPicture3("");
+                }
+            }else{
+                p.setPicture3("");
+            }
+
+            String img4 = p.getPicture4();
+            if((img4 != null) && !img4.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic4.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic4.png");
+                }else{
+                    p.setPicture4("");
+                }
+            }else{
+                p.setPicture4("");
+            }
+
+            String img5 = p.getPicture5();
+            if((img5 != null) && !img5.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic5.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic5.png");
+                }else{
+                    p.setPicture5("");
+                }
+            }else{
+                p.setPicture5("");
+            }
+
+            String img6 = p.getPicture6();
+            if((img6 != null) && !img6.equals("") ){
+                String fileName = "./"+p.getUserName() + p.getTitle()+"Pic6.png";
+                File f = new File(fileName);
+                if(f.exists()){
+                    p.setPicture1(p.getUserName() + p.getTitle()+"Pic6.png");
                 }else{
                     p.setPicture6("");
                 }
