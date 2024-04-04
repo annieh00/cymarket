@@ -101,7 +101,7 @@ public class AuctionActivity extends AppCompatActivity {
     private DrawerLayout nDrawerLayout;
 
 
-//    AlertDialog.Builder builder;
+    //    AlertDialog.Builder builder;
     public static final String URL_IMAGE = "http://10.0.2.2:8080/images/1";
 
     //    private ListAdapter adapter;

@@ -37,11 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTxt, passwordTxt;  //these text boxes are where the user enters their credentials
     private Button loginButton;         // the login button is used to submit the credentials of the user
     private Button signupButton;        // the sign up button is used to indicate that the user wants to sign up, and it will lead to another screen
- //   public static String username;    //the user's full name given to Iowa State
+    //   public static String username;    //the user's full name given to Iowa State
     private String TAG = LoginActivity.class.getSimpleName(); //the tag used to identify JSON object requests
-//    public static int userID = 0;       //id of the user who is currently logged in
+    //    public static int userID = 0;       //id of the user who is currently logged in
     public static int permission = 0; //0=admin, 1=organizer, 2=normal user
-//    public static String profilePicture;        //the user's profile picture
+    //    public static String profilePicture;        //the user's profile picture
     public static String password;      //the user's password
     public static String firstName;//
 
@@ -49,9 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     public static String userType;
     public static String username;
     public static String email;         //the user's email
-//    public static String dateCreated; //the date that the account was created
+    //    public static String dateCreated; //the date that the account was created
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req"; //this is the tag names
-//    private Boolean userValidity = true; //this boolean is meant to validate the user
+    //    private Boolean userValidity = true; //this boolean is meant to validate the user
     private Boolean txtValidity = true;
     public Boolean validUser;
     @Override
@@ -86,8 +86,9 @@ public class LoginActivity extends AppCompatActivity {
         txtRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                  Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                  startActivity(intent);  // go to SignupActivity
+//                  Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
+                startActivity(intent);  // go to SignupActivity
             }
         });
         /* click listener on login button pressed */
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 /* grab strings from user inputs */
 //                if (txtValidity == true) {
-                     sendJsonObjReq();
+                sendJsonObjReq();
 //                    Pass();
 //                }else if (!txtValidity){
 //                    Pass();
@@ -150,7 +151,6 @@ public class LoginActivity extends AppCompatActivity {
             try {
 //                email = response.getString("email");
 //                password = response.getString("password");
-                username = response.getString("userName");
                 validUser = response.getBoolean("fromServer");
                 permission = response.getInt("permission");
 //                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();

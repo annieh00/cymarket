@@ -54,7 +54,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
-//    private EditText categoryEditTxt;
+    //    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
     private ImageView image1 = null;
@@ -90,7 +90,6 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private String encodedString;
     ArrayList<Uri> images = new ArrayList<>();
-    ArrayList<String> encodedImages = new ArrayList<>();
 
     private EditText priceEditTxt;
 //    private String encodedString;
@@ -134,27 +133,21 @@ public class CreatePostActivity extends AppCompatActivity{
                             ImageView imageView = null;
                             switch (index) {
                                 case 0:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView1);
                                     break;
                                 case 1:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView2);
                                     break;
                                 case 2:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView3);
                                     break;
                                 case 3:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView4);
                                     break;
                                 case 4:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView5);
                                     break;
                                 case 5:
-                                    encodedImages.add(encodedString);
                                     imageView = findViewById(R.id.imageSelView6);
                                     break;
                             }
@@ -167,12 +160,12 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
                     }
-        });
+                });
 
 
         /*
-        *  click listener on post button pressed
-        */
+         *  click listener on post button pressed
+         */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,7 +215,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //
 //        return Base64.encodeToString(byteArray, Base64.DEFAULT);
 //    }
-    
+
     /**
      * Uploads an image to a remote server using a multipart Volley request.
      *
@@ -272,29 +265,27 @@ public class CreatePostActivity extends AppCompatActivity{
         JSONObject body = new JSONObject();
         try {
             //input your API parameters
-//            jsonObject.put("title", titleEditText.getText().toString());
-////            jsonObject.put("category", categoryEditTxt.getText().toString());
-//            jsonObject.put("description", descriptionEditText.getText().toString());
-//            jsonObject.put("price", Integer.getInteger(priceEditTxt.getText().toString()));
-            //boolean isAuction
-//                jsonObjec;
+            jsonObject.put("title", titleEditText.getText().toString());
+//            jsonObject.put("category", categoryEditTxt.getText().toString());
+            jsonObject.put("description", descriptionEditText.getText().toString());
+//            jsonObject.put("category", getCategoryEditTxt.getText().toString());
+//            jsonObject.put("price", priceEditTxt.getText().toString());
+
             int index = 0;
-            while (index < images.size()) {
+            while (index < images.size() - 1) {
                 switch (index) {
                     case 0:
                         jsonObject.put("picture1", encodedString);
-                        break;
-                    case 1:
-                        jsonObject.put("picture2", encodedString);
-                        break;
-                    case 2:
-                        jsonObject.put("picture3", encodedString);
-                    case 3:
-                        jsonObject.put("picture4", encodedString);
-                    case 4:
-                        jsonObject.put("picture5", encodedString);
-                    case 5:
-                        jsonObject.put("picture6", encodedString);
+//                    case 1:
+//                        jsonObject.put("image2", encodedString);
+//                    case 2:
+//                        jsonObject.put("image3", );
+//                    case 3:
+//                        jsonObject.put("image4", R.id.imageSelView4);
+//                    case 4:
+//                        jsonObject.put("image5", R.id.imageSelView5);
+//                    case 5:
+//                        jsonObject.put("image6", R.id.imageSelView6);
                 }
                 index++;
             }
@@ -303,8 +294,7 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        String url2 = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data6";
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_IMAGES, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_IMAGES, body, response -> {
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = response.getBoolean("postSuccessful");
