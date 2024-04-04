@@ -200,9 +200,10 @@ public class SetLocationActivity extends AppCompatActivity {
                 intent.putExtra("longitude", markerLongitude);
                 setResult(RESULT_OK, intent);
 
-                setLocation(markerLatitude, markerLongitude);
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
                 finish(); // Close the SetLocationActivity
-
             }
         });
 
