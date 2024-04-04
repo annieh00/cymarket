@@ -1,5 +1,7 @@
 package com.example.androidexample;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -7,87 +9,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.view.View;
-import android.view.MenuItem.OnMenuItemClickListener;
-import java.util.ArrayList;
-import android.view.View;
-import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
+import java.util.ArrayList;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
+import com.example.androidexample.Post.PostAdapter;
+import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
-import android.widget.Button;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import com.example.androidexample.ListAdapter;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import com.example.androidexample.R.menu.*;
 
 /**
  * Main feed displays the current posts.
@@ -104,10 +60,52 @@ public class MainFeed extends AppCompatActivity {
     private ListView listView;
     private String itemSelected;
 
+    /**
+     *
+     */
     private ImageView imageView;
 
+    private List<String> dataList = new ArrayList<>();
+    /**
+     * this is a tag that is attached to the log
+     */
+    private String TAG = MainFeed.class.getSimpleName();
 
 
+    /**
+     * the following variables hole the keys for the items to pass to vote poll activity
+     */
+    public static final Uri EXTRA_postPicture1 = null;
+    public static final Uri EXTRA_postPicture2 = null;
+    public static final Uri EXTRA_postPicture3 = null;
+    public static final Uri EXTRA_postPicture4 = null;
+    public static final Uri EXTRA_postPicture5 = null;
+    public static final Uri EXTRA_postPicture6 = null;
+
+    public static final String EXTRA_postTitle = "postTitle";
+    public static final int EXTRA_postPrice = 0;
+    public static final String EXTRA_postDate = "date";
+    public static final String EXTRA_postCategory = "category";
+    public static final int EXTRA_postFlagCount = 0;
+    public static final Boolean EXTRA_postAuction = false;
+
+    public static final int EXTRA_userID = 0;
+
+    public static final int EXTRA_postID = 0;
+
+
+    /**
+     * recyclerview related variables
+     */
+    private PostAdapter mPostAdapter;
+    private RecyclerView mRecyclerView;
+    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+
+
+    /**
+     * this is the tag itself
+     */
+    private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
 
 
@@ -151,10 +149,6 @@ public class MainFeed extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-//
-//        adapter = new ListAdapter(this, new ArrayList<>());
-//        listView.setAdapter(adapter);
-
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
@@ -271,11 +265,6 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), CreatePostActivity.class);
                         startActivity(intent);
                         break;
-                    case "Friends":
-                        // Handle click on the second item
-                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-                        startActivity(intent);
-                        break;
                     case "Inbox":
                         // Handle click on the third item
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
@@ -366,7 +355,71 @@ public class MainFeed extends AppCompatActivity {
 //        });
 
 
+
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
+            @Override public void onItemClick(PostItemObject item) {
+                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                // intent to the detail activity
+                Intent intent = new Intent(MainFeed.this, PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(item.getPostID()+1)); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                startActivity(intent);
+            }
+        });
+
+        mRecyclerView.setAdapter(mPostAdapter);
+        fetchPosts();
     }
+
+    private void fetchPosts() {
+        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            String title = jsonObject.getString("title");
+                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            String description = jsonObject.getString("description");
+
+                            String date = "date"; // placeholder
+                            String category = "category"; // placeholder
+                            Boolean auction = true; // placeholder
+                            int flagCount = 0; // placeholder
+                            int userID = 0; // placeholder
+                            int postID = 0; // placeholder
+
+                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                        }
+
+                        mPostAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+    }
+
+//    private void jsonParse(){
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+//                response -> {
+//                    try {
+//                        JSONArray jsonArray = response.getJSONArray("posts");
+//                        for (int i = 0; i < jsonArray.length(); i++){
+//
+//                        }
+//                    }catch(JSONException e){
+//                        throw new RuntimeException(e);
+//                    }
+//                })
+//
+//    }
+
 
 //    private void makeJsonArrayReq () {
 //
@@ -460,6 +513,54 @@ public class MainFeed extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
+
+//    public static final Uri EXTRA_postPicture1 = null;
+//    public static final Uri EXTRA_postPicture2 = null;
+//    public static final Uri EXTRA_postPicture3 = null;
+//    public static final Uri EXTRA_postPicture4 = null;
+//    public static final Uri EXTRA_postPicture5 = null;
+//    public static final Uri EXTRA_postPicture6 = null;
+//
+//    public static final String EXTRA_postTitle = "postTitle";
+//    public static final int EXTRA_postPrice = 0;
+//    public static final String EXTRA_postDate = "date";
+//    public static final String EXTRA_postCategory = "category";
+//    public static final int EXTRA_postFlagCount = 0;
+//    public static final Boolean EXTRA_postAuction = false;
+//
+//    public static final int EXTRA_userID = 0;
+//
+//    public static final int EXTRA_postID = 0;
+
+    /**
+     * this sets up an intent and send them Vote Poll Activity
+     * @param position
+     */
+//    @Override
+//    public void onItemClick(int position) {
+//        Intent detailIntent = new Intent(this, MainFeed.class);
+//        PostItemObject clickeditem = mPostList.get(position);
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickeditem.getPicture1());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickeditem.getPicture2());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickeditem.getPicture3());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickeditem.getPicture4());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickeditem.getPicture5());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickeditem.getPicture6());
+//        detailIntent.putExtra(EXTRA_postTitle, clickeditem.getTitle());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickeditem.getPrice());
+//        detailIntent.putExtra(EXTRA_postDate, clickeditem.getDate());
+//        detailIntent.putExtra(EXTRA_postCategory, clickeditem.getCategory());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickeditem.getFlagCount());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickeditem.getAuction());
+//        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickeditem.getUserID());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickeditem.getPostID());
+//        startActivity(detailIntent);
+//
+//    }
+
+
 }
+
+
 
 
