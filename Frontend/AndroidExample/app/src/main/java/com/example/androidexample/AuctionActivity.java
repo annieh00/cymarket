@@ -30,6 +30,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.androidexample.Auction.AuctionAdapter;
+import com.example.androidexample.Auction.AuctionItemObject;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
@@ -97,9 +99,9 @@ public class AuctionActivity extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private PostAdapter mPostAdapter;
+    private AuctionAdapter mAuctionAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+    ArrayList<AuctionItemObject> mAuctionList = new ArrayList<>();
 
 
     /**
@@ -251,10 +253,6 @@ public class AuctionActivity extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
-                    case "Main Feed":
-                        intent = new Intent(getApplicationContext(), MainFeed.class);
-                        startActivity(intent);
-                        break;
                     case "Profile":
                         // Handle click on the first item
                         intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
@@ -358,8 +356,8 @@ public class AuctionActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
-            @Override public void onItemClick(PostItemObject item) {
+        mAuctionAdapter = new AuctionAdapter(mAuctionList, new AuctionAdapter.OnItemClickListener() {
+            @Override public void onItemClick(AuctionItemObject item) {
                 Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
@@ -369,7 +367,7 @@ public class AuctionActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView.setAdapter(mPostAdapter);
+        mRecyclerView.setAdapter(mAuctionAdapter);
         fetchPosts();
     }
 
@@ -393,10 +391,10 @@ public class AuctionActivity extends AppCompatActivity {
                             int postID = 0; // placeholder
 
 
-                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                            mAuctionList.add(new AuctionItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
                         }
 
-                        mPostAdapter.notifyDataSetChanged();
+                        mAuctionAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

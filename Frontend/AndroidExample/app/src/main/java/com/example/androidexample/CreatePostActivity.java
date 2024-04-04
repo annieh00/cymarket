@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -112,6 +113,15 @@ public class CreatePostActivity extends AppCompatActivity{
         image5 = findViewById(R.id.imageSelView5);
         image6 = findViewById(R.id.imageSelView6);
         priceEditTxt = findViewById(R.id.priceEditTxt);
+
+        Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
+            }
+        });
 
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML

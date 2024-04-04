@@ -18,8 +18,8 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHold
         void onItemClick(AuctionItemObject auction);
     }
 
-    public AuctionAdapter(List<AuctionItemObject> mPostList, OnItemClickListener listener){
-        this.mAuctionList = mPostList;
+    public AuctionAdapter(List<AuctionItemObject> mAuctionList, OnItemClickListener listener){
+        this.mAuctionList = mAuctionList;
         this.mListener = listener;
     }
 
