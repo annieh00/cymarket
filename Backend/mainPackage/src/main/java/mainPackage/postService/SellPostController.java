@@ -20,10 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Junhyung Shim
@@ -357,12 +354,27 @@ public class SellPostController {
     })
     @PostMapping("/posts/delete")
     public String deletePost(@RequestBody Posting delete){
-        System.out.println(delete.getId());
+        System.out.println(delete.getUserName());
         Posting p = postingRepository.findPostingById(delete.getId());
 
         if(p == null){
+
             return "{ \"serverResponse\" : false}";
         }
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(delete.getUserName());
+        System.out.println(delete.getUserName());
+        if(u != null){
+            Set<Posting> hs = u.getPublishedPosts();
+            for(Posting p3 : hs){
+                if(p3.getId() == delete.getId()){
+                    hs.remove(p3);
+                    break;
+                }
+            }
+            u.setPublishedPosts(hs);
+            generalUserRepository.save(u);
+        }
+
         AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
         if(a != null){
             auctionTableRepository.delete(a);
