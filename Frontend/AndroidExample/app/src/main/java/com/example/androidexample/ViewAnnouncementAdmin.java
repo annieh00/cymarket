@@ -46,10 +46,10 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
     private EditText newUpdatedBody;
     private int announcementID;
     private Toolbar toolbar;
-//    private static final String URL_JSON_ARRAY_DEL = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/";
+    //    private static final String URL_JSON_ARRAY_DEL = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/";
 //    private static final String URL_JSON_ARRAY_UPDATE = "http://coms-309-060.class.las.iastate.edu:8080/announcements/update/";
 //    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
-private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
+    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     private AnnouncementAdapter adapter;
     private ListView announcements;
@@ -84,13 +84,12 @@ private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06
             }
         });
 
-        getAnnouncements();
+//        getAnnouncements();
 
         createAnnouncement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showBottomSheet();
-
 
 
             }
@@ -110,13 +109,10 @@ private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06
         EditText announcementBodyEditText = view.findViewById(R.id.announcement_body);
 
 
-
-
         // Set onClickListener for the "Yes" button
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
             }
@@ -133,70 +129,70 @@ private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06
         dialog.show();
 
     }
-
-    private void getAnnouncements() {
-//        adapter.clear();
-
-//        String URL_JSON_ARRAY = "http://your-api-url/announcements";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
-                Request.Method.GET,
-                URL_JSON_ARRAY,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("Volley Response", response.toString());
-
-                        // Parse the JSON array and add data to the adapter
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                String title = jsonObject.getString("title");
-                                String description = jsonObject.getString("description");
-
-
-                                    Announcement announcement = new Announcement(title, description);
-                                    allAnnouncements.add(announcement);
-
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("param1", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-
-            // Adding request to request queue
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
-        }
-
-    }
 }
-
+//    private void getAnnouncements() {
+////        adapter.clear();
+//
+////        String URL_JSON_ARRAY = "http://your-api-url/announcements";
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//
+//        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
+//                Request.Method.GET,
+//                URL_JSON_ARRAY,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d("Volley Response", response.toString());
+//
+//                        // Parse the JSON array and add data to the adapter
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                JSONObject jsonObject = response.getJSONObject(i);
+//                                String title = jsonObject.getString("title");
+//                                String description = jsonObject.getString("description");
+//
+//
+//                                    Announcement announcement = new Announcement(title, description);
+//                                    allAnnouncements.add(announcement);
+//
+//
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                        adapter.notifyDataSetChanged();
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                return headers;
+//            }
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("param1", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//
+//            // Adding request to request queue
+//            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
+//        }
+//
+//
+//}
+//
 
 
 
