@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class ListAdapter<T> extends ArrayAdapter<T> {
@@ -31,7 +29,7 @@ public class ListAdapter<T> extends ArrayAdapter<T> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.announcement_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_announcements, parent, false);
         }
 
         // Lookup view for data population
