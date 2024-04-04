@@ -16,14 +16,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class FriendRequest {
 
-    private static final Set<FriendRequest> endpoints = new CopyOnWriteArraySet<>();
     private static final Map<String, Session> sessionUsernameMap = new HashMap<>();
     private static final Map<String, Set<String>> pendingFriendRequests = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+
         sessionUsernameMap.put(username, session);
-        endpoints.add(this);
         sendPendingFriendRequests(session, username);
     }
 
@@ -45,7 +44,6 @@ public class FriendRequest {
 
     @OnClose
     public void onClose(Session session) throws IOException {
-        endpoints.remove(this);
         sessionUsernameMap.values().remove(session);
     }
 

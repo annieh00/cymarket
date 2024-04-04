@@ -182,7 +182,7 @@ public class DirectChat {
             }
         } else if(message.startsWith("!location ")) {
             try {
-                String otherUser = split_msg[1];
+//                String otherUser = split_msg[1];
                 // Extract meeting location data from the message
                 double latitude = Double.parseDouble(split_msg[1]);
                 double longitude = Double.parseDouble(split_msg[2]);
