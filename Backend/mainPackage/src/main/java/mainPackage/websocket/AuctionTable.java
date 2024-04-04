@@ -48,14 +48,14 @@ public class AuctionTable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private Chat winnerChat;
+    private Message winnerChat;
 
 
-    public Chat getWinnerChat() {
+    public Message getWinnerChat() {
         return winnerChat;
     }
 
-    public void setWinnerChat(Chat winnerChat) {
+    public void setWinnerChat(Message winnerChat) {
         this.winnerChat = winnerChat;
     }
 
