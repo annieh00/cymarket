@@ -14,6 +14,8 @@ import jakarta.websocket.server.ServerEndpoint;
 import mainPackage.imageProcess.Image;
 import mainPackage.imageProcess.ImageProcessingController;
 import mainPackage.imageProcess.ImageRepository;
+import mainPackage.meetingLocationPackage.MeetingLocation;
+import mainPackage.meetingLocationPackage.MeetingLocationRepository;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.antlr.v4.runtime.misc.LogManager;
@@ -49,6 +51,8 @@ public class DirectChat {
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
     private static GeneralUserRepository generalUserRepository;
+
+    private static MeetingLocationRepository meetingLocationRepository;
     private static ImageRepository imageRepository;
     // cannot autowire static directly (instead we do it by the below
     // method
@@ -69,6 +73,9 @@ public class DirectChat {
 
     @Autowired
     public void setGeneralUserRepository(GeneralUserRepository gur) { generalUserRepository = gur; }
+
+    @Autowired
+    public void setMeetingLocationRepository(MeetingLocationRepository mlr) { meetingLocationRepository = mlr; }
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(DirectChat.class);
@@ -94,9 +101,13 @@ public class DirectChat {
             session.close();
         }
 
+        // store connecting user information
+        sessionUsernameMap.put(session, username);
+        usernameSessionMap.put(username, session);
+
         // Send messages and broadcast
         sendMessageToParticularUser(username, "user connected: " + username);
-        sendMessageToParticularUser(username, getChatHistory());
+//        sendMessageToParticularUser(username, getChatHistory());
         broadcast("User: " + username + " has joined the chat.");
     }
 
@@ -138,13 +149,14 @@ public class DirectChat {
         // get the username by session
         String username = sessionUsernameMap.get(session);
 
+        GeneralUser sender = generalUserRepository.findGeneralUserByUserName(username);
+
         // server side log
         logger.info("[onMessage] from: " + username + " message: " + message);
 
         // Direct message to
         // split by space
         String[] split_msg = message.split("\\s+");
-        String otherUser = split_msg[0];
 
         /**
          user1 sends base64 encoded string
@@ -153,11 +165,11 @@ public class DirectChat {
 
         // Check if the message starts with the specific command for saving an image
         if (message.startsWith("!saveimage ")) {
-            String encodedImageString = split_msg[2]; // Assuming 12 characters for "!saveimage "
-
-            // Create an Image object with the extracted Base64 string
-            Image imageToSave = new Image(null, encodedImageString);
             try {
+                String encodedImageString = split_msg[2]; // Assuming 12 characters for "!saveimage "
+
+                // Create an Image object with the extracted Base64 string
+                Image imageToSave = new Image(null, encodedImageString);
                 // Call the saveImage method from ImageProcessingController to save and return Base64 string
                 String savedImageB64 = onMessageHelper(imageToSave, username + count + ".jpg");
                 count++;
@@ -166,9 +178,25 @@ public class DirectChat {
                 logger.info("[onMessage] from: " + username + "\"" + savedImageB64 + "\" to: " + split_msg[0]);
             } catch (Exception e) {
                 logger.error("[Image Save Error] for user " + username + ": " + e.getMessage());
-                sendMessageToParticularUser(username, "Error saving image. Please try again.");
+                sendMessageToParticularUser(username, "Error saving image. Make sure you start with !saveimage followed by the user you are sending to followed by your image.");
+            }
+        } else if(message.startsWith("!location ")) {
+            try {
+                String otherUser = split_msg[1];
+                // Extract meeting location data from the message
+                double latitude = Double.parseDouble(split_msg[1]);
+                double longitude = Double.parseDouble(split_msg[2]);
+
+                // Process the meeting location message
+                processMeetingLocation(username, latitude, longitude);
+                sendMessageToParticularUser(username, "Meeting location set successfully at Latitude: " + latitude + ", Longitude: " + longitude);
+            } catch (NumberFormatException e) {
+                // Handle invalid latitude or longitude format
+                sendMessageToParticularUser(username, "Error: Invalid latitude or longitude format.");
+                logger.error("Invalid latitude or longitude format in message: " + message);
             }
         } else {
+            String otherUser = split_msg[0];
             // Check if the other user is in the session to send a message to them
             if (sessionUsernameMap.containsValue(otherUser)) {
                 // Combine the rest of message
@@ -201,19 +229,23 @@ public class DirectChat {
      */
     @OnClose
     public void onClose(Session session) throws IOException {
-
-        // get the username from session-username mapping
+        // Get the username from session-username mapping
         String username = sessionUsernameMap.get(session);
 
-        // server side log
-        logger.info("[onClose] " + username);
+        // Server-side log
+        logger.info("[onClose] " + (username != null ? username : "Unknown user"));
 
-        // remove user from memory mappings
-        sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(username);
+        // Remove user from memory mappings
+        if (username != null) {
+            sessionUsernameMap.remove(session);
+            usernameSessionMap.remove(username);
 
-        // send the message to chat
-        broadcast(username + " disconnected");
+            // Send the message to chat
+            broadcast(username + " disconnected");
+        } else {
+            // Handle the case where the username is null (optional)
+            logger.warn("Username is null for session: " + session.getId());
+        }
     }
 
     /**
@@ -274,5 +306,20 @@ public class DirectChat {
         }
         return sb.toString();
     }
+
+    // Method to process meeting location messages
+    private void processMeetingLocation(String username, double latitude, double longitude) {
+        // Create a MeetingLocation object with the extracted latitude and longitude
+        MeetingLocation meetingLocation = new MeetingLocation();
+        meetingLocation.setX(Double.toString(latitude));
+        meetingLocation.setY(Double.toString(longitude));
+
+        // Save the meeting location using the repository
+        meetingLocationRepository.save(meetingLocation);
+
+        // Optionally, you can send a confirmation message back to the user
+        sendMessageToParticularUser(username, "Meeting location set successfully at Latitude: " + latitude + ", Longitude: " + longitude);
+    }
+
 
 }

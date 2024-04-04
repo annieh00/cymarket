@@ -49,12 +49,9 @@ public class GeneralUser {
     @Column(name = "userName",unique = true)
     private String userName;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
-
-
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -71,6 +68,10 @@ public class GeneralUser {
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Message> userReceived;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GeneralUser> friends;
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
