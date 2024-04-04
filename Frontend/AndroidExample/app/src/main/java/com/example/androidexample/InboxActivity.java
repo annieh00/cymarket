@@ -1,16 +1,29 @@
 package com.example.androidexample;
 
+
 // Import necessary Android classes and libraries
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import android.content.Intent;
 
-import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -19,8 +32,20 @@ import android.view.View;
  */
 public class InboxActivity extends AppCompatActivity implements WebSocketListener {
 
-    private Button btnShowMap; // Declare Button variable
 
+//    private String serverUrl = "ws://10.0.2.2:8080/chat/";
+
+    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/1/userName123";
+
+
+    private ImageButton sendBtn, setLocation;
+
+    private EditText msgEtx;
+
+    private TextView msgTv;
+    private Toolbar toolbar;
+
+    private ActivityResultLauncher<Intent> setLocationLauncher;
     /**
      * Called when the activity is first created.
      *
@@ -35,42 +60,117 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
         // Set the content view to the layout defined in activity_inbox.xml
         setContentView(R.layout.activity_inbox);
 
-        // Initialize the button by finding it in the layout by its id
-        btnShowMap = findViewById(R.id.btn_show_map);
+        sendBtn = findViewById(R.id.sendBtn);
 
-        // Set click listener for the button
-        btnShowMap.setOnClickListener(new View.OnClickListener() {
+        msgEtx = findViewById(R.id.msgEdt);
+
+        msgTv = findViewById(R.id.tx1);
+
+        toolbar = findViewById(R.id.vwebtoolbar1);
+
+        setLocation = findViewById(R.id.setLocationButton);
+
+//        setLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Create an Intent to navigate to SetLocationActivity
+////                Intent intent = new Intent(getApplicationContext(), SetLocationActivity.class);
+////                // Start the activity
+////                startActivity(intent);
+//                startActivityForResult(new Intent(getApplicationContext(), SetLocationActivity.class), REQUEST_SET_LOCATION);
+//
+//            }
+//        });
+
+        setLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to navigate to SetLocationActivity
                 Intent intent = new Intent(getApplicationContext(), SetLocationActivity.class);
-                // Start the activity
-                startActivity(intent);
+                setLocationLauncher.launch(intent);
             }
         });
+
+        setLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // Handle the result here
+                            if (result.getData() != null) {
+                                double latitude = result.getData().getDoubleExtra("latitude", 0.0);
+                                double longitude = result.getData().getDoubleExtra("longitude", 0.0);
+                                // Now you can use these coordinates as needed
+                                String coordinates = "Latitude: " + latitude + ", Longitude: " + longitude;
+                                msgEtx.setText(coordinates);
+
+
+                            }
+                        }
+                    }
+                });
+
+
+
+
+//        serverUrl = serverUrl+ "jess";
+
+        WebSocketManager.getInstance().connectWebSocket(serverUrl);
+        WebSocketManager.getInstance().setWebSocketListener(InboxActivity.this);
+
+        /* send button listener */
+        sendBtn.setOnClickListener(v -> {
+            try {
+                // send message
+                WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
+            } catch (Exception e) {
+                Log.d("ExceptionSendMessage:", e.getMessage().toString());
+            }
+        });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
+
+
 
     // WebSocketListener interface methods
 
-    /**
-     * Method called when WebSocket connection is opened.
-     *
-     * @param handshakedata Information about the handshake
-     */
-    @Override
-    public void onWebSocketOpen(ServerHandshake handshakedata) {
-        // Method called when WebSocket connection is opened
-    }
+
+
 
     /**
      * Method called when a message is received via WebSocket.
      *
      * @param message The received message
      */
-    @Override
     public void onWebSocketMessage(String message) {
-        // Method called when a message is received via WebSocket
+
+        /**
+         * In Android, all UI-related operations must be performed on the main UI thread
+         * to ensure smooth and responsive user interfaces. The 'runOnUiThread' method
+         * is used to post a runnable to the UI thread's message queue, allowing UI updates
+         * to occur safely from a background or non-UI thread.
+         */
+        // Log statement to indicate that the method is being called
+//        Log.d("WebSocketMessage", "Received message: " + message);
+
+        // Update the UI on the main thread
+        runOnUiThread(() -> {
+            // Log statement to indicate that the UI update block is being executed
+//            Log.d("WebSocketMessage", "Updating UI with message: " + message);
+
+            // Update the TextView with the received message
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "\n" + message);
+        });
+
     }
+
+
 
     /**
      * Method called when WebSocket connection is closed.
@@ -81,7 +181,11 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
      */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
-        // Method called when WebSocket connection is closed
+        String closedBy = remote ? "server" : "local";
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
+        });
     }
 
     /**
@@ -92,5 +196,11 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
     @Override
     public void onWebSocketError(Exception ex) {
         // Method called when there's an error with WebSocket connection
+    }
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+
+
     }
 }

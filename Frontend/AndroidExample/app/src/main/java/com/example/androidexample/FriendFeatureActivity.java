@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.Button;
 
+//need some method to pull existing users
 public class FriendFeatureActivity extends AppCompatActivity implements FriendAcceptedListener {
 
     private Toolbar toolbar;

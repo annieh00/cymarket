@@ -1,4 +1,6 @@
 package com.example.androidexample;
+import static com.example.androidexample.CurrentUser.setCurrentUser;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -37,11 +39,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailTxt, passwordTxt;  //these text boxes are where the user enters their credentials
     private Button loginButton;         // the login button is used to submit the credentials of the user
     private Button signupButton;        // the sign up button is used to indicate that the user wants to sign up, and it will lead to another screen
- //   public static String username;    //the user's full name given to Iowa State
+    //   public static String username;    //the user's full name given to Iowa State
     private String TAG = LoginActivity.class.getSimpleName(); //the tag used to identify JSON object requests
-//    public static int userID = 0;       //id of the user who is currently logged in
-//    public static int permission = 0; //0=admin, 1=organizer, 2=normal user
-//    public static String profilePicture;        //the user's profile picture
+    //    public static int userID = 0;       //id of the user who is currently logged in
+    public static int permission = 0; //0=admin, 1=organizer, 2=normal user
+    //    public static String profilePicture;        //the user's profile picture
     public static String password;      //the user's password
     public static String firstName;//
 
@@ -49,11 +51,16 @@ public class LoginActivity extends AppCompatActivity {
     public static String userType;
     public static String username;
     public static String email;         //the user's email
-//    public static String dateCreated; //the date that the account was created
+    //    public static String dateCreated; //the date that the account was created
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req"; //this is the tag names
-//    private Boolean userValidity = true; //this boolean is meant to validate the user
+    //    private Boolean userValidity = true; //this boolean is meant to validate the user
     private Boolean txtValidity = true;
     public Boolean validUser;
+
+
+    public String currentUser;
+
+    public CurrentUser current;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,21 +73,31 @@ public class LoginActivity extends AppCompatActivity {
 
         //Buttons
         loginButton = findViewById(R.id.login_login_btn);    // link to login button in the Login activity XML
-        signupButton = findViewById(R.id.login_signup_btn);  // link to signup button in the Login activity XML
-
+//        signupButton = findViewById(R.id.login_signup_btn);  // link to signup button in the Login activity XML
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getApplicationContext());
 
 
         /* click listener on signup button pressed */
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        signupButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                /* when signup button is pressed, use intent to switch to Signup Activity */
+//                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+//                startActivity(intent);  // go to SignupActivity
+//            }
+//        });
 
-                /* when signup button is pressed, use intent to switch to Signup Activity */
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        //asking if the user hasn't created an account yet
+        TextView txtRegister = (TextView)findViewById(R.id.signupTxtBtn);
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+//                  Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                 startActivity(intent);  // go to SignupActivity
             }
         });
-
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 /* grab strings from user inputs */
 //                if (txtValidity == true) {
-                     sendJsonObjReq();
+                sendJsonObjReq();
 //                    Pass();
 //                }else if (!txtValidity){
 //                    Pass();
@@ -142,20 +159,32 @@ public class LoginActivity extends AppCompatActivity {
 //                email = response.getString("email");
 //                password = response.getString("password");
                 validUser = response.getBoolean("fromServer");
+                permission = response.getInt("permission");
 //                Toast.makeText(LoginActivity.this, "validUser : " + validUser, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
 
-            if (validUser){
+            if (validUser && permission == 0){
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
+                startActivity(intent);
+            }else if (validUser && permission == 1) {
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
+                startActivity(intent);
+            }else if (validUser && permission == 2){
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+                //setting the currentUser
+//                setCurrentUser();
+                //calling method to get currentUser
+                getCurrentUser(emailTxt.getText().toString().trim());
+
                 Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                 startActivity(intent);
             }else{
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
-
-
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
@@ -187,5 +216,48 @@ public class LoginActivity extends AppCompatActivity {
         //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
 
+    }
+
+
+    // im not sure what the correct endpoint is but it is something about these lines
+    // but idk
+    private void getCurrentUser(String email) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "YOUR_API_ENDPOINT_HERE?email=" + email;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Parse the response to get the username
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String username = jsonObject.getString("userName");
+
+                            currentUser = username;
+
+                            current.setCurrentUser(username);
+
+
+
+                            // Do something with the retrieved username
+                            Log.d(TAG, "Username: " + username);
+                            // You can set the retrieved username to a TextView or any other UI element if needed
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error
+                Toast.makeText(LoginActivity.this, "Error retrieving username", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }
