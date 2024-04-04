@@ -60,6 +60,10 @@ public class SellPostController {
             e.setErrormsg("user does not exist, and therefore cannot create post");
             return "{\"serverResponse\" : false}";
         }
+        Posting p2 = postingRepository.findPostingByTitle(p.getTitle());
+        if(p2 != null && p2.getUserName().equals(p.getUserName())){
+            return "{\"serverResponse\" : false}";
+        }
 
         try {
             //nu.pattern.OpenCV.loadLocally();
@@ -84,9 +88,9 @@ public class SellPostController {
             auction.setPost(p);
             auction.setHighestBidder(u); //no one has placed a bid yet
             auction.setId(u.getUserName()+p.getTitle());
-            if(p.getTimeAliveInMinutes() == 0){
-                p.setTimeAliveInMinutes(5);
-            }
+//            if(p.getTimeAliveInMinutes() == 0){
+//                p.setTimeAliveInMinutes(5);
+//            }
             auctionTableRepository.save(auction);
         }
 
@@ -119,6 +123,9 @@ public class SellPostController {
         return "{ \"posts\" :" +json + "}";
     }
 
+    @GetMapping("/image/{imageName}")
+
+
 
     private Posting setPictures(Posting p){
         GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
@@ -139,7 +146,7 @@ public class SellPostController {
             if((img1 != null) && !img1.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic1.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture1(fileName);
+                p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture1("");
@@ -149,7 +156,7 @@ public class SellPostController {
             if((img2 != null) && !img2.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic2.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture2(fileName);
+                p.setPicture2(p.getUserName() + p.getTitle()+"Pic2.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture2("");
@@ -159,7 +166,7 @@ public class SellPostController {
             if((img3 != null) && !img3.equals("") ){
                 String fileName ="./"+ p.getUserName() + p.getTitle()+"Pic3.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture3(fileName);
+                p.setPicture3(p.getUserName() + p.getTitle()+"Pic3.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture3("");
@@ -169,7 +176,7 @@ public class SellPostController {
             if((img4 != null) && !img4.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic4.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture4(fileName);
+                p.setPicture4(p.getUserName() + p.getTitle()+"Pic4.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture4("");
@@ -179,7 +186,7 @@ public class SellPostController {
             if((img5 != null) && !img5.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic5.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture5(fileName);
+                p.setPicture5(p.getUserName() + p.getTitle()+"Pic5.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture5("");
@@ -189,7 +196,7 @@ public class SellPostController {
             if((img6 != null) && !img6.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic6.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
-                p.setPicture6(fileName);
+                p.setPicture6(p.getUserName() + p.getTitle()+"Pic6.png");
                 FileUtils.writeByteArrayToFile(new File(fileName), decoded);
             }else{
                 p.setPicture6("");
@@ -350,8 +357,10 @@ public class SellPostController {
     })
     @PostMapping("/posts/delete")
     public String deletePost(@RequestBody Posting delete){
+        System.out.println(delete.getId());
         Posting p = postingRepository.findPostingById(delete.getId());
-        if(p==null){
+
+        if(p == null){
             return "{ \"serverResponse\" : false}";
         }
         AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
