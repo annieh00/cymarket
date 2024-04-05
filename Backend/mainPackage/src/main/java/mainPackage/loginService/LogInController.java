@@ -52,7 +52,7 @@ public class LogInController {
         // 0 admin
         // 1 organization
         // 2 normal user
-        return "{\"fromServer\" : true, \"permission\" :" + user.getUserType()+"}";
+        return "{\"fromServer\" : true, \"permission\" :" + user.getUserType() + ",\"username\" :" + user.getUserName() + "}";
     }
 
     /*REMOVE METHODS BELOW AFTER DEMO2*/
