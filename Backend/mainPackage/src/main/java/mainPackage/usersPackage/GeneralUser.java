@@ -69,6 +69,11 @@ public class GeneralUser {
     private Set<Message> userReceived;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
     @JsonIgnore
     private Set<GeneralUser> friends;
 
