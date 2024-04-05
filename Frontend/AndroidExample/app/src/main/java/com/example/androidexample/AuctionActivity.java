@@ -379,7 +379,7 @@ public class AuctionActivity extends AppCompatActivity {
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
                 response -> {
                     try {
                         JSONArray jsonArray = new JSONArray("auctions");
