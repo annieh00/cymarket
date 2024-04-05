@@ -38,7 +38,7 @@ public class WebSocketManager {
 
     /**
      * Sets the WebSocketListener for this WebSocketManager instance. The WebSocketListener
-     * is responsible for handling WebSocket events, such as received messages and errors.
+     * is responsible for handling WebSocket events, 2such as received messages and errors.
      *
      * @param listener The WebSocketListener to be set for this WebSocketManager.
      */

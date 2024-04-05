@@ -93,6 +93,8 @@ public class MainFeed extends AppCompatActivity {
 
     public static final int EXTRA_postID = 0;
 
+    public boolean alreadyConnected = false;
+
 
     /**
      * recyclerview related variables
@@ -123,6 +125,7 @@ public class MainFeed extends AppCompatActivity {
     String server_url_del = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/del/";
 
     String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
+
 
 
 
@@ -251,6 +254,11 @@ public class MainFeed extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
+                    case "Friends":
+                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+                        startActivity(intent);
+                        break;
+
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);
@@ -267,8 +275,10 @@ public class MainFeed extends AppCompatActivity {
                         break;
                     case "Inbox":
                         // Handle click on the third item
+//                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
+
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
