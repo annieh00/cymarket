@@ -113,7 +113,7 @@ public class DirectChat {
             List<String> usernames = new ArrayList<>(sessionUsernameMap.values());
 
             // Retrieve chat history between these two users
-            String chatHistory = getChatHistory();
+            String chatHistory = getChatHistory(usernames.get(0), usernames.get(1));
 
             // Send chat history to both users
             sendMessageToParticularUser(usernames.get(0), chatHistory);
@@ -311,17 +311,20 @@ public class DirectChat {
     }
 
     // Gets the Chat history from the repository
-    private String getChatHistory() {
-        List<Message> messages = messageRepository.findAll();
-        // convert the list to a string
+    private String getChatHistory(String user1, String user2) {
+        // Fetch messages sent between user1 and user2
+        List<Message> messages = messageRepository.findByUserSentUserNameAndUserReceivedUserNameOrUserSentUserNameAndUserReceivedUserNameOrderBySent(user1, user2, user2, user1);
+
         StringBuilder sb = new StringBuilder();
-        if(!messages.isEmpty()) {
-            for (Message message : messages) {
-                sb.append(message.getUserSent() + ": " + message.getContent() + "\n");
+        for (Message message : messages) {
+            // Perform null check on userSent and userReceived
+            if (message.getUserSent() != null && message.getUserReceived() != null) {
+                sb.append(message.getUserSent().getUserName() + ": " + message.getContent() + "\n");
             }
         }
         return sb.toString();
     }
+
 
     // Method to process meeting location messages
     private void processMeetingLocation(String username, double latitude, double longitude) {
