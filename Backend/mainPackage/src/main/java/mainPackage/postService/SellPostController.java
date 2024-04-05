@@ -171,7 +171,7 @@ public class SellPostController {
     @Operation(summary = "returns byte array for the specified image", description = "gets the specified")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "image successfully retreived", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-            @ApiResponse(responseCode = "404", description = "image not found")
+            @ApiResponse(responseCode = "400", description = "image not found")
     })
     @GetMapping("/image/{postId}/{imageID}")
     public @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
