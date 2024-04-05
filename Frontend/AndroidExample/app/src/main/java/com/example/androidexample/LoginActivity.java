@@ -48,12 +48,16 @@ public class LoginActivity extends AppCompatActivity {
     public static String lastName;
     public static String userType;
     public static String username;
+
+    public static int loginID;
     public static String email;         //the user's email
     //    public static String dateCreated; //the date that the account was created
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req"; //this is the tag names
     //    private Boolean userValidity = true; //this boolean is meant to validate the user
     private Boolean txtValidity = true;
     public Boolean validUser;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +159,8 @@ public class LoginActivity extends AppCompatActivity {
                 permission = response.getInt("permission");
                 //I, jess added these two lines
                 username = response.getString("username");
+                loginID = response.getInt("id");
+
                 Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();

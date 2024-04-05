@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,6 +50,10 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
     //    private static final String URL_JSON_ARRAY_DEL = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/";
 //    private static final String URL_JSON_ARRAY_UPDATE = "http://coms-309-060.class.las.iastate.edu:8080/announcements/update/";
 //    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
+//    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
+
+    //THIS IS THE MAPPING TO LIST ALL ANNOUNCEMENTS THAT WERE MADE
+//    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080/announcements/";
     private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     private AnnouncementAdapter adapter;
@@ -77,6 +82,8 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
         adapter = new AnnouncementAdapter(this, allAnnouncements);
         announcements.setAdapter(adapter); // Set the adapter to the ListView
 
+
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,7 +91,8 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
             }
         });
 
-//        getAnnouncements();
+        //fetches all announcements
+        getAnnouncements();
 
         createAnnouncement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,108 +107,155 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
     }
 
     private void showBottomSheet() {
-        View view = getLayoutInflater().inflate(R.layout.modal_bottom_sheet_announcements, null);
 
-        // Find buttons by their IDs
-        Button post = view.findViewById(R.id.postButton);
+        // Create a BottomSheetDialog
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
 
+        // Inflate the layout for the bottom sheet
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.modal_bottom_sheet_announcements, null);
 
-        EditText announcementTitleEditText = view.findViewById(R.id.announcement_title);
-        EditText announcementBodyEditText = view.findViewById(R.id.announcement_body);
+        // Find views in the bottom sheet layout
+        EditText editTextTitle = bottomSheetView.findViewById(R.id.announcement_title);
+        EditText editTextDescription = bottomSheetView.findViewById(R.id.announcement_body);
+        Button buttonSubmit = bottomSheetView.findViewById(R.id.postButton);
 
-
-        // Set onClickListener for the "Yes" button
-        post.setOnClickListener(new View.OnClickListener() {
+        // Set click listener for the submit button
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Perform actions when the submit button is clicked
+                String title = editTextTitle.getText().toString().trim();
+                String description = editTextDescription.getText().toString().trim();
 
+                // Validate input
+                if (!title.isEmpty() && !description.isEmpty()) {
+                    // Here you can perform actions such as sending the announcement to the server
+                    // You may also update the UI to reflect the newly added announcement
+                    postAnnouncement(title, description);
 
+                    // For demonstration purposes, let's log the input
+                    Log.d("BottomSheet", "Title: " + title + ", Description: " + description);
+
+                    // Dismiss the bottom sheet dialog
+                    bottomSheetDialog.dismiss();
+                } else {
+                    // Show a message indicating that both fields are required
+                    Toast.makeText(ViewAnnouncementAdmin.this, "Both title and description are required", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        // Set onClickListener for the "No" button
+        // Set the bottom sheet view
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        // Show the bottom sheet dialog
+        bottomSheetDialog.show();
+    }
+
+    private void postAnnouncement(String title, String description) {
+        // Define your endpoint URL
+//        String postUrl = URL_JSON_ARRAY + "/create";
+
+        String postUrl = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements/create";
+
+        // Create a StringRequest for the POST request
+        // Create a JSONObject to hold the announcement data
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("title", title);
+            requestBody.put("description", description);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return; // Exit method if JSON creation fails
+        }
+
+        // Create a JsonObjectRequest for the POST request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                postUrl,
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle response from the server
+                        Log.d("POST Request", "Response: " + response);
+
+                        Log.d("POST Request", "Title: " + title + ", Posted Data: " + requestBody.toString());
 
 
-        // Create the BottomSheetDialog
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        dialog.setContentView(view);
+                        Announcement newAnnouncement = new Announcement(title, description);
+                        allAnnouncements.add(newAnnouncement);
 
-        // Show the dialog
-        dialog.show();
+                        // Notify the adapter that the data set has changed
+                        adapter.notifyDataSetChanged();
+                        // Optionally, you can update the UI or perform any additional actions here
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error response
+                        Log.e("POST Request", "Error: " + error.getMessage());
+                        // You can display an error message or take other actions as needed
+                    }
+                });
 
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+
+
+    private void getAnnouncements() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL_JSON_ARRAY,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<Announcement> fetchedAnnouncements = parseAnnouncements(response);
+                        allAnnouncements.clear();
+                        allAnnouncements.addAll(fetchedAnnouncements);
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                }
+        );
+
+        Volley.newRequestQueue(this).add(jsonArrayRequest);
+    }
+
+    // Method to parse JSON response and create Announcement objects
+    private List<Announcement> parseAnnouncements(JSONArray jsonArray) {
+        List<Announcement> announcements = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                int id = jsonObject.getInt("id");
+                String title = jsonObject.getString("title");
+                String description = jsonObject.getString("description");
+
+                // Create Announcement object
+                Announcement announcement = new Announcement(title, description);
+//                announcement.setId(id);
+//                announcement.setTitle(title);
+//                announcement.setDescription(description);
+
+                announcements.add(announcement);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return announcements;
     }
 }
-//    private void getAnnouncements() {
-////        adapter.clear();
-//
-////        String URL_JSON_ARRAY = "http://your-api-url/announcements";
-//        RequestQueue queue = Volley.newRequestQueue(this);
-//
-//        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
-//                Request.Method.GET,
-//                URL_JSON_ARRAY,
-//                null, // Pass null as the request body since it's a GET request
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        Log.d("Volley Response", response.toString());
-//
-//                        // Parse the JSON array and add data to the adapter
-//                        for (int i = 0; i < response.length(); i++) {
-//                            try {
-//                                JSONObject jsonObject = response.getJSONObject(i);
-//                                String title = jsonObject.getString("title");
-//                                String description = jsonObject.getString("description");
-//
-//
-//                                    Announcement announcement = new Announcement(title, description);
-//                                    allAnnouncements.add(announcement);
-//
-//
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-//                return headers;
-//            }
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("param1", "value1");
-////                params.put("param2", "value2");
-//                return params;
-//            }
-//        };
-//
-//            // Adding request to request queue
-//            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
-//        }
-//
-//
-//}
-//
-
-
-
-
-
-
-
-
-
 
 

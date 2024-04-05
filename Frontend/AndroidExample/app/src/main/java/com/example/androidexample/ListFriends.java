@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 
-import com.android.volley.Response;
 
-import org.json.JSONArray;
+
+
 
 import java.util.List;
 
@@ -53,12 +54,16 @@ public class ListFriends extends ArrayAdapter<Friend> implements FriendAcceptedL
         moreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call method in activity to show modal bottom sheet
-                ((FriendFeatureActivity) context).showModalBottomSheet(currentFriend);
+
+                if (context instanceof FriendFeatureActivity) {
+                    ((FriendFeatureActivity) context).showModalBottomSheet(currentFriend);
+
+                }
+
+
+
             }
         });
-
-
 
 
         return listItemView;
@@ -69,5 +74,15 @@ public class ListFriends extends ArrayAdapter<Friend> implements FriendAcceptedL
         // Update the adapter when a friend is accepted
         notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onFriendAccepted(String requesterUsername) {
+
+    }
+    public void updateFriendList(List<Friend> updatedList) {
+        friendList.clear();
+        friendList.addAll(updatedList);
+        notifyDataSetChanged();
     }
 }
