@@ -4,6 +4,7 @@ public class Announcement {
     private String title;
     private String description;
 
+
     public Announcement(String title, String description) {
 //        this.id = id;
         this.title = title;
