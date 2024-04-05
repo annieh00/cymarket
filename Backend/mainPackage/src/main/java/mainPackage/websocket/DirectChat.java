@@ -107,7 +107,18 @@ public class DirectChat {
 
         // Send messages and broadcast
         sendMessageToParticularUser(username, "user connected: " + username);
-//        sendMessageToParticularUser(username, getChatHistory());
+        // Check if there is another user in the session
+        if (sessionUsernameMap.size() == 2) {
+            // Get usernames of both users
+            List<String> usernames = new ArrayList<>(sessionUsernameMap.values());
+
+            // Retrieve chat history between these two users
+            String chatHistory = getChatHistory(usernames.get(0), usernames.get(1));
+
+            // Send chat history to both users
+            sendMessageToParticularUser(usernames.get(0), chatHistory);
+            sendMessageToParticularUser(usernames.get(1), chatHistory);
+        }
         broadcast("User: " + username + " has joined the chat.");
     }
 
@@ -182,14 +193,19 @@ public class DirectChat {
             }
         } else if(message.startsWith("!location ")) {
             try {
-                String otherUser = split_msg[1];
+//                String otherUser = split_msg[1];
                 // Extract meeting location data from the message
                 double latitude = Double.parseDouble(split_msg[1]);
                 double longitude = Double.parseDouble(split_msg[2]);
 
                 // Process the meeting location message
                 processMeetingLocation(username, latitude, longitude);
-                sendMessageToParticularUser(username, "Meeting location set successfully at Latitude: " + latitude + ", Longitude: " + longitude);
+                broadcast("Meeting location has been set by " + username);
+                // Check the number of users in the session
+                if (sessionUsernameMap.size() < 3) {
+                    // If there are 1-2 users, send JSON data to all users
+                    sendLocationDataToAllUsers(latitude, longitude);
+                }
             } catch (NumberFormatException e) {
                 // Handle invalid latitude or longitude format
                 sendMessageToParticularUser(username, "Error: Invalid latitude or longitude format.");
@@ -295,17 +311,20 @@ public class DirectChat {
     }
 
     // Gets the Chat history from the repository
-    private String getChatHistory() {
-        List<Message> messages = messageRepository.findAll();
-        // convert the list to a string
+    private String getChatHistory(String user1, String user2) {
+        // Fetch messages sent between user1 and user2
+        List<Message> messages = messageRepository.findByUserSentUserNameAndUserReceivedUserNameOrUserSentUserNameAndUserReceivedUserNameOrderBySent(user1, user2, user2, user1);
+
         StringBuilder sb = new StringBuilder();
-        if(!messages.isEmpty()) {
-            for (Message message : messages) {
-                sb.append(message.getUserSent() + ": " + message.getContent() + "\n");
+        for (Message message : messages) {
+            // Perform null check on userSent and userReceived
+            if (message.getUserSent() != null && message.getUserReceived() != null) {
+                sb.append(message.getUserSent().getUserName() + ": " + message.getContent() + "\n");
             }
         }
         return sb.toString();
     }
+
 
     // Method to process meeting location messages
     private void processMeetingLocation(String username, double latitude, double longitude) {
@@ -317,9 +336,20 @@ public class DirectChat {
         // Save the meeting location using the repository
         meetingLocationRepository.save(meetingLocation);
 
-        // Optionally, you can send a confirmation message back to the user
-        sendMessageToParticularUser(username, "Meeting location set successfully at Latitude: " + latitude + ", Longitude: " + longitude);
+//        // Optionally, can send a confirmation message back to the user
+//        sendMessageToParticularUser(username, "Meeting location set successfully at Latitude: " + latitude + ", Longitude: " + longitude);
     }
 
+    private void sendLocationDataToAllUsers(double latitude, double longitude) {
+        // Send JSON data to all users
+        for (Session session : sessionUsernameMap.keySet()) {
+            try {
+                session.getBasicRemote().sendText("{\"latitude\" : \"" + latitude + "\", \"longitude\" : \"" + longitude + "\"}");
+                // return "{\"fromServer\" : true, \"permission\" :" + user.getUserType() + ",\"username\" :" + user.getUserName() + "}";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
