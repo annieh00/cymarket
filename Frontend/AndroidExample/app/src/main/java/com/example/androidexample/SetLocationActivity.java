@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -49,6 +50,10 @@ public class SetLocationActivity extends AppCompatActivity {
     private MapView map = null; // MapView object
     private Marker marker; // Marker object for indicating the selected location
 
+    public Marker setMarker;
+
+    public static GeoPoint setPoint;
+
     private double markerLatitude; // Latitude of the marker
     private double markerLongitude; // Longitude of the marker
 
@@ -57,6 +62,7 @@ public class SetLocationActivity extends AppCompatActivity {
     String server_url_create = "http://coms-309-060.class.las.iastate.edu:8080/chat/userName123";
 
     AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,28 +93,42 @@ public class SetLocationActivity extends AppCompatActivity {
         // Enable multi-touch controls for panning and zooming
         map.setMultiTouchControls(true);
 
-        // Set up gesture detector for handling map interactions
-        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                // Handle single tap event by adding a marker
-                GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+//        if(setPoint!=null){
+//            addMarker(setPoint);
+////            Log.d("SetLocationActivity", "setPoint: " + setPoint.getLatitude() + ", " + setPoint.getLongitude());
 
-                //i would send the json data here
-                addMarker(point);
-                return true;
-            }
-        });
 
-        // Set onTouchListener to handle gesture detection
-        map.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
+
+
+    // Set up gesture detector for handling map interactions
+    GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            // Handle single tap event by adding a marker4
+            GeoPoint point = (GeoPoint) map.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+
+            //i would send the json data here
+            addMarker(point);
+            return true;
+        }
+    });
+
+    // Set onTouchListener to handle gesture detection
+        map.setOnTouchListener(new View.OnTouchListener()
+
+    {
+        @Override
+        public boolean onTouch (View v, MotionEvent event){
+        return gestureDetector.onTouchEvent(event);
     }
+    });
 
+
+        if (setPoint != null) {
+            Log.d("SetLocationActivity", "setPoint: " + setPoint.getLatitude() + ", " + setPoint.getLongitude());
+            addMarker(setPoint);
+        }
+}
     @Override
     public void onResume() {
         super.onResume();
@@ -164,7 +184,7 @@ public class SetLocationActivity extends AppCompatActivity {
      *
      * @param point The GeoPoint at which to add the marker.
      */
-    private void addMarker(GeoPoint point) {
+    public void addMarker(GeoPoint point) {
         if (marker != null) {
             map.getOverlays().remove(marker); // Remove existing marker
         }
@@ -177,7 +197,11 @@ public class SetLocationActivity extends AppCompatActivity {
         markerLatitude = point.getLatitude();
         markerLongitude = point.getLongitude();
 
-        showBottomSheet();
+
+        if(setPoint != point) {
+            showBottomSheet();
+        }
+
     }
 
     private void showBottomSheet() {
@@ -200,9 +224,10 @@ public class SetLocationActivity extends AppCompatActivity {
                 intent.putExtra("longitude", markerLongitude);
                 setResult(RESULT_OK, intent);
 
-                setLocation(markerLatitude, markerLongitude);
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
                 finish(); // Close the SetLocationActivity
-
             }
         });
 
@@ -253,6 +278,10 @@ public class SetLocationActivity extends AppCompatActivity {
         });
 
         VolleySingleton.getInstance(SetLocationActivity.this).addToRequestQueue(jsonObjReq);
+    }
+
+    public void setGioPoint(GeoPoint point) {
+        this.setPoint = point;
     }
 
 
