@@ -19,9 +19,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
 import com.android.volley.toolbox.ImageRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,15 +39,40 @@ public class PostDetailActivity extends AppCompatActivity {
     public String actualPostURL = Const.URL_CREATE_POST;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
     private String URL_JSON_OBJECT = "https://jsonplaceholder.typicode.com/users/";
+    private String picture1;
+    private String picture2;
+    private String picture3;
+    private String picture4;
+    private String picture5;
+    private String picture6;
+    private String titleTxt;
+    private TextView titleTxtView;
+    private int price;
+    private TextView priceTxtView;
+    private Boolean isAuction;
+    private String description;
+    private TextView descriptionTxtView;
+    private int postID;
+    private ArrayList<Bitmap> imageList;
+private Boolean auction;
+private String userName;
+private int id;
+private Button leftArrowBtn;
+    private Button rightArrowBtn;
+    private int currentImageIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_post_item);
         Bundle extras = getIntent().getExtras();
-
-        imageView = (ImageView) findViewById(R.id.imgView);
-        msgResponse = findViewById(R.id.msgResponse);
+        titleTxtView = findViewById(R.id.titleTxt);
+        imageView = findViewById(R.id.imageSelView1);
+        priceTxtView = findViewById(R.id.priceTxt);
+        descriptionTxtView = findViewById(R.id.descriptionTxt);
+//        imageView = (ImageView) findViewById(R.id.imgView);
+//        msgResponse = findViewById(R.id.msgResponse);
 
 
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
@@ -54,22 +83,64 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         URL_JSON_OBJECT += extras.getString("id");
 
-        makeImageRequest();
-        makeJsonObjReq();
+        int j = 0;
+        for (j = 0; j < 6; j++){
+            makeImageRequest(Const.URL_IMAGES + extras.getString("id") + "/" + j);
+        }
+        imageView.setImageBitmap(imageList.get(currentImageIndex));
+
+
+        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentImageIndex == 6){
+                    currentImageIndex = 0;
+                    imageView.setImageBitmap(imageList.get(currentImageIndex));
+
+                }
+                currentImageIndex++;
+                imageView.setImageBitmap(imageList.get(currentImageIndex));
+
+            }
+        });
+
+        leftArrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentImageIndex == 0){
+                    currentImageIndex = 6;
+                    imageView.setImageBitmap(imageList.get(currentImageIndex));
+
+                }
+                currentImageIndex--;
+                imageView.setImageBitmap(imageList.get(currentImageIndex));
+
+            }
+        });
     }
+
 
     /**
      * Making image request
      * */
-    private void makeImageRequest() {
+    private void makeImageRequest(String URL) {
 
+        imageList = new ArrayList<>();
+        currentImageIndex = 0;
         ImageRequest imageRequest = new ImageRequest(
-                URL_IMAGE,
+                URL,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
+
                         // Display the image in the ImageView
-                        imageView.setImageBitmap(response);
+                        if (response != null && response.getByteCount() != 0){
+//                            imageView.setImageBitmap(response);
+                            imageList.add(response);
+                        }
+
+//                        imageView.setImageBitmap(response);
+
                     }
                 },
                 0, // Width, set to 0 to get the original width
@@ -102,7 +173,27 @@ public class PostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-                        msgResponse.setText(response.toString());
+                        try {
+                            picture1 = response.getString("picture1");
+                            picture2 = response.getString("picture2");
+                            picture3 = response.getString("picture3");
+                            picture4 = response.getString("picture4");
+                            picture5 = response.getString("picture5");
+                            picture6 = response.getString("picture6");
+                            titleTxt = response.getString("title");
+                            price = response.getInt("price");
+                            auction = response.getBoolean("isAuction");
+                            description = response.getString("description");
+                            userName = response.getString("userName");
+                            id = response.getInt("id");
+
+                            titleTxtView.setText(titleTxt);
+                            priceTxtView.setText(price);
+                            descriptionTxtView.setText(description);
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -136,4 +227,3 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 }
-    

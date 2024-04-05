@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/vwebtoolbar1"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/cardinal"
@@ -192,6 +192,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.96" />
 
+            <TextView
+                android:id="@+id/highestBidTxt"
+                android:layout_width="217dp"
+                android:layout_height="34dp"
+                android:text="Highest Bid:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.711"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.628">
+
+            </TextView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -203,17 +217,15 @@
             app:layout_anchor="@+id/constraintLayout3"
             app:layout_anchorGravity="center" />
 
-        <TextView
-            android:id="@+id/highestBidTxt"
-            android:layout_width="303dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:text="Highest Bid:"
-            app:layout_anchor="@+id/descriptionTxt"
-            app:layout_anchorGravity="bottom|center">
-
-        </TextView>
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navheader"
+        app:menu="@menu/menu_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

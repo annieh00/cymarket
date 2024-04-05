@@ -573,5 +573,3 @@ public class MainFeed extends AppCompatActivity {
 }
 
 
-
-

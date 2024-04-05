@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -54,7 +55,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
-    //    private EditText categoryEditTxt;
+//    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
     private ImageView image1 = null;
@@ -113,6 +114,15 @@ public class CreatePostActivity extends AppCompatActivity{
         image6 = findViewById(R.id.imageSelView6);
         priceEditTxt = findViewById(R.id.priceEditTxt);
 
+        Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
+            }
+        });
+
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
         addImageBtn = findViewById(R.id.addImageButton); //link to add images
@@ -160,12 +170,12 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
                     }
-                });
+        });
 
 
         /*
-         *  click listener on post button pressed
-         */
+        *  click listener on post button pressed
+        */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +225,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //
 //        return Base64.encodeToString(byteArray, Base64.DEFAULT);
 //    }
-
+    
     /**
      * Uploads an image to a remote server using a multipart Volley request.
      *

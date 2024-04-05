@@ -36,6 +36,7 @@ import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
 
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -95,6 +96,8 @@ public class AuctionActivity extends AppCompatActivity {
 
     public static final int EXTRA_postID = 0;
 
+    public boolean alreadyConnected = false;
+
 
     /**
      * recyclerview related variables
@@ -128,11 +131,11 @@ public class AuctionActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auction);
-
 
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
@@ -254,10 +257,18 @@ public class AuctionActivity extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
-                    case "Auction":
-                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
+                    case "Main Feed":
+                        intent = new Intent(getApplicationContext(), MainFeed.class);
                         startActivity(intent);
                         break;
+                    case "Friends":
+                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+                        startActivity(intent);
+                        break;
+//                    case "Auction":
+//                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Profile":
                         // Handle click on the first item
                         intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
@@ -270,8 +281,10 @@ public class AuctionActivity extends AppCompatActivity {
                         break;
                     case "Inbox":
                         // Handle click on the third item
+//                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
+
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
@@ -357,8 +370,6 @@ public class AuctionActivity extends AppCompatActivity {
 //            }
 //        });
 
-
-
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mPostAdapter = new AuctionAdapter(mPostList, new AuctionAdapter.OnItemClickListener() {
@@ -379,12 +390,12 @@ public class AuctionActivity extends AppCompatActivity {
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
                 response -> {
                     try {
-                        JSONArray jsonArray = new JSONArray("auctions");
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray jsonArray = response.getJSONArray("auctions");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String picture1 = jsonObject.getString("picture1");
                             String picture2 = jsonObject.getString("picture2");
                             String picture3 = jsonObject.getString("picture3");
@@ -397,7 +408,6 @@ public class AuctionActivity extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-
                             mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
@@ -565,8 +575,8 @@ public class AuctionActivity extends AppCompatActivity {
 //    }
 
 
+
+
 }
-
-
 
 

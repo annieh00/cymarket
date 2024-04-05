@@ -6,12 +6,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidexample.Auction.AuctionItemObject;
 import com.example.androidexample.R;
 import java.util.List;
 
 public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHolder> {
 
-    private List<AuctionItemObject> mAuctionList;
+    private List<AuctionItemObject> mPostList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
@@ -19,24 +21,24 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHold
     }
 
     public AuctionAdapter(List<AuctionItemObject> mPostList, OnItemClickListener listener){
-        this.mAuctionList = mPostList;
+        this.mPostList = mPostList;
         this.mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.auction_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(mAuctionList.get(position), mListener);
+        holder.bind(mPostList.get(position), mListener);
     }
 
     @Override
     public int getItemCount() {
-        return mAuctionList.size();
+        return mPostList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
