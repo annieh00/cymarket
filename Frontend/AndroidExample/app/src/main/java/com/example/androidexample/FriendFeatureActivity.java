@@ -68,14 +68,14 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
 
 //        // Call methods to make network requests
-//        fetchFriendsData();
-//        fetchFriendRequestsData();
+        fetchFriendsData();
+        fetchFriendRequestsData();
         fetchOtherUsers();
     }
 
     //WORKING!!!!
     private void fetchFriendsData() {
-        String friends_url = URL + "/friends/" + LoginActivity.loginID;
+        String friends_url = URL + "/friends/" + LoginActivity.loginID + "/list";
 //        String friends_url = URL + "/friendrequests/" + LoginActivity.username + "/";
 //        String friends_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io" + "/friends";
         //replace userName with LoginActivity.username
@@ -108,7 +108,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     //THIS WORKS
     private void fetchFriendRequestsData() {
-        String url = URL + "/friendrequests/" +LoginActivity.loginID;
+        String url = URL + "/friendrequests/" + LoginActivity.loginID + "/";
 
 
 //        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friendrequests/" + LoginActivity.loginID;
@@ -119,11 +119,14 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                     @Override
                     public void onResponse(JSONArray response) {
                         // Handle JSON response for friend requests data
-                        friendRequestList = parseFriendsJson(response);
+                        friendRequestList = parseFriendsRequests(response);
 
                         // Populate ListView with friend requests data
                         ListFriendRequests adapter = new ListFriendRequests(FriendFeatureActivity.this, friendRequestList, FriendFeatureActivity.this);
                         listViewFriendRequests.setAdapter(adapter);
+
+
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -137,6 +140,37 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
         queue.add(jsonArrayRequest);
     }
 
+//
+    private List<Friend> parseFriendsRequests(JSONArray jsonArray) {
+        List<Friend> friendRequests = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String status = jsonObject.getString("status");
+
+                // Check if the status is "PENDING"
+                if (status.equals("PENDING")) {
+                    JSONObject senderObject = jsonObject.getJSONObject("sender");
+
+                    // Extract sender information
+                    String firstName = senderObject.getString("firstName");
+                    String lastName = senderObject.getString("lastName");
+                    int id = senderObject.getInt("id");
+                    String username = senderObject.getString("userName");
+
+                    // Create a FriendRequest object with sender information
+                    Friend friendRequest = new Friend(firstName, lastName, id, username);
+
+                    friendRequests.add(friendRequest);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return friendRequests;
+    }
     //PARSING CORRECTLY
     private List<Friend> parseFriendsJson(JSONArray jsonArray) {
         List<Friend> friends = new ArrayList<>();
@@ -148,6 +182,8 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                 String last = jsonObject.getString("lastName");
                 int uid = jsonObject.getInt("id");
                 String username = jsonObject.getString("userName");
+
+
 
                 Log.d("JSONParsing", "First Name: " + first + ", Last Name: " + last + ", UID: " + uid + ", Username: " + username);
 
@@ -235,18 +271,6 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
         queue.add(jsonArrayRequest);
 
-
-
-
-
-
-
-//        // Update the ListFriends adapter when a friend is accepted
-//        ListFriends adapter = (ListFriends) listViewFriends.getAdapter();
-//        if (adapter != null) {
-//            adapter.notifyDataSetChanged();
-//        }
-
     }
 
     public void showModalBottomSheet(Friend friend) {
@@ -286,13 +310,9 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     //IDK if this being a string request is right
     private void deleteFriend(int userID) {
-
-
 //        Log.d("DeleteFriend", "Deleting friend with userID: " + userID);
         // Construct the URL for the DELETE request
         String url = URL + "/friends/" + LoginActivity.loginID +"/del/";
-
-
 
         //correct mapping
 //        String url = url+ "/friends/"+ LoginActivity.username+"/del/" +  + userID;
@@ -330,11 +350,6 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
         // Add the request to the RequestQueue
         Volley.newRequestQueue(this).add(request);
 
-
-
-
-
     }
-
 
 }

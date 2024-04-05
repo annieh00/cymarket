@@ -137,7 +137,7 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle error
-                        Log.e("AcceptFriendRequest", "Error accepting friend request from " + username + ": " + error.toString());
+                        Log.d("AcceptFriendRequest", "Error accepting friend request from " + username + ": " + error.toString());
                         // You can show an error message to the user or perform any other error handling
                     }
                 });
@@ -156,7 +156,7 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
     private void deleteFriend(Friend id) {
         // Assuming you're using Volley for network requests
 //        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friendsrequests/userName123/reject/";
-        String url = url = "/friendsrequests/"+ LoginActivity.loginID+"/reject/" + id.getId();
+        String url = URL + "/friendrequests/"+ LoginActivity.loginID+"/reject/" + id.getId();
 
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
