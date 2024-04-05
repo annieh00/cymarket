@@ -151,37 +151,46 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.73">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tx1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text=""
+                    android:textSize="20dp" />
 
-                    <TextView
-                        android:id="@+id/highestBidTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Highest Bid:"
-                        app:layout_constraintEnd_toEndOf="parent">
 
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/highestBidNum"
-                        android:layout_width="109dp"
-                        android:layout_height="18dp"
-                        android:text=""
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.425"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0">
-
-                    </TextView>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+        \
 
             </ScrollView>
+
+            <EditText
+                android:id="@+id/bidEditTxt"
+                android:layout_width="318dp"
+                android:layout_height="41dp"
+                android:inputType="number"
+                android:hint="Enter your bid here..."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+
+            </EditText>
+
+            <Button
+                android:id="@+id/confirmBidBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm Bid"
+                android:backgroundTint="@color/cardinal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.96" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -193,6 +202,18 @@
             android:text=""
             app:layout_anchor="@+id/constraintLayout3"
             app:layout_anchorGravity="center" />
+
+        <TextView
+            android:id="@+id/highestBidTxt"
+            android:layout_width="303dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:text="Highest Bid:"
+            app:layout_anchor="@+id/descriptionTxt"
+            app:layout_anchorGravity="bottom|center">
+
+        </TextView>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

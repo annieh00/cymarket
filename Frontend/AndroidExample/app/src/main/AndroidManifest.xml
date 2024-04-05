@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidExample"
         android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
             android:name=".FriendFeatureActivity"
@@ -82,6 +83,12 @@
         <!-- android:exported="true" /> -->
         <activity
             android:name=".ViewAnnouncementAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".AuctionDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PostDetailActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

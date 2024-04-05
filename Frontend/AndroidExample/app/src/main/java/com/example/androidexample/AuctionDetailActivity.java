@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 
-public class PostDetailActivity extends AppCompatActivity {
+public class AuctionDetailActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private TextView msgResponse;
@@ -46,9 +46,9 @@ public class PostDetailActivity extends AppCompatActivity {
         msgResponse = findViewById(R.id.msgResponse);
 
 
-        int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
-        if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
-            actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
+        int i = Const.URL_AUCTION.lastIndexOf("/");
+        if (Const.URL_AUCTION.charAt(i+1) >= '0' && Const.URL_AUCTION.charAt(i+1) <= '9'){
+            actualPostURL = Const.URL_AUCTION.substring(0,i)+"/"+extras.getString("id")+"/" + LoginActivity.username;
         }else{
             actualPostURL += ("/" + extras.getString("id"));
         }
@@ -136,4 +136,4 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 }
-    
+

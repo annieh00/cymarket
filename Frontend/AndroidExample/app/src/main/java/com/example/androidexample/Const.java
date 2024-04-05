@@ -10,7 +10,7 @@ public class Const {
 
     public static final String URL_POSTS = DOMAIN + "/posts";
     //URL that gets all of the posts
-    public static final String URL_GET_ALL_POSTS = DOMAIN + "/getAllPosts";
+    public static String URL_GET_ALL_POSTS = DOMAIN + "/getAllPosts";
     //URL to update the user's email
     public static final String URL_UPDATE_USER = DOMAIN + "/login" + "/editUser";
     //URL to make a post
@@ -24,5 +24,7 @@ public class Const {
     //URL updates a post with a given title
     public static final String URL_UPDATE_POST = DOMAIN + "/posts" + "/update";
     public static final String URL_IMAGES = DOMAIN + "/img/save";
+    public static final String URL_GET_ALL_AUCTIONS = DOMAIN + "/auctions";
 
+    public static final String URL_AUCTION = DOMAIN + "/auction";
 }

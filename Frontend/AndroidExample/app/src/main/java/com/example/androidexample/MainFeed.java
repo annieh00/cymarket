@@ -364,7 +364,7 @@ public class MainFeed extends AppCompatActivity {
 
                 // intent to the detail activity
                 Intent intent = new Intent(MainFeed.this, PostDetailActivity.class);
-                intent.putExtra("id", String.valueOf(item.getPostID()+1)); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }
         });
@@ -376,23 +376,26 @@ public class MainFeed extends AppCompatActivity {
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray jsonArray = new JSONArray("posts");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
-                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            int price = jsonObject.getInt("price");
+                            Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
 
-                            String date = "date"; // placeholder
-                            String category = "category"; // placeholder
-                            Boolean auction = true; // placeholder
-                            int flagCount = 0; // placeholder
-                            int userID = 0; // placeholder
-                            int postID = 0; // placeholder
-
-                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
                         mPostAdapter.notifyDataSetChanged();

@@ -1,4 +1,4 @@
-package com.example.androidexample.Post;
+package com.example.androidexample.Auction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,34 +9,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidexample.R;
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHolder> {
 
-    private List<PostItemObject> mPostList;
+    private List<AuctionItemObject> mAuctionList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
-        void onItemClick(PostItemObject post);
+        void onItemClick(AuctionItemObject post);
     }
 
-    public PostAdapter(List<PostItemObject> mPostList, OnItemClickListener listener){
-        this.mPostList = mPostList;
+    public AuctionAdapter(List<AuctionItemObject> mPostList, OnItemClickListener listener){
+        this.mAuctionList = mPostList;
         this.mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.auction_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(mPostList.get(position), mListener);
+        holder.bind(mAuctionList.get(position), mListener);
     }
 
     @Override
     public int getItemCount() {
-        return mPostList.size();
+        return mAuctionList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,7 +51,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             title = itemView.findViewById(R.id.itemTitle);
         }
 
-        public void bind(final PostItemObject item, final OnItemClickListener listener) {
+        public void bind(final AuctionItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
             price.setText(String.valueOf(item.getPrice()));
             itemView.setOnClickListener(new View.OnClickListener() {
