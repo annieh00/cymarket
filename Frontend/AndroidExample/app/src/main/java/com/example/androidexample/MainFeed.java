@@ -19,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -109,7 +111,7 @@ public class MainFeed extends AppCompatActivity {
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-
+    private ImageButton refreshBtn;
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
@@ -133,7 +135,7 @@ public class MainFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
-
+        refreshBtn = findViewById(R.id.refreshBtn);
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
 //        setLocationBtn = findViewById(R.id.locationButton);
@@ -298,6 +300,28 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sendJsonObjReq();
+                mPostList = new ArrayList<>();
+              fetchPosts();
+                /* grab strings from user inputs */
+//                if (txtValidity == true) {
+//                    Pass();
+//                }else if (!txtValidity){
+//                    Pass();
+//                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
+//                }
+                /* when login button is pressed, use intent to switch to Login Activity */
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
+//                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
+//                startActivity(intent);  // go to MainActivity with the key-value data
+            }
+        });
+
+
 //        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -379,8 +403,8 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
-        mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+
     }
 
     private void fetchPosts() {
@@ -407,6 +431,7 @@ public class MainFeed extends AppCompatActivity {
                             mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
+                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();

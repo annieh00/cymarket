@@ -18,8 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
-
+//import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -105,7 +105,7 @@ public class CreatePostActivity extends AppCompatActivity{
         //Text
         titleEditText = findViewById(R.id.titleEditTxt);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
-        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
+//        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
         image1 = findViewById(R.id.imageSelView1);
         image2 = findViewById(R.id.imageSelView2);
         image3 = findViewById(R.id.imageSelView3);
@@ -304,7 +304,7 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_IMAGES, body, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, body, response -> {
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = response.getBoolean("postSuccessful");

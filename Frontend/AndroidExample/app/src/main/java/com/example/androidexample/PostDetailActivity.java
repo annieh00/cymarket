@@ -91,10 +91,8 @@ private ImageButton leftArrowBtn;
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
         if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
             actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
-            Log.d("ACTUAL POST URL:", actualPostURL);
         }else{
             actualPostURL += ("/" + extras.getString("id"));
-            Log.d("ACTUAL POST URL:", actualPostURL);
         }
         URL_JSON_OBJECT += extras.getString("id");
 
@@ -108,7 +106,7 @@ private ImageButton leftArrowBtn;
 //        getIntent().putExtra("imageSelView1", imageList.get(currentImageIndex));
 
 
-        imageView.setImageBitmap(picture1bm);
+//        imageView.setImageBitmap(picture1bm);
 
 
 //        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
