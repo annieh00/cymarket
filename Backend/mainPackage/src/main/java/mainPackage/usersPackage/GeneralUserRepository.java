@@ -18,24 +18,17 @@ import java.util.Set;
 public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
     public GeneralUser findGeneralUserByUserName(String userName);
     public ArrayList<GeneralUser> findGeneralUsersByUserType(int userType);
-
     public GeneralUser findGeneralUserByEmailAndPassword(String email, String password);
-
-
     public GeneralUser findById(int id);
     public GeneralUser findGeneralUserByEmail(String email);
-
-
     public ArrayList<GeneralUser> findAll();
-
     public GeneralUser findGeneralUserById(int id);
-
-    Set<GeneralUser> findAllByFriends(GeneralUser user);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM GeneralUser u WHERE :friendId MEMBER OF u.friends")
-    void deleteFriend(int friendId);
-
-    Set<GeneralUser> findAllByFriendsContaining(GeneralUser user);
+    @Query("SELECT u FROM GeneralUser u " +
+            "WHERE u.id <> :id " + // Exclude the user themselves
+            "AND u NOT IN (SELECT f.sender FROM Friend f WHERE f.receiver.id = :id AND f.status = 'PENDING')" + // Exclude users who sent pending friend requests to the user
+            "AND u NOT IN (SELECT f.receiver FROM Friend f WHERE f.sender.id = :id AND f.status = 'PENDING')" + // Exclude users who received pending friend requests from the user
+            "AND u NOT IN (SELECT f.sender FROM Friend f WHERE f.receiver.id = :id AND f.status = 'ACCEPTED')" + // Exclude users who are already friends with the user
+            "AND u NOT IN (SELECT f.receiver FROM Friend f WHERE f.sender.id = :id AND f.status = 'ACCEPTED')" // Exclude users who are already friends with the user
+    )
+    List<GeneralUser> findPotentialFriends(@Param("id") int id);
 }

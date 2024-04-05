@@ -15,7 +15,6 @@
 	<name>work-environment</name>
 	<description>Demo project for Spring Boot</description>
 
-
 	<properties>
 	</properties>
 	<dependencies>
@@ -40,8 +39,6 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.2.0</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.openpnp</groupId>

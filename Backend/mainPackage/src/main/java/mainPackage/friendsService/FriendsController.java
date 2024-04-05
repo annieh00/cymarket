@@ -23,6 +23,9 @@
         @Autowired
         private GeneralUserRepository generalUserRepository;
 
+        @Autowired
+        private FriendRepository friendRepository;
+
         // Read
         @GetMapping("/")
         @Operation(summary = "Find a friend by ID",
@@ -43,13 +46,20 @@
                 @ApiResponse(responseCode = "200", description = "Friend removed successfully"),
                 @ApiResponse(responseCode = "404", description = "Friend not found")
         })
-        public String removeFriend(@PathVariable int uid) {
+        public String removeFriend(@PathVariable int uid, @PathVariable int id) {
             GeneralUser u = generalUserRepository.findGeneralUserById(uid);
-            if (u == null) {
-                return "Friend does not exist.";
+            GeneralUser friendToRemove = generalUserRepository.findGeneralUserById(id);
+
+            if (u == null || friendToRemove == null) {
+                return "Friend or user does not exist.";
             } else {
-                generalUserRepository.deleteFriend(uid);
-                return "Removed" + u.getUserName() + " successfully.";
+                Friend friend = friendRepository.findFriendBySenderAndReceiver(u, friendToRemove);
+                if (friend != null) {
+                    friendRepository.delete(friend);
+                    return "Removed " + friendToRemove.getUserName() + " successfully.";
+                } else {
+                    return friendToRemove.getUserName() + " is not a friend.";
+                }
             }
         }
 
@@ -62,9 +72,14 @@
         public List<GeneralUser> getAllFriends(@PathVariable int id) {
             GeneralUser u = generalUserRepository.findGeneralUserById(id);
             if (u == null) {
-                // Handle the case where the user with the specified username is not found
                 return Collections.emptyList();
             }
-            return new ArrayList<>(u.getFriends());
+
+            List<GeneralUser> friends = new ArrayList<>();
+            List<Friend> userFriends = friendRepository.findFriendRequestsByReceiver(u);
+            for (Friend friend : userFriends) {
+                friends.add(friend.getSender());
+            }
+            return friends;
         }
     }
