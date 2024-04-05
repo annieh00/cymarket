@@ -27,7 +27,7 @@ public class AuctionTable {
     private Posting post;
 
     //@Column(name = "highestBidderUid")
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "uid")
     private GeneralUser highestBidder;
 

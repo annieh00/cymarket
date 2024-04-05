@@ -34,7 +34,7 @@ public class Posting {
 
 
     @Column(name = "isAuction")
-    private boolean isAuction;
+    private boolean isAuction = false;
 
     @Column(name = "picture1")
     private String picture1;

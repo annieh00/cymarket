@@ -108,19 +108,19 @@ public class SellPostController {
     @GetMapping("/getAllPosts")
     public String getPosts(){
         ArrayList<Posting> mylist = postingRepository.findAll();
-
+        ArrayList<Posting> ret = new ArrayList<>();
         try {
             for(int i = 0; i < mylist.size(); i++){
                 Posting p = getPicturePaths(mylist.get(i));
-                if(p != null){
-                    mylist.set(i,p);
+                if(p != null && !p.getIsAuction()){
+                    ret.add(i,p);
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        String json = new Gson().toJson(mylist);
+        String json = new Gson().toJson(ret);
         return "{ \"posts\" :" +json + "}";
     }
 
@@ -132,6 +132,26 @@ public class SellPostController {
             return json;
         }
         return null;
+    }
+
+    @GetMapping("/auctions")
+    public String getAuctions(){
+        ArrayList<Posting> mylist = postingRepository.findAll();
+        ArrayList<Posting> ret = new ArrayList<>();
+
+        try {
+            for(int i = 0; i < mylist.size(); i++){
+                if(mylist.get(i).getIsAuction()){
+                    ret.add(mylist.get(i));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        String json = new Gson().toJson(ret);
+        return "{ \"auctions\" :" +json + "}";
+
     }
 
     @GetMapping("/image/{postId}/{imageID}")
