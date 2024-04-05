@@ -124,8 +124,18 @@ public class SellPostController {
         return "{ \"posts\" :" +json + "}";
     }
 
+    @GetMapping("/getAllPosts/{id}")
+    public String getSpecificPost(@PathVariable String id){
+        Posting p = postingRepository.findPostingById(Integer.parseInt(id));
+        if(p != null){
+            String json = new Gson().toJson(p);
+            return json;
+        }
+        return null;
+    }
+
     @GetMapping("/image/{postId}/{imageID}")
-    private @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
+    public @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
         Posting p = postingRepository.findPostingById(postId);
         String imgName = "";
         if(p != null){
