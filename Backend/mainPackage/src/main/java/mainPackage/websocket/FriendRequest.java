@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -17,11 +18,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class FriendRequest {
 
     private static final Map<String, Session> sessionUsernameMap = new HashMap<>();
+    private static Map<String, Session> usernameSessionMap = new Hashtable<>();
     private static final Map<String, Set<String>> pendingFriendRequests = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) throws IOException {
-
         sessionUsernameMap.put(username, session);
         sendPendingFriendRequests(session, username);
     }
