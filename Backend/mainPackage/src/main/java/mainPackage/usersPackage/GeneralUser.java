@@ -69,17 +69,21 @@ public class GeneralUser {
     private Set<Message> userReceived;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_friends",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
+//    @JoinTable(
+//            name = "user_friends",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "friend_id")
+//    )
     @JsonIgnore
     private Set<GeneralUser> friends;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "friendRequestsReceived", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<GeneralUser> friendRequests = new HashSet<>();
+    private Set<GeneralUser> friendRequestsReceived = new HashSet<>();
+
+    @ManyToMany(mappedBy = "friendRequestsSent", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GeneralUser> friendRequestsSent = new HashSet<>();
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -155,7 +159,9 @@ public class GeneralUser {
 
     public Set<GeneralUser> getFriends() { return this.friends; }
 
-    public Set<GeneralUser> getFriendRequests() { return this.friendRequests; }
+    public Set<GeneralUser> getFriendRequestsSent() { return this.friendRequestsSent; }
+
+    public Set<GeneralUser> getFriendRequestsReceived() { return this.friendRequestsReceived; }
 
     public List<Announcement> getAnnouncements() { return this.announcements; }
 }

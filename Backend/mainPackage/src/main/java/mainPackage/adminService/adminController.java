@@ -75,10 +75,11 @@ public class adminController {
 
             // Save the updated announcement
             announcementRepository.save(existingAnnouncement);
-
-            return "Announcement with ID " + id + " updated successfully.";
+            String response = "Announcement updated.";
+            return "{\"status\": \"" + response + "\"}";
         } else {
-            return "Invalid announcement data provided.";
+            String response = "Announcement failed to update.";
+            return "{\"status\": \"" + response + "\"}";
         }
     }
 
@@ -94,10 +95,12 @@ public class adminController {
     public String deleteAnnouncement(@PathVariable(name = "id") int id) {
         Announcement a = announcementRepository.findAnnouncementById(id);
         if (a == null) {
-            return "Announcement does not exist.";
+            String response = "Announcement is null.";
+            return "{\"status\": \"" + response + "\"}";
         } else {
             announcementRepository.delete(a);
-            return "Deleted " + a.getTitle() + " successfully.";
+            String response = "Announcement deleted successfully.";
+            return "{\"status\": \"" + response + "\"}";
         }
     }
 

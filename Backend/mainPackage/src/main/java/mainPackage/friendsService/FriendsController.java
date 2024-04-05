@@ -17,7 +17,7 @@
     import java.util.List;
 
     @RestController
-    @RequestMapping("/friends/{username}")
+    @RequestMapping("/friends/{id}")
     public class FriendsController {
 
         @Autowired
@@ -36,19 +36,19 @@
         }
 
         // Delete
-        @DeleteMapping("/del/{id}")
+        @DeleteMapping("/del/{uid}")
         @Operation(summary = "Remove a friend",
                 description = "Removes a friend based on the provided ID.")
         @ApiResponses(value = {
                 @ApiResponse(responseCode = "200", description = "Friend removed successfully"),
                 @ApiResponse(responseCode = "404", description = "Friend not found")
         })
-        public String removeFriend(@PathVariable(name = "id") int id) {
-            GeneralUser u = generalUserRepository.findGeneralUserById(id);
+        public String removeFriend(@PathVariable int uid) {
+            GeneralUser u = generalUserRepository.findGeneralUserById(uid);
             if (u == null) {
                 return "Friend does not exist.";
             } else {
-                generalUserRepository.deleteFriend(id);
+                generalUserRepository.deleteFriend(uid);
                 return "Removed" + u.getUserName() + " successfully.";
             }
         }
@@ -59,8 +59,8 @@
         @ApiResponses(value = {
                 @ApiResponse(responseCode = "200", description = "Friends retrieved successfully")
         })
-        public List<GeneralUser> getAllFriends(String username) {
-            GeneralUser u = generalUserRepository.findGeneralUserByUserName(username);
+        public List<GeneralUser> getAllFriends(@PathVariable int id) {
+            GeneralUser u = generalUserRepository.findGeneralUserById(id);
             if (u == null) {
                 // Handle the case where the user with the specified username is not found
                 return Collections.emptyList();
