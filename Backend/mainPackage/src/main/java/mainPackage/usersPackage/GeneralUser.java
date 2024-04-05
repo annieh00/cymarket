@@ -9,8 +9,7 @@ import mainPackage.announcementPackage.Announcement;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Junhyung Shim
@@ -57,9 +56,9 @@ public class GeneralUser {
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Announcement> announcements = new HashSet<>();
+    private List<Announcement> announcements = new ArrayList<>() { };
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -72,6 +71,10 @@ public class GeneralUser {
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<GeneralUser> friends;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<GeneralUser> friendRequests = new HashSet<>();
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -144,4 +147,10 @@ public class GeneralUser {
     public void setPublishedPosts(Set<Posting> publishedPosts) {
         this.publishedPosts = publishedPosts;
     }
+
+    public Set<GeneralUser> getFriends() { return this.friends; }
+
+    public Set<GeneralUser> getFriendRequests() { return this.friendRequests; }
+
+    public List<Announcement> getAnnouncements() { return this.announcements; }
 }

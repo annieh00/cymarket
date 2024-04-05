@@ -31,7 +31,6 @@ public class adminController {
     public String createAnnouncement(@RequestBody Announcement a) {
         a.setDate(new Date());
         announcementRepository.save(a);
-        // Title: " + a.getTitle() + "\nDescription: " + a.getDescription();
         String response = "Announcement created.";
         return "{\"status\": \"" + response + "\"}";
     }

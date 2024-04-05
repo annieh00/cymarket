@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Junhyung Shim
@@ -24,4 +25,9 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
 
     public ArrayList<GeneralUser> findAll();
 
+    public GeneralUser findGeneralUserById(int id);
+
+    public List<GeneralUser> findAllFriends();
+
+    void deleteFriend(GeneralUser u);
 }

@@ -36,7 +36,7 @@ public class Announcement {
     @Size(max = 1000)
     private String description;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public String getTitle() {
