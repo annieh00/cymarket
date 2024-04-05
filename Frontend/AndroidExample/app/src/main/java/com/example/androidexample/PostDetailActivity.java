@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -57,9 +58,9 @@ public class PostDetailActivity extends AppCompatActivity {
 private Boolean auction;
 private String userName;
 private int id;
-private Button leftArrowBtn;
-    private Button rightArrowBtn;
-    private int currentImageIndex = 0;
+private ImageButton leftArrowBtn;
+    private ImageButton rightArrowBtn;
+    private int currentImageIndex;
 
 
     @Override
@@ -71,9 +72,12 @@ private Button leftArrowBtn;
         imageView = findViewById(R.id.imageSelView1);
         priceTxtView = findViewById(R.id.priceTxt);
         descriptionTxtView = findViewById(R.id.descriptionTxt);
-//        imageView = (ImageView) findViewById(R.id.imgView);
-//        msgResponse = findViewById(R.id.msgResponse);
+        leftArrowBtn = findViewById(R.id.leftArrowBtn);
+        rightArrowBtn = findViewById(R.id.rightArrowBtn);
 
+
+        //        imageView = (ImageView) findViewById(R.id.imgView);
+//        msgResponse = findViewById(R.id.msgResponse);
 
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
         if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
@@ -93,30 +97,13 @@ private Button leftArrowBtn;
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentImageIndex++;
                 if (currentImageIndex == 6){
                     currentImageIndex = 0;
-                    imageView.setImageBitmap(imageList.get(currentImageIndex));
-
                 }
-                currentImageIndex++;
-                imageView.setImageBitmap(imageList.get(currentImageIndex));
-
             }
         });
-
-        leftArrowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentImageIndex == 0){
-                    currentImageIndex = 6;
-                    imageView.setImageBitmap(imageList.get(currentImageIndex));
-
-                }
-                currentImageIndex--;
-                imageView.setImageBitmap(imageList.get(currentImageIndex));
-
-            }
-        });
+        makeJsonObjReq();
     }
 
 
@@ -125,8 +112,8 @@ private Button leftArrowBtn;
      * */
     private void makeImageRequest(String URL) {
 
-        imageList = new ArrayList<>();
-        currentImageIndex = 0;
+//        imageList = new ArrayList<>();
+
         ImageRequest imageRequest = new ImageRequest(
                 URL,
                 new Response.Listener<Bitmap>() {
