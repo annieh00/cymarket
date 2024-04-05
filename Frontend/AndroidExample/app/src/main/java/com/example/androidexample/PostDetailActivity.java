@@ -4,8 +4,10 @@ import com.example.androidexample.LoginActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.graphics.Bitmap;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +39,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView msgResponse;
 
-    public String actualPostURL = Const.URL_CREATE_POST;
+    public String actualPostURL = Const.URL_GET_ALL_POSTS;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
     private String URL_JSON_OBJECT = "https://jsonplaceholder.typicode.com/users/";
     private String picture1;
@@ -46,6 +48,13 @@ public class PostDetailActivity extends AppCompatActivity {
     private String picture4;
     private String picture5;
     private String picture6;
+
+    private Bitmap picture1bm;
+    private Bitmap picture2bm;
+    private Bitmap picture3bm;
+    private Bitmap picture4bm;
+    private Bitmap picture5bm;
+    private Bitmap picture6bm;
     private String titleTxt;
     private TextView titleTxtView;
     private int price;
@@ -82,28 +91,36 @@ private ImageButton leftArrowBtn;
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
         if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
             actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
+            Log.d("ACTUAL POST URL:", actualPostURL);
         }else{
             actualPostURL += ("/" + extras.getString("id"));
+            Log.d("ACTUAL POST URL:", actualPostURL);
         }
         URL_JSON_OBJECT += extras.getString("id");
 
         int j = 0;
-        for (j = 0; j < 6; j++){
-            makeImageRequest(Const.URL_IMAGES + extras.getString("id") + "/" + j);
-        }
-        imageView.setImageBitmap(imageList.get(currentImageIndex));
-
-
-        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentImageIndex++;
-                if (currentImageIndex == 6){
-                    currentImageIndex = 0;
-                }
-            }
-        });
         makeJsonObjReq();
+//        for (j = 0; j < 6; j++){
+//            makeImageRequest(Const.URL_IMAGES + extras.getString("id") + "/" + j);
+//            Log.d("BITMAP:", Const.URL_IMAGES + extras.getString("id") + "/" + j);
+//        }
+//        Bundle extras2 = getIntent().getExtras();
+//        getIntent().putExtra("imageSelView1", imageList.get(currentImageIndex));
+
+
+        imageView.setImageBitmap(picture1bm);
+
+
+//        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                currentImageIndex++;
+//                if (currentImageIndex == 6){
+//                    currentImageIndex = 0;
+//                }
+//            }
+//        });
+
     }
 
 
@@ -122,6 +139,7 @@ private ImageButton leftArrowBtn;
 
                         // Display the image in the ImageView
                         if (response != null && response.getByteCount() != 0){
+
 //                            imageView.setImageBitmap(response);
                             imageList.add(response);
                         }
@@ -149,6 +167,16 @@ private ImageButton leftArrowBtn;
     }
 
     /**
+     * decoding base64 string encoded image
+     * @param base64Image
+     * @return Bitmap
+     */
+    public static Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    /**
      * Making json object request
      */
     private void makeJsonObjReq() {
@@ -167,6 +195,13 @@ private ImageButton leftArrowBtn;
                             picture4 = response.getString("picture4");
                             picture5 = response.getString("picture5");
                             picture6 = response.getString("picture6");
+                            picture1bm = decodeBase64ToBitmap(picture1);
+                            picture2bm = decodeBase64ToBitmap(picture2);
+                            picture3bm = decodeBase64ToBitmap(picture3);
+                            picture4bm = decodeBase64ToBitmap(picture4);
+                            picture5bm = decodeBase64ToBitmap(picture5);
+                            picture6bm = decodeBase64ToBitmap(picture6);
+
                             titleTxt = response.getString("title");
                             price = response.getInt("price");
                             auction = response.getBoolean("isAuction");
