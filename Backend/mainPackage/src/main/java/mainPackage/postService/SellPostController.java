@@ -105,7 +105,7 @@ public class SellPostController {
     @Operation(summary = "get all posts in DB", description = "gets all posts in DB")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-            @ApiResponse(responseCode = "401", description = "Access denied, not admin")
+            @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllPosts")
     public String getPosts(){
@@ -128,6 +128,11 @@ public class SellPostController {
         return "{ \"posts\" :" +json + "}";
     }
 
+    @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object off posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "500", description = "bad request")
+    })
     @GetMapping("/getAllPosts/{id}")
     public String getSpecificPost(@PathVariable String id){
         Posting p = postingRepository.findPostingById(Integer.parseInt(id));
@@ -138,6 +143,11 @@ public class SellPostController {
         return null;
     }
 
+    @Operation(summary = "gets all posts marked as auctions", description = "gets auctions in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Array of auctions", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "500", description = "bad request")
+    })
     @GetMapping("/auctions")
     public String getAuctions(){
         ArrayList<Posting> mylist = postingRepository.findAll();
