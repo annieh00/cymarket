@@ -172,11 +172,35 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
         TextView nameTextView = bottomSheetView.findViewById(R.id.friend_name);
         nameTextView.setText(friend.getFirstName() + " " + friend.getLastName());
 
+//        String currentFriendFirst = friend.getFirstName();
+//        String currentFriendLast = friend.getLastName();
+
+        //i need to get friend username here
+//        String user = getUserName(friend);
+
+        Button message = findViewById(R.id.sendMessageButton);
+
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
         // You can set other details similarly...
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
+
+//    private String getUserName(Friend friend) {
+//        String userName;
+//
+//
+//        return userName;
+//    }
 
 //    private List<FriendRequest> parseFriendRequestsJson(JSONArray jsonArray)
 }

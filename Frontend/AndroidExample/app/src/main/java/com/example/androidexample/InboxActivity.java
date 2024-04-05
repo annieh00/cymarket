@@ -18,12 +18,16 @@ import android.widget.Button;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Marker;
 
 
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.example.androidexample.SetLocationActivity;
 
 
 /**
@@ -35,9 +39,10 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
 //    private String serverUrl = "ws://10.0.2.2:8080/chat/";
 
-    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/%7B" + LoginActivity.username + "%7D";
+    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8443/chat/%7B" + LoginActivity.username + "%7D";
 
 
+//    private boolean isWebSocketConnected = false;
     private ImageButton sendBtn, setLocation;
 
     private EditText msgEtx;
@@ -70,17 +75,6 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
         setLocation = findViewById(R.id.setLocationButton);
 
-//        setLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Create an Intent to navigate to SetLocationActivity
-////                Intent intent = new Intent(getApplicationContext(), SetLocationActivity.class);
-////                // Start the activity
-////                startActivity(intent);
-//                startActivityForResult(new Intent(getApplicationContext(), SetLocationActivity.class), REQUEST_SET_LOCATION);
-//
-//            }
-//        });
 
         setLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,21 +95,20 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
                                 double longitude = result.getData().getDoubleExtra("longitude", 0.0);
                                 // Now you can use these coordinates as needed
                                 String coordinates =  "!location " + latitude + " " + longitude;
-                                msgEtx.setText(coordinates);
-
+//                                msgEtx.setText(coordinates);
+                                WebSocketManager.getInstance().sendMessage(coordinates);
 
                             }
                         }
                     }
                 });
 
+            // Connect to WebSocket
+            WebSocketManager.getInstance().connectWebSocket(serverUrl);
+            WebSocketManager.getInstance().setWebSocketListener(InboxActivity.this);
 
-
-
-//        serverUrl = serverUrl+ "jess";
-
-        WebSocketManager.getInstance().connectWebSocket(serverUrl);
-        WebSocketManager.getInstance().setWebSocketListener(InboxActivity.this);
+//            isWebSocketConnected = true; // Set the flag to true indicating that WebSocket connection is established
+//        }
 
         /* send button listener */
         sendBtn.setOnClickListener(v -> {
@@ -129,7 +122,11 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 onBackPressed();
+                WebSocketManager.getInstance().disconnectWebSocket();
             }
         });
 
@@ -160,16 +157,50 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
         // Update the UI on the main thread
         runOnUiThread(() -> {
-            // Log statement to indicate that the UI update block is being executed
-//            Log.d("WebSocketMessage", "Updating UI with message: " + message);
 
-            // Update the TextView with the received message
-            String s = msgTv.getText().toString();
-            msgTv.setText(s + "\n" + message);
+            // Update the UI with the received message
+            // In case of location data, call the method to handle the JSON data
+            if (message.startsWith("{")) {
+                // JSON data received, handle it as location data
+                handleLocationData(message);
+            } else {
+                // Regular text message, update UI accordingly
+                String s = msgTv.getText().toString();
+                msgTv.setText(s + "\n" + message);
+            }
+
         });
 
     }
 
+
+private void handleLocationData(String jsonData) {
+    try {
+        JSONObject locationJson = new JSONObject(jsonData);
+        double latitude = locationJson.getDouble("latitude");
+        double longitude = locationJson.getDouble("longitude");
+
+        Log.d("LocationData", "Latitude: " + latitude + ", Longitude: " + longitude);
+
+        SetLocationActivity.setPoint = new GeoPoint(latitude, longitude);
+
+    } catch (JSONException e) {
+        e.printStackTrace();
+    }
+}
+
+    private String extractUsernameFromMessage(String message) {
+        try {
+            // Split the message by space to separate the username and message content
+            String[] parts = message.split(" ", 2);
+            // The sender's username is the first part of the split
+            String username = parts[0];
+            return username;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unknown";
+        }
+    }
 
 
     /**
@@ -185,6 +216,8 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
         runOnUiThread(() -> {
             String s = msgTv.getText().toString();
             msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
+//            isWebSocketConnected = false; // Reset the flag to false indicating that WebSocket connection is closed
+
         });
     }
 
