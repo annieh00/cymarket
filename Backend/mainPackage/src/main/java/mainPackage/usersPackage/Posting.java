@@ -37,8 +37,8 @@ public class Posting {
     private boolean isAuction = false;
 
 
-//    @Column(name = "isClosed")
-//    private boolean isClosed = false;
+    @Column(name = "isClosed")
+    private boolean isClosed = false;
     @Column(name = "picture1")
     private String picture1;
 
@@ -73,13 +73,13 @@ public class Posting {
         return userName;
     }
 
-//    public boolean getIsClosed() {
-//        return isClosed;
-//    }
-//
-//    public void setIsClosed(boolean closed) {
-//        isClosed = closed;
-//    }
+    public boolean getIsClosed() {
+        return isClosed;
+    }
+
+    public void setIsClosed(boolean closed) {
+        isClosed = closed;
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;

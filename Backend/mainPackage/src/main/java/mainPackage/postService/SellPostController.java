@@ -114,10 +114,10 @@ public class SellPostController {
 
         try {
             for(int i = 0; i < mylist.size(); i++){
-                System.out.println(i);
-                Posting p = getPicturePaths(mylist.get(i));
+                //System.out.println(i);
+                Posting p = getPictures(mylist.get(i));
                 if(p != null && !p.getIsAuction()){
-                    ret.add(i,p);
+                    ret.add(p);
                 }
             }
         }catch (Exception e){
@@ -137,6 +137,7 @@ public class SellPostController {
     public String getSpecificPost(@PathVariable String id){
         Posting p = postingRepository.findPostingById(Integer.parseInt(id));
         if(p != null){
+            //p = getPictures(p);
             String json = new Gson().toJson(p);
             return json;
         }

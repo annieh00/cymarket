@@ -23,6 +23,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 
+import mainPackage.usersPackage.PostingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,13 @@ public class Auction {
 
     @Autowired
     public void setGeneralUserRepository(GeneralUserRepository repo) {
+        generalUserRepository = repo;  // we are setting the static variable
+    }
+
+    private static PostingRepository postingRepository;
+
+    @Autowired
+    public void setPostingRepository(GeneralUserRepository repo) {
         generalUserRepository = repo;  // we are setting the static variable
     }
 
