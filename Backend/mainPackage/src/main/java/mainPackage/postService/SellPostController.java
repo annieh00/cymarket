@@ -88,7 +88,9 @@ public class SellPostController {
             AuctionTable auction = new AuctionTable();
             auction.setPost(p);
             auction.setHighestBidder(u); //no one has placed a bid yet
-            auction.setId(u.getUserName()+p.getTitle());
+            //ArrayList<Posting> pa = postingRepository.findPostingsByTitle(p.getTitle());
+
+            auction.setId(p.getId());
 //            if(p.getTimeAliveInMinutes() == 0){
 //                p.setTimeAliveInMinutes(5);
 //            }
@@ -109,8 +111,10 @@ public class SellPostController {
     public String getPosts(){
         ArrayList<Posting> mylist = postingRepository.findAll();
         ArrayList<Posting> ret = new ArrayList<>();
+
         try {
             for(int i = 0; i < mylist.size(); i++){
+                System.out.println(i);
                 Posting p = getPicturePaths(mylist.get(i));
                 if(p != null && !p.getIsAuction()){
                     ret.add(i,p);
@@ -154,6 +158,11 @@ public class SellPostController {
 
     }
 
+    @Operation(summary = "returns byte array for the specified image", description = "gets the specified")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "image successfully retreived", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "404", description = "image not found")
+    })
     @GetMapping("/image/{postId}/{imageID}")
     public @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
         Posting p = postingRepository.findPostingById(postId);

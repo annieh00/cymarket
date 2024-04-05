@@ -19,7 +19,7 @@ public class AuctionTable {
 
     @Id
     @Column(name = "url")
-    private String id;
+    private int id;
 
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -62,10 +62,10 @@ public class AuctionTable {
 
     public AuctionTable(){
         connectedUsers =  new HashSet<>();
-        id = null;
+        id = 0;
         bidHistory = "";
     }
-    public AuctionTable(String id, GeneralUser user){
+    public AuctionTable(int id, GeneralUser user){
         connectedUsers =  new HashSet<>();
         getConnectedUsers().add(user);
         this.id = id;
@@ -83,11 +83,11 @@ public class AuctionTable {
         this.connectedUsers.add(u);
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id){this.id = id;}
+    public void setId(int id){this.id = id;}
 
     public Posting getPost() {
         return post;

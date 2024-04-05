@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -71,8 +74,9 @@ public class Auction {
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username, @PathParam("associatedPostID") String auctionID) throws IOException {
         if(username == null || username == ""
-                || generalUserRepository.findGeneralUserByUserName(username) == null
-                || auctionTableRepository.getAuctionTableById(auctionID) == null){
+                && generalUserRepository.findGeneralUserByUserName(username) == null
+                || auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionID)) == null){
+
             session.close();
             return;
         }
@@ -126,7 +130,7 @@ public class Auction {
 
 
 
-        AuctionTable auction = auctionTableRepository.getAuctionTableById(auctionID.trim());
+        AuctionTable auction = auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionID.trim()));
         if(auction != null){
             participatingAuctions.add(auction);
             auction.getConnectedUsers().add(user);
@@ -162,6 +166,7 @@ public class Auction {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
 
+
         // get the username by session
         String username = usernameFromSession.get(session);
         String auctionId = auctionIDFromSession.get(session);
@@ -177,7 +182,7 @@ public class Auction {
 
         int bid = Integer.parseInt(split_msg[0]);
         if(auctionId != "" && auctionId != null){
-            AuctionTable a = auctionTableRepository.getAuctionTableById(auctionId);
+            AuctionTable a = auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionId));
             if( bid > a.getHighestBidAmount()){
                 a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
                 a.setHighestBidAmount(bid);
@@ -187,6 +192,8 @@ public class Auction {
                 broadcast(username + " bid $" + bid);
             }
         }
+
+
 
         //logger.info("[onMessage] bid placed from: " + username + "\"" + message + "\" to: " + split_msg[0]);
 
