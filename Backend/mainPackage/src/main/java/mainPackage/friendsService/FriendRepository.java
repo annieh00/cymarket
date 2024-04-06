@@ -12,10 +12,9 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Friend findFriendBySenderAndReceiver(GeneralUser sender, GeneralUser receiver);
 
-    // Retrieve friend requests received by a specific user, excluding those with status 'ACCEPTED' or 'DECLINED'
+    // Retrieve friend requests received by a specific user, including those with PENDING status'
     @Query("SELECT f FROM Friend f " +
             "WHERE f.receiver = :user " +
-            "AND f.status <> 'ACCEPTED' " +
-            "AND f.status <> 'DECLINED'")
+            "AND f.status = 'PENDING'")
     List<Friend> findFriendRequestsByReceiver(GeneralUser user);
 }

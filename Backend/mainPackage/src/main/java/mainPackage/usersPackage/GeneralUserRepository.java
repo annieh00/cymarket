@@ -25,6 +25,7 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
     public GeneralUser findGeneralUserById(int id);
     @Query("SELECT u FROM GeneralUser u " +
             "WHERE u.id <> :id " + // Exclude the user themselves
+            "AND u.userType = 2 " + // Include only users with userType 2 (normal users)
             "AND u NOT IN (SELECT f.sender FROM Friend f WHERE f.receiver.id = :id AND f.status = 'PENDING')" + // Exclude users who sent pending friend requests to the user
             "AND u NOT IN (SELECT f.receiver FROM Friend f WHERE f.sender.id = :id AND f.status = 'PENDING')" + // Exclude users who received pending friend requests from the user
             "AND u NOT IN (SELECT f.sender FROM Friend f WHERE f.receiver.id = :id AND f.status = 'ACCEPTED')" + // Exclude users who are already friends with the user

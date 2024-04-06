@@ -34,6 +34,7 @@ public class FriendRequestsController {
         }
 
         Friend friendRequest = new Friend(sender, receiver, Friend.FriendshipStatus.PENDING);
+        System.out.println(friendRequest.getId() + "HELLOOOOOOOOOOOOOOO \n");
         friendRepository.save(friendRequest);
 
         return "Friend request sent to " + receiver.getUserName() + " successfully.";
