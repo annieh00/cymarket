@@ -95,11 +95,13 @@ public class ListOtherUsers extends ArrayAdapter<Friend> implements FriendAccept
 //                        Log.d("FriendRequest", "Friend request sent successfully");
                         // You can perform any additional actions upon successful request here
                         Log.d("FriendRequest", "Friend request sent successfully to user ID: " + sentTo.getId());
+                        Log.d("FriendRequest", "Friend request sent successfully to user ID: " + LoginActivity.loginID);
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
+                    //this is the issues
                     public void onErrorResponse(VolleyError error) {
                         // Handle errors
                         Log.e("FriendRequest", "Error sending friend request: " + error.getMessage());
@@ -108,17 +110,11 @@ public class ListOtherUsers extends ArrayAdapter<Friend> implements FriendAccept
 
         // Add the request to the RequestQueue
         Volley.newRequestQueue(context).add(stringRequest);
-
     }
 
     @Override
-    public void onFriendAccepted() {
-
-    }
+    public void onFriendAccepted() {}
 
     @Override
-    public void onFriendAccepted(String requesterUsername) {
-
-    }
+    public void onFriendAccepted(String requesterUsername) {}
 }
-

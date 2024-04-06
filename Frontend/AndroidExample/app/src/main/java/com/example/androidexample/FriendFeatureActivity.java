@@ -237,6 +237,8 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     }
 
+
+    //no usages but i think this might have something to do w it
     @Override
     public void onFriendAccepted(String requesterUsername) {
         String otherUsers = URL + "/friendrequests/" + LoginActivity.loginID +"/accept/" + requesterUsername;
