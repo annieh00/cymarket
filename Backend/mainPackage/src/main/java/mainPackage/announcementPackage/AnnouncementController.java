@@ -16,11 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/announcements/{userid}")
+@RequestMapping("/announcements")
 public class AnnouncementController {
-
-    @Autowired
-    private GeneralUserRepository generalUserRepository;
 
     @Autowired
     private AnnouncementRepository announcementRepository;
@@ -31,13 +28,8 @@ public class AnnouncementController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Announcements listed successfully")
     })
-    public List<Announcement> listAllAnnouncements(@PathVariable int userid) {
-        GeneralUser user = generalUserRepository.findGeneralUserById(userid);
-        if (user == null) {
-            return Collections.emptyList();
-        }
-        // Return the list of announcements associated with the user
-        return user.getAnnouncements();
+    public List<Announcement> listAllAnnouncements() {
+        return announcementRepository.findAll();
     }
 
     @GetMapping("/{announcementId}")
@@ -47,13 +39,7 @@ public class AnnouncementController {
             @ApiResponse(responseCode = "200", description = "Announcement retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Announcement not found")
     })
-    public Announcement getAnnouncementById(@PathVariable int userid, @PathVariable int announcementId) {
-        // Retrieve the user from the repository
-        GeneralUser user = generalUserRepository.findGeneralUserById(userid);
-        if (user == null) {
-            return null;
-        }
-        Announcement a = announcementRepository.findAnnouncementById(announcementId);
-        return a;
+    public Announcement getAnnouncementById(@PathVariable int announcementId) {
+        return announcementRepository.findAnnouncementById(announcementId);
     }
 }
