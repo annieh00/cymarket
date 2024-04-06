@@ -1,22 +1,21 @@
 package mainPackage.friendsService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import ch.qos.logback.classic.Logger;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/friendrequests/{id}")
 public class FriendRequestsController {
+
+    // Initialize the logger properly
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(FriendRequestsController.class);
 
     @Autowired
     private FriendRepository friendRepository;
@@ -34,7 +33,14 @@ public class FriendRequestsController {
         }
 
         Friend friendRequest = new Friend(sender, receiver, Friend.FriendshipStatus.PENDING);
-        System.out.println(friendRequest.getId() + "HELLOOOOOOOOOOOOOOO \n");
+
+        // Log the data
+        System.out.println("Friend request sent. " +
+                "Friend request ID: " + friendRequest.getId() +
+                ", Sender ID: " + friendRequest.getSender().getId() +
+                ", Receiver ID: " + friendRequest.getReceiver().getId() +
+                ", Status: " + friendRequest.getStatus());
+
         friendRepository.save(friendRequest);
 
         return "Friend request sent to " + receiver.getUserName() + " successfully.";

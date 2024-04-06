@@ -32,7 +32,7 @@ public class adminController {
         a.setDate(new Date());
         announcementRepository.save(a);
         String response = "Announcement created.";
-        return "{\"status\": \"" + response + "\"}";
+        return "{\"status\": \"" + response + "\"" + ",\"id\" : \"" + a.getId() + "\"}";
     }
 
     // Read

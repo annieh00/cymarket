@@ -19,7 +19,6 @@ public class Announcement {
     @GeneratedValue(
             strategy=GenerationType.TABLE,
             generator="announcementsGenerator")
-
     private int id;
 
     @Column(name = "title")

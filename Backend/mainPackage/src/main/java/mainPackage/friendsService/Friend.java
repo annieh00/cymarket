@@ -41,8 +41,8 @@ public class Friend {
     @Column(name = "status")
     private FriendshipStatus status; // Status of the friendship (pending, accepted, etc.)
 
-    @CreatedDate
-    @Column(name = "created_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_created")
     private LocalDateTime createdAt;
 
     public Friend(GeneralUser sender, GeneralUser receiver, FriendshipStatus status) {
@@ -67,4 +67,8 @@ public class Friend {
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
+
+    public LocalDateTime getCreatedAt() { return this.createdAt; }
+
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/announcements/{username}")
+@RequestMapping("/announcements/{userid}")
 public class AnnouncementController {
 
     @Autowired
@@ -31,8 +31,8 @@ public class AnnouncementController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Announcements listed successfully")
     })
-    public List<Announcement> listAllAnnouncements(@PathVariable String username) {
-        GeneralUser user = generalUserRepository.findGeneralUserByUserName(username);
+    public List<Announcement> listAllAnnouncements(@PathVariable int userid) {
+        GeneralUser user = generalUserRepository.findGeneralUserById(userid);
         if (user == null) {
             return Collections.emptyList();
         }
@@ -47,9 +47,9 @@ public class AnnouncementController {
             @ApiResponse(responseCode = "200", description = "Announcement retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Announcement not found")
     })
-    public Announcement getAnnouncementById(@PathVariable String username, @PathVariable int announcementId) {
+    public Announcement getAnnouncementById(@PathVariable int userid, @PathVariable int announcementId) {
         // Retrieve the user from the repository
-        GeneralUser user = generalUserRepository.findGeneralUserByUserName(username);
+        GeneralUser user = generalUserRepository.findGeneralUserById(userid);
         if (user == null) {
             return null;
         }
