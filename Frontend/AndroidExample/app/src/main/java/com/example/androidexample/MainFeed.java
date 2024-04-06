@@ -266,7 +266,7 @@ public class MainFeed extends AppCompatActivity {
                         break;
                     case "Profile":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
+                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intent);
                         break;
                     case "Sell":

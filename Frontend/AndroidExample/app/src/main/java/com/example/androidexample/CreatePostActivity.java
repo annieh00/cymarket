@@ -95,6 +95,8 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText priceEditTxt;
 //    private String encodedString;
 
+    private Boolean isAuction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,8 +281,8 @@ public class CreatePostActivity extends AppCompatActivity{
 //            jsonObject.put("category", categoryEditTxt.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
 //            jsonObject.put("category", getCategoryEditTxt.getText().toString());
-//            jsonObject.put("price", priceEditTxt.getText().toString());
-
+            jsonObject.put("price", priceEditTxt.getText().toString());
+            jsonObject.put("isAuction", isAuction);
             int index = 0;
             while (index < images.size() - 1) {
                 switch (index) {
@@ -307,10 +309,11 @@ public class CreatePostActivity extends AppCompatActivity{
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, body, response -> {
             Log.d(TAG, response.toString());
             try {
-                createPostSuccess = response.getBoolean("postSuccessful");
+                createPostSuccess = response.getBoolean("serverResponse");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
 
             if (createPostSuccess == true) {
                 Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();

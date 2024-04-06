@@ -64,10 +64,10 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView descriptionTxtView;
     private int postID;
     private ArrayList<Bitmap> imageList;
-private Boolean auction;
-private String userName;
-private int id;
-private ImageButton leftArrowBtn;
+    private Boolean auction;
+    private String userName;
+    private int id;
+    private ImageButton leftArrowBtn;
     private ImageButton rightArrowBtn;
     private int currentImageIndex;
 
@@ -125,54 +125,54 @@ private ImageButton leftArrowBtn;
     /**
      * Making image request
      * */
-    private void makeImageRequest(String URL) {
-
-//        imageList = new ArrayList<>();
-
-        ImageRequest imageRequest = new ImageRequest(
-                URL,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-
-                        // Display the image in the ImageView
-                        if (response != null && response.getByteCount() != 0){
-
-//                            imageView.setImageBitmap(response);
-                            imageList.add(response);
-                        }
-
-//                        imageView.setImageBitmap(response);
-
-                    }
-                },
-                0, // Width, set to 0 to get the original width
-                0, // Height, set to 0 to get the original height
-                ImageView.ScaleType.FIT_XY, // ScaleType
-                Bitmap.Config.RGB_565, // Bitmap config
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle errors here
-                        Log.e("Volley Error", error.toString());
-                    }
-                }
-        );
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
-    }
+//    private void makeImageRequest(String URL) {
+//
+////        imageList = new ArrayList<>();
+//
+//        ImageRequest imageRequest = new ImageRequest(
+//                URL,
+//                new Response.Listener<Bitmap>() {
+//                    @Override
+//                    public void onResponse(Bitmap response) {
+//
+//                        // Display the image in the ImageView
+//                        if (response != null && response.getByteCount() != 0){
+//
+////                            imageView.setImageBitmap(response);
+////                            imageList.add(response);
+//                        }
+//
+////                        imageView.setImageBitmap(response);
+//
+//                    }
+//                },
+//                0, // Width, set to 0 to get the original width
+//                0, // Height, set to 0 to get the original height
+//                ImageView.ScaleType.FIT_XY, // ScaleType
+//                Bitmap.Config.RGB_565, // Bitmap config
+//
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // Handle errors here
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }
+//        );
+//
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+//    }
 
     /**
      * decoding base64 string encoded image
      * @param base64Image
      * @return Bitmap
      */
-    public static Bitmap decodeBase64ToBitmap(String base64Image) {
-        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
+//    public static Bitmap decodeBase64ToBitmap(String base64Image) {
+//        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+//        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+//    }
 
     /**
      * Making json object request
@@ -193,12 +193,12 @@ private ImageButton leftArrowBtn;
                             picture4 = response.getString("picture4");
                             picture5 = response.getString("picture5");
                             picture6 = response.getString("picture6");
-                            picture1bm = decodeBase64ToBitmap(picture1);
-                            picture2bm = decodeBase64ToBitmap(picture2);
-                            picture3bm = decodeBase64ToBitmap(picture3);
-                            picture4bm = decodeBase64ToBitmap(picture4);
-                            picture5bm = decodeBase64ToBitmap(picture5);
-                            picture6bm = decodeBase64ToBitmap(picture6);
+//                            picture1bm = decodeBase64ToBitmap(picture1);
+//                            picture2bm = decodeBase64ToBitmap(picture2);
+//                            picture3bm = decodeBase64ToBitmap(picture3);
+//                            picture4bm = decodeBase64ToBitmap(picture4);
+//                            picture5bm = decodeBase64ToBitmap(picture5);
+//                            picture6bm = decodeBase64ToBitmap(picture6);
 
                             titleTxt = response.getString("title");
                             price = response.getInt("price");
@@ -208,7 +208,7 @@ private ImageButton leftArrowBtn;
                             id = response.getInt("id");
 
                             titleTxtView.setText(titleTxt);
-                            priceTxtView.setText(price);
+                            priceTxtView.setText(String.valueOf(price));
                             descriptionTxtView.setText(description);
 
                         } catch (JSONException e) {
