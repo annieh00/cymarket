@@ -69,7 +69,7 @@ public class SellPostController {
 
         try {
             //nu.pattern.OpenCV.loadLocally();
-            setPictures(p);
+            //setPictures(p);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -549,33 +549,86 @@ public class SellPostController {
         //p.setTitle(editpost.getTitle());
         //p.setDescription(editpost.getDescription());
         if(editpost.getPicture1() != null && !editpost.getPicture1().equals("")){
-            p.setPicture1(editpost.getPicture1());
+
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic1.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture1());
+            p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
+            //p.setPicture1(editpost.getPicture1());
         }
 
         if(editpost.getPicture2() != null && !editpost.getPicture2().equals("")){
-            p.setPicture2(editpost.getPicture2());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic2.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture2());
+            p.setPicture2(p.getUserName() + p.getTitle()+"Pic2.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED 2nd IMAGE");
+
+            //p.setPicture2(editpost.getPicture1());
         }
 
-        if(editpost.getPicture2() != null && !editpost.getPicture2().equals("")){
-            p.setPicture2(editpost.getPicture2());
-        }
 
         if(editpost.getPicture3() != null && !editpost.getPicture3().equals("")){
-            p.setPicture3(editpost.getPicture3());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic3.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture3());
+            p.setPicture3(p.getUserName() + p.getTitle()+"Pic3.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
+            //p.setPicture3(editpost.getPicture2());
         }
 
         if(editpost.getPicture4() != null && !editpost.getPicture4().equals("")){
-            p.setPicture4(editpost.getPicture4());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic4.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture4());
+            p.setPicture4(p.getUserName() + p.getTitle()+"Pic4.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
         }
 
         if(editpost.getPicture5() != null && !editpost.getPicture5().equals("")){
-            p.setPicture5(editpost.getPicture5());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic5.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture5());
+            p.setPicture5(p.getUserName() + p.getTitle()+"Pic5.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
         }
 
         if(editpost.getPicture6() != null && !editpost.getPicture6().equals("")){
-            p.setPicture6(editpost.getPicture6());
-        }
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic6.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture6());
+            p.setPicture6(p.getUserName() + p.getTitle()+"Pic6.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
 
+        }
         postingRepository.save(p);
         String json = new Gson().toJson(p);
         return "{\"serverResponse\" : true}";
