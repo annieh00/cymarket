@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import com.example.androidexample.LoginActivity.*;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -53,6 +55,8 @@ import java.util.List;
 public class ProfileActivity extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
+
+    private String postsUsersURL;
 
 
     AlertDialog.Builder builder;
@@ -99,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int EXTRA_postID = 0;
 
     public boolean alreadyConnected = false;
+    public String specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + LoginActivity.username;
 
 
     /**
@@ -131,6 +136,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
 
+    private Button deleteBtn;
 
 
 
@@ -149,7 +155,6 @@ public class ProfileActivity extends AppCompatActivity {
 //        updateLocationBtn = findViewById(R.id.updateCoord);
 //        updatedX = findViewById(R.id.updateX);
 //        updatedY = findViewById(R.id.updateY);
-
 
 
         builder = new AlertDialog.Builder(ProfileActivity.this);
@@ -412,19 +417,35 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void fetchPosts() {
 //        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+//        JSONObject jsonObject2 = new JSONObject();
+//        try {
+//            //input your API parameters
+//            jsonObject2.put("userName", LoginActivity.username);
+//
+//            //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, specificPostURL, null,
                 response -> {
                     try {
                         JSONArray jsonArray = response.getJSONArray("posts");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String picture1 = jsonObject.getString("picture1");
-                            String picture2 = jsonObject.getString("picture2");
-                            String picture3 = jsonObject.getString("picture3");
-                            String picture4 = jsonObject.getString("picture4");
-                            String picture5 = jsonObject.getString("picture5");
-                            String picture6 = jsonObject.getString("picture6");
+//                            String picture1 = jsonObject.getString("picture1");
+//                            String picture2 = jsonObject.getString("picture2");
+//                            String picture3 = jsonObject.getString("picture3");
+//                            String picture4 = jsonObject.getString("picture4");
+//                            String picture5 = jsonObject.getString("picture5");
+//                            String picture6 = jsonObject.getString("picture6");
+                            String picture1 = null;
+                            String picture2 = null;
+                            String picture3 = null;
+                            String picture4 = null;
+                            String picture5 = null;
+                            String picture6 = null;
+
                             String title = jsonObject.getString("title");
                             int price = jsonObject.getInt("price");
                             Boolean auction = jsonObject.getBoolean("isAuction");

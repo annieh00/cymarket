@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POST_LOGIN_USER, jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/login", jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
 //                email = response.getString("email");

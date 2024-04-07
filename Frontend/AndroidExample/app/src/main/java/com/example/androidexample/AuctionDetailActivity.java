@@ -35,6 +35,7 @@ import java.util.Map;
 
 
 public class AuctionDetailActivity extends AppCompatActivity implements WebSocketListener{
+    private Boolean isCurrentUserOwner;
 
     private TextView msgTv;
 
@@ -47,6 +48,15 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
     private EditText bidEditTxt;
     private TextView highestBidTxt;
     private Button confirmBtn;
+    private Button closeAuctionBtn;
+    private String titleTxt;
+    private int price;
+    private Boolean auction;
+    private String description;
+    private String userName;
+    private int id;
+
+
     private volatile String incomingMessages;
 
     private ImageView imv;
