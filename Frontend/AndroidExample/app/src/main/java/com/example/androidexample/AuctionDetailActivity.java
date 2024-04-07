@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.android.volley.toolbox.ImageRequest;
 
@@ -31,10 +32,14 @@ import java.util.Map;
 
 
 public class AuctionDetailActivity extends AppCompatActivity implements WebSocketListener{
+    private Boolean isCurrentUserOwner;
 
     private TextView msgTv;
     private ImageView imageView;
     private TextView msgResponse;
+    private TextView titleTxtView;
+    private TextView descriptionTxtView;
+    private TextView priceTxtView;
 
     public String actualPostURL = Const.URL_AUCTION;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
@@ -42,6 +47,15 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
     private EditText bidEditTxt;
     private TextView highestBidTxt;
     private Button confirmBtn;
+    private Button closeAuctionBtn;
+    private String titleTxt;
+    private int price;
+    private Boolean auction;
+    private String description;
+    private String userName;
+    private int id;
+
+
     private volatile String incomingMessages;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +65,8 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         confirmBtn = findViewById(R.id.confirmBidBtn);
         bidEditTxt = (EditText) findViewById(R.id.bidEditTxt);
         highestBidTxt = (TextView) findViewById(R.id.highestBidTxt);
-
+        closeAuctionBtn = findViewById(R.id.closeAuctionBtn);
+        titleTxtView = findViewById(R.id.titleTxtView);
 
         imageView = (ImageView) findViewById(R.id.imageSelView1);
 //        msgResponse = findViewById(R.id.msgResponse);
@@ -90,6 +105,14 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                 WebSocketManager.getInstance().sendMessage(bidEditTxt.getText().toString());
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
+            }
+        });
+
+        closeAuctionBtn.setOnClickListener(v -> {
+            try{
+                WebSocketManager.getInstance().disconnectWebSocket();
+            }catch (Exception e){
+
             }
         });
     }
@@ -137,7 +160,40 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-//                        msgResponse.setText(response.toString());
+                        try {
+                            titleTxt = response.getString("title");
+                            price = response.getInt("price");
+                            auction = response.getBoolean("isAuction");
+                            description = response.getString("description");
+                            userName = response.getString("userName");
+                            id = response.getInt("id");
+
+                            titleTxtView.setText(titleTxt);
+                            priceTxtView.setText(String.valueOf(price));
+                            descriptionTxtView.setText(description);
+
+                            //if the current user logged in is not the same as the owner of the post
+                            if (!userName.equals(LoginActivity.username)){
+                                isCurrentUserOwner = false;
+                            }else{
+                                //if the current user logged in is the same as the owner of the post
+                                isCurrentUserOwner = true;
+                            }
+
+                            //set visibility based on ownership
+                            //if the current user logged in is not the same as the owner of the post
+                            if (!isCurrentUserOwner){
+                                closeAuctionBtn.setVisibility(View.GONE);
+                            }else{
+
+                                closeAuctionBtn.setVisibility(View.VISIBLE);
+                            }
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
                     }
                 },
                 new Response.ErrorListener() {
