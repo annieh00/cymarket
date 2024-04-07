@@ -129,7 +129,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
                 if(displayedImageIndex  >= 1 ){
                     displayedImageIndex--;
-                }else if(displayedImageIndex == 1){
+                }else if(displayedImageIndex == 0){
                     //make it to 6 so that it feels like the user is rolling through the pictures
                     displayedImageIndex = 6;
                 }

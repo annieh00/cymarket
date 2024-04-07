@@ -36,6 +36,7 @@
                 </ImageView>
 
 
+
             </androidx.appcompat.widget.Toolbar>
 
 
@@ -72,61 +73,32 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.25" />
 
-            <ImageView
-                android:id="@+id/imageSelView2"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+            <ImageButton
+                android:id="@+id/leftArrowBtn"
+                android:layout_width="81dp"
+                android:layout_height="67dp"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.109"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintVertical_bias="0.251"
+                app:srcCompat="@drawable/left_arrow" />
 
-            <ImageView
-                android:id="@+id/imageSelView3"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+            <ImageButton
+                android:id="@+id/rightArrowBtn"
+                android:layout_width="81dp"
+                android:layout_height="67dp"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.875"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintVertical_bias="0.251"
+                app:srcCompat="@drawable/right_arrow" />
 
-            <ImageView
-                android:id="@+id/imageSelView4"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
-
-
-            <ImageView
-                android:id="@+id/imageSelView5"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
-
-            <ImageView
-                android:id="@+id/imageSelView6"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
 
             <TextView
                 android:id="@+id/AuctionTxt"

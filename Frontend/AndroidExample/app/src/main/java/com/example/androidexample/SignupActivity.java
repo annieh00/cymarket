@@ -103,6 +103,8 @@ public class SignupActivity extends AppCompatActivity {
             //input your API parameters
             jsonObject.put("email", emailEditText.getText().toString());
             jsonObject.put("password", passwordEditText.getText().toString());
+            int atInex = emailEditText.getText().toString().lastIndexOf("@");
+            jsonObject.put("userName",emailEditText.getText().toString().substring(0,atInex));
 
             //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {

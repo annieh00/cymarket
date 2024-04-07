@@ -3,11 +3,11 @@ package com.example.androidexample;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.androidexample.LoginActivity;
+import static com.example.androidexample.LoginActivity.username;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,11 +51,9 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText descriptionEditText;
     private EditText categoryEditTxt;
     private Button cancelBtn;
-    private static String UPLOAD_URL = "http://10.0.2.2:8080/images";
 
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
-    private EditText username;
 //    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
@@ -65,17 +63,13 @@ public class CreatePostActivity extends AppCompatActivity{
     private ImageView image4 = null;
     private ImageView image5 = null;
     private ImageView image6 = null;
-    private String imageString1 = null;
-    private String imageString2 = null;
-    private String imageString3 = null;
-    private String imageString4 = null;
-    private String imageString5 = null;
-    private String imageString6 = null;
+
+    private int imageIndex = 0;
     private Boolean createPostSuccess;
 
-    private String title;
+    private volatile String title;
     private String description;
-    private String usernameString;
+    private volatile String usernameString;
 
     private Bitmap bitmap;
     private String filePath;
@@ -85,32 +79,25 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private EditText getCategoryEditTxt;
     private Boolean auction;
-    private static final String url2 = "http://10.0.2.2/android_db_pool/fileupload.php";
-    String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/data4";
+
     private ActivityResultLauncher<String> mGetContent;
 
     Uri selectiedUri;
 
-    private String encodedString1;
-    private String encodedString2;
-    private String encodedString3;
-    private String encodedString4;
-    private String encodedString5;
-    private String encodedString6;
-    private String picture1;
-    private String picture2;
-    private String picture3;
-    private String picture4;
-    private String picture5;
-    private String picture6;
-
-
-    ArrayList<Uri> images = new ArrayList<>();
+    private String encodedString;
+    //ArrayList<Bitmap> imageBitMaps = new ArrayList<>();
 
     private EditText priceEditTxt;
 //    private String encodedString;
 
-    private Boolean isAuction;
+    private volatile Bitmap[] bitmap1to6 = new Bitmap[6];
+
+    private boolean isAuction;
+
+    public volatile JSONObject ret = new JSONObject();
+
+    private static int ImageUploadedCounter = 0;
+
 
 
     @Override
@@ -121,14 +108,27 @@ public class CreatePostActivity extends AppCompatActivity{
         /* initialize UI elements */
         //Text
         titleEditText = findViewById(R.id.titleEditTxt);
+        titleEditText.setSaveEnabled(true);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
+        descriptionEditText.setSaveEnabled(true);
 //        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
         image1 = findViewById(R.id.imageSelView1);
+
+
         image2 = findViewById(R.id.imageSelView2);
+
+
         image3 = findViewById(R.id.imageSelView3);
+
+
         image4 = findViewById(R.id.imageSelView4);
+
+
         image5 = findViewById(R.id.imageSelView5);
+
+
         image6 = findViewById(R.id.imageSelView6);
+
         priceEditTxt = findViewById(R.id.priceEditTxt);
 
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
@@ -149,43 +149,68 @@ public class CreatePostActivity extends AppCompatActivity{
                 uri -> {
                     // Handle the returned Uri
                     Log.d("URI", "Received URI: " + uri);
+                    selectiedUri = uri;
                     if (uri != null) {
-//                        pic = uri;
-                        selectiedUri = uri;
-                        byte[] imageData = convertImageUriToBytes(selectiedUri);
-                        images.add(uri);
-                        int index = images.size() - 1;
-                        if (index >= 0 && index < 6) {
-                            ImageView imageView = null;
-                            switch (index) {
+                        if (imageIndex >= 0 && imageIndex < 6) {
+                            switch (imageIndex) {
                                 case 0:
-                                    encodedString1 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView1);
+                                    image1 = findViewById(R.id.imageSelView1);
+                                    image1.setImageURI(uri);
+                                    image1.setDrawingCacheEnabled(true);
+                                    image1.layout(0, 0, 150, 150);
+                                    image1.buildDrawingCache(true);
+                                    bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
+                                    image1.setDrawingCacheEnabled(false); // clear drawing cache
+
                                     break;
                                 case 1:
-                                    encodedString2 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView2);
+                                    image2 = findViewById(R.id.imageSelView2);
+                                    image2.setImageURI(uri);
+                                    image2.setDrawingCacheEnabled(true);
+                                    image2.layout(0, 0, 150, 150);
+                                    image2.buildDrawingCache(true);
+                                    bitmap1to6[1] = Bitmap.createBitmap(image2.getDrawingCache());
+                                    image2.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                                 case 2:
-                                    encodedString3 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView3);
+                                    image3 = findViewById(R.id.imageSelView3);
+                                    image3.setImageURI(uri);
+                                    image3.setDrawingCacheEnabled(true);
+                                    image3.layout(0, 0, 150, 150);
+                                    image3.buildDrawingCache(true);
+                                    bitmap1to6[2] = Bitmap.createBitmap(image3.getDrawingCache());
+                                    image3.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                                 case 3:
-                                    encodedString4 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView4);
+                                    image4 = findViewById(R.id.imageSelView4);
+                                    image4.setImageURI(uri);
+                                    image4.setDrawingCacheEnabled(true);
+                                    image4.layout(0, 0, 150, 150);
+                                    image4.buildDrawingCache(true);
+                                    bitmap1to6[3] = Bitmap.createBitmap(image4.getDrawingCache());
+                                    image4.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                                 case 4:
-                                    encodedString5 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView5);
+                                    image5 = findViewById(R.id.imageSelView5);
+                                    image5.setImageURI(uri);
+                                    image5.setDrawingCacheEnabled(true);
+                                    image5.layout(0, 0, 150, 150);
+                                    image5.buildDrawingCache(true);
+                                    bitmap1to6[4] = Bitmap.createBitmap(image5.getDrawingCache());
+                                    image5.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                                 case 5:
-                                    encodedString6 = Base64.getEncoder().encodeToString(imageData);
-                                    imageView = findViewById(R.id.imageSelView6);
+                                    image6 = findViewById(R.id.imageSelView6);
+                                    image6.setImageURI(uri);
+                                    image6.setDrawingCacheEnabled(true);
+                                    image6.layout(0, 0, 150, 150);
+                                    image6.buildDrawingCache(true);
+                                    bitmap1to6[5] = Bitmap.createBitmap(image6.getDrawingCache());
+                                    image6.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                             }
-                            if (imageView != null) {
-                                imageView.setImageURI(uri);
-                            }
+
+                           imageIndex++;
                         }else{
                             Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
                         }
@@ -202,11 +227,9 @@ public class CreatePostActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                sendJsonObjReq();
-//                /* when post button is pressed, use intent to switch to Signup Activity */
-//                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-//                startActivity(intent);  // go to SignupActivity
-//                sendJsonObjReq();
+               sendJsonObjReq();
+               Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+               startActivity(intent);
 
             }
         });
@@ -234,56 +257,84 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
 
-//    private String getBase64String() {
-//
-//        // give your image file url in mCurrentPhotoPath
-//        String mCurrentPhotoPath = null;
-//        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-//
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        // In case you want to compress your image, here it's at 40%
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
-//        byte[] byteArray = byteArrayOutputStream.toByteArray();
-//
-//        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-//    }
-    
-    /**
-     * Uploads an image to a remote server using a multipart Volley request.
-     *
-     * This method creates and executes a multipart request using the Volley library to upload
-     * an image to a predefined server endpoint. The image data is sent as a byte array and the
-     * request is configured to handle multipart/form-data content type. The server is expected
-     * to accept the image with a specific key ("image") in the request.
-     *
-     */
-//    private void uploadImage(){
-//
-//        byte[] imageData = convertImageUriToBytes(selectiedUri);
-//        String encodedString = Base64.getEncoder().encodeToString(imageData);
-////        Log.d("encoded String:", encodedString);
-////        MultipartRequest multipartRequest = new MultipartRequest(
-////                Request.Method.POST,
-////                Const.URL_IMAGES,
-////                imageData,
-////                response -> {
-////                    // Handle response
-//////                    Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
-////
-////                    Log.d("Upload", "Response: " + response);
-////                },
-////                error -> {
-////                    // Handle error
-//////                    Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_LONG).show();
-////                    Log.e("Upload", "Error: " + error.getMessage());
-////                }
-////        );
-//
-////        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(multipartRequest);
-//    }
+    private String convertBitmapToBase64(Bitmap b) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        b = Bitmap.createScaledBitmap(b,150,150,false);
+        b.compress(Bitmap.CompressFormat.PNG, 70, stream);
+        byte[] byteArray = stream.toByteArray();
+        return Base64.getEncoder().encodeToString(byteArray);
+    }
 
-//    int i;
 
+    private void sendImageToServer(int postId, int imageIndexStartFrom1){
+            JSONObject jo = new JSONObject();
+            try {
+
+
+                jo.put("id",postId);
+                jo.put("title", title);
+                jo.put("userName", usernameString);
+                jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
+                System.out.println("ABOUT TO SEND " + jo.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts/update", jo , response -> {
+                Log.d(TAG, response.toString());
+                try {
+                    System.out.println("RECEIVED FROM UPDATE");
+                    System.out.println("SENT THIS: " + jo.toString());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                if (createPostSuccess) {
+                    Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                    //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+
+
+                    //startActivity(intent);
+                }else{
+                    Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
+            }, error -> {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+//            txtValidity = true;
+            }) {
+
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                    return params;
+                }
+
+            };
+
+            //queue.add(jsonObjReq);
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+            //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
+
+    }
     /**
      * Send a JSON Object request to server that posts the data for a new post.
      * This method constructs a JSON Object containing post data and sends it to the server
@@ -292,85 +343,52 @@ public class CreatePostActivity extends AppCompatActivity{
      * Toast outputs "Post unsuccessful."
      */
     private void sendJsonObjReq() {
-        RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();
-        JSONObject body = new JSONObject();
+       // JSONObject ret = new JSONObject();
         try {
             //input your API parameters
+
             jsonObject.put("title", titleEditText.getText().toString());
-//            jsonObject.put("category", categoryEditTxt.getText().toString());
+            System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
-//            jsonObject.put("category", getCategoryEditTxt.getText().toString());
-            jsonObject.put("price", priceEditTxt.getText().toString());
+            System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
+            jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
+            System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
             jsonObject.put("isAuction", isAuction);
-            int index = 0;
-            while (index < images.size()) {
-                switch (index) {
-                    case 0:
-                        Log.d("picture1:", encodedString1);
-                        jsonObject.put("picture1", encodedString1);
-                    case 1:
-//                        Log.d("picture2:", encodedString2);
-                        jsonObject.put("picture2", encodedString2);
-                    case 2:
-//                        Log.d("picture3:", encodedString3);
-                        jsonObject.put("picture3", encodedString3);
-                    case 3:
-//                        Log.d("picture4:", encodedString4);
-                        jsonObject.put("picture4", encodedString4);
-                    case 4:
-//                        Log.d("picture5:", encodedString5);
-                        jsonObject.put("picture5", encodedString5);
-                    case 5:
-//                        Log.d("picture6:", encodedString6);
-                        jsonObject.put("picture6", encodedString6);
-                }
-                index++;
-            }
-            body.put("post", jsonObject);
+            System.out.println("THE AUCTION STATUS WAS " + isAuction);
+            jsonObject.put("userName",LoginActivity.username);
+            System.out.println("THE userName WAS " + LoginActivity.username);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, body, response -> {
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts", jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-                int index = 0;
-//                while (index < images.size()) {
-//                    switch (index) {
-//                        case 0:
-//                            picture1 = response.getString("picture1");
-//                        case 1:
-//                            picture2 = response.getString("picture2");
-//                        case 2:
-//                            picture3 = response.getString("picture3");
-//                        case 3:
-//                            picture4 = response.getString("picture4");
-//                        case 4:
-//                            picture5 = response.getString("picture5");
-//                        case 5:
-//                            picture6 = response.getString("picture6");
-//                    }
-//                    index++;
-//                }
+                createPostSuccess = true;
+                int pid = response.getInt("id");
                 title = response.getString("title");
-                description = response.getString("description");
-                price = response.getInt("price");
-                isAuction = response.getBoolean("isAuction");
-//                createPostSuccess = response.getBoolean("serverResponse");
+                usernameString = response.getString("userName");
+                for(int i = 0; i < imageIndex; i++ ) {
+                    sendImageToServer(pid, i+1);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
+                //System.out.println("FAILED AT LINE 350");
+                //createPostSuccess = false;
             }
 
 
-//            if (createPostSuccess == true) {
-//                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-//                startActivity(intent);
-//            }else{
-//                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
-//            }
-//
+            if (createPostSuccess) {
+                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                //startActivity(intent);
+            }else{
+                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            }
+
 
 
 
@@ -403,7 +421,6 @@ public class CreatePostActivity extends AppCompatActivity{
         //queue.add(jsonObjReq);
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
         //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
-
 
     }
 
