@@ -74,6 +74,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Bitmap bitmap;
     private String filePath;
     TextView textView;
+    private int price;
     private  int userType = 0;
 
     private EditText getCategoryEditTxt;

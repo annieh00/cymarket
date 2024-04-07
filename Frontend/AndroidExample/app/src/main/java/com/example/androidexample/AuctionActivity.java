@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -106,7 +107,7 @@ public class AuctionActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
 
-
+    private Button stopAuctionBtn;
     /**
      * this is the tag itself
      */
@@ -136,6 +137,8 @@ public class AuctionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auction);
+
+
 
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
@@ -271,7 +274,7 @@ public class AuctionActivity extends AppCompatActivity {
 //                        break;
                     case "Profile":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
+                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intent);
                         break;
                     case "Sell":
