@@ -18,6 +18,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -115,7 +116,7 @@ public class SellPostController {
         try {
             for(int i = 0; i < mylist.size(); i++){
                 //System.out.println(i);
-                Posting p = getPictures(mylist.get(i));
+                Posting p = getPicturePaths(mylist.get(i));
                 if(p != null && !p.getIsAuction()){
                     ret.add(p);
                 }
@@ -174,12 +175,13 @@ public class SellPostController {
             @ApiResponse(responseCode = "200", description = "image successfully retreived", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "400", description = "image not found")
     })
-    @GetMapping("/image/{postId}/{imageID}")
-    public @ResponseBody byte[] getImage(@PathVariable int postId, @PathVariable int imageID) throws IOException {
+    @GetMapping(value = "/image/{postId}/{imageIndex}")
+    public String getImage(@PathVariable int postId, @PathVariable int imageIndex) throws IOException {
+        System.out.println("getImage Called! to postID:" + postId + " imageIndex: " + imageIndex);
         Posting p = postingRepository.findPostingById(postId);
         String imgName = "";
         if(p != null){
-            switch (imageID){
+            switch (imageIndex){
                 case 1:
                     imgName = p.getPicture1();
                     break;
@@ -203,13 +205,16 @@ public class SellPostController {
             }
             if(!imgName.equals("") && imgName != null){
                 File initialFile = new File("./"+imgName);
-                InputStream in = new FileInputStream(initialFile);
-                return IOUtils.toByteArray(in);
+                byte[] fileContent = FileUtils.readFileToByteArray(initialFile);
+                String encodedString = Base64.getEncoder().encodeToString(fileContent);
+                return "{\"image\" : \"" + encodedString +"\"}";
+                //InputStream in = new FileInputStream(initialFile);
+                //return IOUtils.toByteArray(in);
             }
 
         }
 
-        return new byte[0];
+        return "{\"image\" : \"\"}";
 
     }
 
@@ -574,6 +579,8 @@ public class SellPostController {
             auctionTableRepository.delete(a);
         }
         postingRepository.delete(p);
+
+
         return  "{ \"serverResponse\" : true}";
     }
 }
