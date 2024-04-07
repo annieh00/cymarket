@@ -14,32 +14,27 @@
         android:textSize="20sp"
         android:gravity="center"/>
 
-    <Button
-        android:id="@+id/seeFriendsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="See Friends"
-        android:backgroundTint="@color/cardinal"/>
 
     <Button
         android:id="@+id/sendMessageButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/cardinal"
         android:text="Send Message"
-        android:backgroundTint="@color/cardinal"/>
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/unfriendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Unfriend"
-        android:backgroundTint="@color/cardinal"/>
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@color/cardinal"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/blockButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Block"
-        android:backgroundTint="@color/cardinal"/>
+
 
 </LinearLayout>

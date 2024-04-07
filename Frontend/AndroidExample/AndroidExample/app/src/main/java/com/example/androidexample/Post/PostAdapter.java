@@ -12,7 +12,6 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private List<PostItemObject> mPostList;
-    private List<AuctionItemObject> mAuctionList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{

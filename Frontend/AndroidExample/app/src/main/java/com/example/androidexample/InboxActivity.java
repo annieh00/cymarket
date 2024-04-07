@@ -62,8 +62,19 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
+
         // Set the content view to the layout defined in activity_inbox.xml
         setContentView(R.layout.activity_inbox);
+
+
+        String userToText = getIntent().getStringExtra("userToText");
+        // Set the userToText to the EditText
+        EditText editText = findViewById(R.id.msgEdt);
+        editText.setText(userToText);
+
 
         sendBtn = findViewById(R.id.sendBtn);
 

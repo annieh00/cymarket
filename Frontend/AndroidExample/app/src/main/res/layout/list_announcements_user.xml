@@ -21,16 +21,5 @@
         android:textSize="18sp"
         android:textColor="#888888" />
 
-    <!-- Edit Button -->
-    <ImageButton
-        android:id="@+id/editAnnouncement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/AnnouncementsTitle"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="-41dp"
-        android:layout_marginEnd="-9dp"
-        android:background="@android:color/transparent"
-        android:padding="13dp"
-        android:src="@drawable/edit" />
+
 </RelativeLayout>
