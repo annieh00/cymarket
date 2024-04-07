@@ -27,5 +27,6 @@ public class Const {
     public static final String URL_GET_ALL_AUCTIONS = DOMAIN + "/auctions";
 
     public static final String URL_AUCTION = DOMAIN + "/auction";
+    public static final String URL_IMAGES_POST = DOMAIN + "/image/";
 
 }

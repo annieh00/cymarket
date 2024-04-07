@@ -283,7 +283,7 @@ public class PostDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.GET,
-                "http://coms-309-060.class.las.iastate.edu:8080/image/" +extras.getString("id") +"/" +imageIndex,
+                Const.URL_IMAGES_POST +extras.getString("id") +"/" +imageIndex,
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONObject>() {
                     @Override
