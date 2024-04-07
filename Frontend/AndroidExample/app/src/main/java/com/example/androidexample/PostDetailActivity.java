@@ -61,7 +61,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageButton rightArrowBtn;
     private Button deleteBtn;
     private String deletePostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + LoginActivity.username;
-
+    private Boolean isCurrentUserOwner;
     private int displayedImageIndex = 1;
     private void processURL(Bundle extras){
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
@@ -70,8 +70,10 @@ public class PostDetailActivity extends AppCompatActivity {
         }else{
             actualPostURL += ("/" + extras.getString("id"));
         }
-        URL_JSON_OBJECT += extras.getString("id");
+//        URL_JSON_OBJECT += extras.getString("id");
     }
+
+
 
 
     @Override
@@ -95,6 +97,8 @@ public class PostDetailActivity extends AppCompatActivity {
         }catch (Exception e){
             System.out.println("CALLING FAILED");
         }
+
+
 
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +136,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
             }
         });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletePosts();
+
+            }
+        });
+
 
     }
 
@@ -176,7 +189,6 @@ public class PostDetailActivity extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-//                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
 //                        mRecyclerView.setAdapter(mPostAdapter);
@@ -213,6 +225,23 @@ public class PostDetailActivity extends AppCompatActivity {
                             titleTxtView.setText(titleTxt);
                             priceTxtView.setText(String.valueOf(price));
                             descriptionTxtView.setText(description);
+
+                            //if the current user logged in is not the same as the owner of the post
+                            if (!userName.equals(LoginActivity.username)){
+                                isCurrentUserOwner = false;
+                            }else{
+                                //if the current user logged in is the same as the owner of the post
+                                isCurrentUserOwner = true;
+                            }
+
+                            //set visibility based on ownership
+                            //if the current user logged in is not the same as the owner of the post
+                            if (!isCurrentUserOwner){
+                                deleteBtn.setVisibility(View.GONE);
+                            }else{
+
+                                deleteBtn.setVisibility(View.VISIBLE);
+                            }
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
