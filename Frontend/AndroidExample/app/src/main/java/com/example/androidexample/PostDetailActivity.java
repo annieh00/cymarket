@@ -1,10 +1,12 @@
 package com.example.androidexample;
 
+import com.android.volley.toolbox.HttpResponse;
 import com.example.androidexample.LoginActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.util.Base64;
@@ -28,6 +30,9 @@ import org.w3c.dom.Text;
 
 import com.android.volley.toolbox.ImageRequest;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,40 +41,33 @@ import java.util.Map;
 
 public class PostDetailActivity extends AppCompatActivity {
 
-    private ImageView imageView;
-    private TextView msgResponse;
 
     public String actualPostURL = Const.URL_GET_ALL_POSTS;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
     private String URL_JSON_OBJECT = "https://jsonplaceholder.typicode.com/users/";
-    private String picture1;
-    private String picture2;
-    private String picture3;
-    private String picture4;
-    private String picture5;
-    private String picture6;
-
-    private Bitmap picture1bm;
-    private Bitmap picture2bm;
-    private Bitmap picture3bm;
-    private Bitmap picture4bm;
-    private Bitmap picture5bm;
-    private Bitmap picture6bm;
     private String titleTxt;
     private TextView titleTxtView;
     private int price;
     private TextView priceTxtView;
-    private Boolean isAuction;
     private String description;
     private TextView descriptionTxtView;
     private int postID;
-    private ArrayList<Bitmap> imageList;
     private Boolean auction;
     private String userName;
     private int id;
     private ImageButton leftArrowBtn;
     private ImageButton rightArrowBtn;
-    private int currentImageIndex;
+
+    private int displayedImageIndex = 1;
+    private void processURL(Bundle extras){
+        int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
+        if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
+            actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
+        }else{
+            actualPostURL += ("/" + extras.getString("id"));
+        }
+        URL_JSON_OBJECT += extras.getString("id");
+    }
 
 
     @Override
@@ -78,101 +76,70 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_item);
         Bundle extras = getIntent().getExtras();
         titleTxtView = findViewById(R.id.titleTxt);
-        imageView = findViewById(R.id.imageSelView1);
         priceTxtView = findViewById(R.id.priceTxt);
         descriptionTxtView = findViewById(R.id.descriptionTxt);
         leftArrowBtn = findViewById(R.id.leftArrowBtn);
         rightArrowBtn = findViewById(R.id.rightArrowBtn);
 
-
-        //        imageView = (ImageView) findViewById(R.id.imgView);
-//        msgResponse = findViewById(R.id.msgResponse);
-
-        int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
-        if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
-            actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
-        }else{
-            actualPostURL += ("/" + extras.getString("id"));
-        }
-        URL_JSON_OBJECT += extras.getString("id");
-
-        int j = 0;
+        processURL(extras);
         makeJsonObjReq();
-//        for (j = 0; j < 6; j++){
-//            makeImageRequest(Const.URL_IMAGES + extras.getString("id") + "/" + j);
-//            Log.d("BITMAP:", Const.URL_IMAGES + extras.getString("id") + "/" + j);
-//        }
-//        Bundle extras2 = getIntent().getExtras();
-//        getIntent().putExtra("imageSelView1", imageList.get(currentImageIndex));
+        ImageView imv = (ImageView) findViewById(R.id.imageSelView1);
+        try {
+            getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+        }catch (Exception e){
+            System.out.println("CALLING FAILED");
+        }
 
 
-//        imageView.setImageBitmap(picture1bm);
+        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(displayedImageIndex < 1 || displayedImageIndex > 6){
+                    return;
+                }
 
+                if(displayedImageIndex  <= 6){
+                    displayedImageIndex++;
 
-//        rightArrowBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                currentImageIndex++;
-//                if (currentImageIndex == 6){
-//                    currentImageIndex = 0;
-//                }
-//            }
-//        });
+                }else if(displayedImageIndex == 7){
+                    //make it to 1 so that it feels like the user is rolling through the pictures
+                    displayedImageIndex = 1;
+                }
+
+                getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+
+            }
+        });
+
+        leftArrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(displayedImageIndex < 1 || displayedImageIndex > 6){
+                    return;
+                }
+                if(displayedImageIndex  >= 1 ){
+                    displayedImageIndex--;
+                }else if(displayedImageIndex == 1){
+                    //make it to 6 so that it feels like the user is rolling through the pictures
+                    displayedImageIndex = 6;
+                }
+                getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+            }
+        });
 
     }
 
 
-    /**
-     * Making image request
-     * */
-//    private void makeImageRequest(String URL) {
-//
-////        imageList = new ArrayList<>();
-//
-//        ImageRequest imageRequest = new ImageRequest(
-//                URL,
-//                new Response.Listener<Bitmap>() {
-//                    @Override
-//                    public void onResponse(Bitmap response) {
-//
-//                        // Display the image in the ImageView
-//                        if (response != null && response.getByteCount() != 0){
-//
-////                            imageView.setImageBitmap(response);
-////                            imageList.add(response);
-//                        }
-//
-////                        imageView.setImageBitmap(response);
-//
-//                    }
-//                },
-//                0, // Width, set to 0 to get the original width
-//                0, // Height, set to 0 to get the original height
-//                ImageView.ScaleType.FIT_XY, // ScaleType
-//                Bitmap.Config.RGB_565, // Bitmap config
-//
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // Handle errors here
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }
-//        );
-//
-//        // Adding request to request queue
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
-//    }
 
     /**
      * decoding base64 string encoded image
      * @param base64Image
      * @return Bitmap
      */
-//    public static Bitmap decodeBase64ToBitmap(String base64Image) {
-//        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
-//        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-//    }
+    public static Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
 
     /**
      * Making json object request
@@ -187,19 +154,6 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
                         try {
-                            picture1 = response.getString("picture1");
-                            picture2 = response.getString("picture2");
-                            picture3 = response.getString("picture3");
-                            picture4 = response.getString("picture4");
-                            picture5 = response.getString("picture5");
-                            picture6 = response.getString("picture6");
-//                            picture1bm = decodeBase64ToBitmap(picture1);
-//                            picture2bm = decodeBase64ToBitmap(picture2);
-//                            picture3bm = decodeBase64ToBitmap(picture3);
-//                            picture4bm = decodeBase64ToBitmap(picture4);
-//                            picture5bm = decodeBase64ToBitmap(picture5);
-//                            picture6bm = decodeBase64ToBitmap(picture6);
-
                             titleTxt = response.getString("title");
                             price = response.getInt("price");
                             auction = response.getBoolean("isAuction");
@@ -244,6 +198,62 @@ public class PostDetailActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
 
+    //image index has to be from 1~6
+    private void getImageAsJsonObjAndSetIt(ImageView imv, int imageIndex) {
+        if(imageIndex < 1 || imageIndex > 6){return;}
+
+        Bundle extras = getIntent().getExtras();
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.GET,
+                "http://coms-309-060.class.las.iastate.edu:8080/image/" +extras.getString("id") +"/" +imageIndex,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        try {
+                            String encodedString = response.getString("image");
+                            if(encodedString == null || encodedString.length() == 0 || encodedString.equals("")){
+                                return;
+                            }
+
+                            Bitmap bm = decodeBase64ToBitmap(encodedString);
+                            bm = Bitmap.createScaledBitmap(bm,150,150,false);
+                            imv.setImageBitmap(bm);
+                        } catch (JSONException e) {
+                            //no json was in the response, which means that the user does not have the image with index
+
+                            return;
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+    }
 
 
 }
