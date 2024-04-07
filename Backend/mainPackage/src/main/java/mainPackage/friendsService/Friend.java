@@ -19,12 +19,12 @@ public class Friend {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sender_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "uid")
     private GeneralUser sender; // User who sent the friend request
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "receiver_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "uid")
     private GeneralUser receiver; // User who received the friend request
 
     public Friend() {}

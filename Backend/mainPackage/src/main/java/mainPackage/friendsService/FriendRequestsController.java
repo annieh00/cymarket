@@ -14,9 +14,6 @@ import java.util.List;
 @RequestMapping("/friendrequests/{id}")
 public class FriendRequestsController {
 
-    // Initialize the logger properly
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(FriendRequestsController.class);
-
     @Autowired
     private FriendRepository friendRepository;
 
@@ -27,22 +24,17 @@ public class FriendRequestsController {
     public String sendFriendRequest(@PathVariable int id, @PathVariable int friendId) {
         GeneralUser sender = generalUserRepository.findGeneralUserById(id);
         GeneralUser receiver = generalUserRepository.findGeneralUserById(friendId);
-
         if (sender == null || receiver == null) {
             return "User or friend not found.";
         }
-
+        // Check if there's already a pending friend request
+        Friend existingRequest = friendRepository.findPendingRequest(id, friendId);
+        if (existingRequest != null) {
+            return "A pending friend request already exists.";
+        }
+        // Create and save the new friend request
         Friend friendRequest = new Friend(sender, receiver, Friend.FriendshipStatus.PENDING);
-
-        // Log the data
-        System.out.println("Friend request sent. " +
-                "Friend request ID: " + friendRequest.getId() +
-                ", Sender ID: " + friendRequest.getSender().getId() +
-                ", Receiver ID: " + friendRequest.getReceiver().getId() +
-                ", Status: " + friendRequest.getStatus());
-
         friendRepository.save(friendRequest);
-
         return "Friend request sent to " + receiver.getUserName() + " successfully.";
     }
 
@@ -50,7 +42,7 @@ public class FriendRequestsController {
     public String acceptFriendRequest(@PathVariable int id, @PathVariable int friendId) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
         GeneralUser friend = generalUserRepository.findGeneralUserById(friendId);
-        Friend friendRequest = friendRepository.findFriendBySenderAndReceiver(user, friend);
+        Friend friendRequest = friendRepository.findFriendBySenderAndReceiver(friend, user);
 
         if (friendRequest == null || friendRequest.getStatus() != Friend.FriendshipStatus.PENDING) {
             return "Friend request not found or already accepted.";
@@ -66,7 +58,7 @@ public class FriendRequestsController {
     public String rejectFriendRequest(@PathVariable int id, @PathVariable int requesterId) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
         GeneralUser requester = generalUserRepository.findGeneralUserById(requesterId);
-        Friend friendRequest = friendRepository.findFriendBySenderAndReceiver(user, requester);
+        Friend friendRequest = friendRepository.findFriendBySenderAndReceiver(requester, user);
 
         if (friendRequest == null || friendRequest.getStatus() != Friend.FriendshipStatus.PENDING) {
             return "Friend request not found or already rejected.";

@@ -1,11 +1,9 @@
 package mainPackage.usersPackage;
 
-
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import mainPackage.announcementPackage.Announcement;
+import mainPackage.friendsService.Friend;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
@@ -67,6 +65,10 @@ public class GeneralUser {
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Message> userReceived;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Friend> friendships;
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
