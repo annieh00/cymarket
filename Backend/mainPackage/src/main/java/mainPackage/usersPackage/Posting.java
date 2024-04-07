@@ -8,6 +8,7 @@ import mainPackage.announcementPackage.Announcement;
 import mainPackage.imageProcess.Image;
 import mainPackage.websocket.AuctionTable;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,6 +65,12 @@ public class Posting {
     private int price;
 
 
+
+    @Column(name = "PublishedDate")
+    String date;
+
+
+
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
@@ -72,6 +79,14 @@ public class Posting {
     private int id;
     public String getUserName() {
         return userName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public boolean getIsClosed() {

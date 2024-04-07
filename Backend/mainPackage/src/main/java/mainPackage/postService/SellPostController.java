@@ -79,7 +79,7 @@ public class SellPostController {
 
 
 
-
+        p.setDate((new java.util.Date()).toString());
         postingRepository.save(p);
         u2.getPublishedPosts().add(p);
         generalUserRepository.save(u2);
