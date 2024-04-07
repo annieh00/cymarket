@@ -1,16 +1,13 @@
 package mainPackage.usersPackage;
 
-
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import mainPackage.announcementPackage.Announcement;
+import mainPackage.friendsService.Friend;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Junhyung Shim
@@ -57,9 +54,9 @@ public class GeneralUser {
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Announcement> announcements = new HashSet<>();
+    private List<Announcement> announcements = new ArrayList<>() { };
 
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -69,9 +66,9 @@ public class GeneralUser {
     @JsonIgnore
     private Set<Message> userReceived;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<GeneralUser> friends;
+    private Set<Friend> friendships;
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -144,4 +141,6 @@ public class GeneralUser {
     public void setPublishedPosts(Set<Posting> publishedPosts) {
         this.publishedPosts = publishedPosts;
     }
+
+    public List<Announcement> getAnnouncements() { return this.announcements; }
 }
