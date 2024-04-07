@@ -3,6 +3,5 @@ package mainPackage.announcementPackage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnnouncementRepository extends JpaRepository<Announcement,Long> {
-
-    Announcement findAnnouncementById(int id);
+    public Announcement findAnnouncementById(int id);
 }
