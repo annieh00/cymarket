@@ -2,6 +2,7 @@ package com.example.androidexample;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -237,7 +238,6 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     }
 
-
     //no usages but i think this might have something to do w it
     @Override
     public void onFriendAccepted(String requesterUsername) {
@@ -292,7 +292,15 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle button click event
+                String userToText = friend.getUsername();
+                // Start the InboxActivity
+                Intent intent = new Intent(getApplicationContext(), InboxActivity.class);
+
+                // Pass the userToText as an extra to the InboxActivity
+                intent.putExtra("userToText", userToText);
+
+                startActivity(intent);
+
             }
         });
 
@@ -314,7 +322,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
     private void deleteFriend(int userID) {
 //        Log.d("DeleteFriend", "Deleting friend with userID: " + userID);
         // Construct the URL for the DELETE request
-        String url = URL + "/friends/" + LoginActivity.loginID +"/del/";
+        String url = URL + "/friends/" + LoginActivity.loginID +"/del/" + userID;
 
         //correct mapping
 //        String url = url+ "/friends/"+ LoginActivity.username+"/del/" +  + userID;
