@@ -3,6 +3,7 @@ package mainPackage.usersPackage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.imageProcess.Image;
 import mainPackage.websocket.AuctionTable;
@@ -94,6 +95,7 @@ public class Posting {
         this.description = description;
     }
 
+    @NonNull
     public String getPicture1() {
         return picture1;
     }

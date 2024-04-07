@@ -23,6 +23,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 
+import mainPackage.usersPackage.Posting;
 import mainPackage.usersPackage.PostingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +52,8 @@ public class Auction {
     private static PostingRepository postingRepository;
 
     @Autowired
-    public void setPostingRepository(GeneralUserRepository repo) {
-        generalUserRepository = repo;  // we are setting the static variable
+    public void setPostingRepository(PostingRepository repo) {
+        postingRepository = repo;  // we are setting the static variable
     }
 
     private static AuctionTableRepository auctionTableRepository;
@@ -197,6 +198,9 @@ public class Auction {
                 String msg = username + " bid $" + bid + ":";
                 a.setBidHistory(a.getBidHistory()+username+"-"+bid+" ");
                 auctionTableRepository.save(a);
+                Posting associated = postingRepository.findPostingById(a.getId());
+                associated.setPrice(bid);
+                postingRepository.save(associated);
                 broadcast(username + " bid $" + bid);
             }
         }
