@@ -65,22 +65,22 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.101" />
 
-            <EditText
-                android:id="@+id/CategoryEditTxt"
-                android:layout_width="228dp"
-                android:layout_height="37dp"
-                android:layout_margin="15dip"
-                android:layout_marginStart="15dip"
-                android:layout_marginTop="15dip"
-                android:layout_marginEnd="15dip"
-                android:layout_marginBottom="15dip"
-                android:background="@drawable/border"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.947"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.402" />
+<!--            <EditText-->
+<!--                android:id="@+id/CategoryEditTxt"-->
+<!--                android:layout_width="228dp"-->
+<!--                android:layout_height="37dp"-->
+<!--                android:layout_margin="15dip"-->
+<!--                android:layout_marginStart="15dip"-->
+<!--                android:layout_marginTop="15dip"-->
+<!--                android:layout_marginEnd="15dip"-->
+<!--                android:layout_marginBottom="15dip"-->
+<!--                android:background="@drawable/border"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.947"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.402" />-->
 
             <EditText
                 android:id="@+id/priceEditTxt"
@@ -112,18 +112,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.118" />
 
-            <TextView
-                android:id="@+id/CategoryTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category:"
-                android:textSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.053"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.408" />
+<!--            <TextView-->
+<!--                android:id="@+id/CategoryTxt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Category:"-->
+<!--                android:textSize="30dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.053"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.408" />-->
 
 
             <TextView

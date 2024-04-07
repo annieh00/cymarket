@@ -1,4 +1,4 @@
-package com.example.androidexample.Post;
+package com.example.androidexample.Auction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,19 +6,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidexample.Auction.AuctionItemObject;
 import com.example.androidexample.R;
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHolder> {
 
-    private List<PostItemObject> mPostList;
+    private List<AuctionItemObject> mPostList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
-        void onItemClick(PostItemObject post);
+        void onItemClick(AuctionItemObject post);
     }
 
-    public PostAdapter(List<PostItemObject> mPostList, OnItemClickListener listener){
+    public AuctionAdapter(List<AuctionItemObject> mPostList, OnItemClickListener listener){
         this.mPostList = mPostList;
         this.mListener = listener;
     }
@@ -51,7 +53,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             title = itemView.findViewById(R.id.itemTitle);
         }
 
-        public void bind(final PostItemObject item, final OnItemClickListener listener) {
+        public void bind(final AuctionItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
             price.setText(String.valueOf(item.getPrice()));
             itemView.setOnClickListener(new View.OnClickListener() {

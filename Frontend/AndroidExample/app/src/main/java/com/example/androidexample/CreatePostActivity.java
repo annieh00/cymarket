@@ -18,7 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -54,7 +55,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
     private EditText username;
-    //    private EditText categoryEditTxt;
+//    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
     private ImageView image1 = null;
@@ -94,6 +95,8 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText priceEditTxt;
 //    private String encodedString;
 
+    private Boolean isAuction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,7 @@ public class CreatePostActivity extends AppCompatActivity{
         //Text
         titleEditText = findViewById(R.id.titleEditTxt);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
-        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
+//        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
         image1 = findViewById(R.id.imageSelView1);
         image2 = findViewById(R.id.imageSelView2);
         image3 = findViewById(R.id.imageSelView3);
@@ -112,6 +115,15 @@ public class CreatePostActivity extends AppCompatActivity{
         image5 = findViewById(R.id.imageSelView5);
         image6 = findViewById(R.id.imageSelView6);
         priceEditTxt = findViewById(R.id.priceEditTxt);
+
+        Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
+            }
+        });
 
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
@@ -160,12 +172,12 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
                     }
-                });
+        });
 
 
         /*
-         *  click listener on post button pressed
-         */
+        *  click listener on post button pressed
+        */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +227,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //
 //        return Base64.encodeToString(byteArray, Base64.DEFAULT);
 //    }
-
+    
     /**
      * Uploads an image to a remote server using a multipart Volley request.
      *
@@ -269,8 +281,8 @@ public class CreatePostActivity extends AppCompatActivity{
 //            jsonObject.put("category", categoryEditTxt.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
 //            jsonObject.put("category", getCategoryEditTxt.getText().toString());
-//            jsonObject.put("price", priceEditTxt.getText().toString());
-
+            jsonObject.put("price", priceEditTxt.getText().toString());
+            jsonObject.put("isAuction", isAuction);
             int index = 0;
             while (index < images.size() - 1) {
                 switch (index) {
@@ -294,13 +306,14 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_IMAGES, body, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_POSTS, body, response -> {
             Log.d(TAG, response.toString());
             try {
-                createPostSuccess = response.getBoolean("postSuccessful");
+                createPostSuccess = response.getBoolean("serverResponse");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
 
             if (createPostSuccess == true) {
                 Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();

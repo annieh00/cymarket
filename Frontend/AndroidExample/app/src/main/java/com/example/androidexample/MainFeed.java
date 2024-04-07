@@ -19,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -109,7 +111,7 @@ public class MainFeed extends AppCompatActivity {
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-
+    private ImageButton refreshBtn;
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
@@ -133,7 +135,7 @@ public class MainFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
-
+        refreshBtn = findViewById(R.id.refreshBtn);
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
 //        setLocationBtn = findViewById(R.id.locationButton);
@@ -258,14 +260,13 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);
                         break;
                     case "Profile":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
+                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intent);
                         break;
                     case "Sell":
@@ -298,6 +299,28 @@ public class MainFeed extends AppCompatActivity {
                 return true; // Return true to indicate that the item is selected
             }
         });
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sendJsonObjReq();
+                mPostList = new ArrayList<>();
+              fetchPosts();
+                /* grab strings from user inputs */
+//                if (txtValidity == true) {
+//                    Pass();
+//                }else if (!txtValidity){
+//                    Pass();
+//                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
+//                }
+                /* when login button is pressed, use intent to switch to Login Activity */
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
+//                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
+//                startActivity(intent);  // go to MainActivity with the key-value data
+            }
+        });
+
 
 //        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -370,41 +393,45 @@ public class MainFeed extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
-                Intent intent = new Intent(MainFeed.this, PostDetailActivity.class);
-                intent.putExtra("id", String.valueOf(item.getPostID()+1)); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                Log.d("Hi"," Bye");
+                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }
         });
 
-        mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+
     }
 
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray jsonArray = response.getJSONArray("posts");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
-                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            int price = jsonObject.getInt("price");
+                            Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
-
-                            String date = "date"; // placeholder
-                            String category = "category"; // placeholder
-                            Boolean auction = true; // placeholder
-                            int flagCount = 0; // placeholder
-                            int userID = 0; // placeholder
-                            int postID = 0; // placeholder
-
-                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
+                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
+                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -570,7 +597,5 @@ public class MainFeed extends AppCompatActivity {
 
 
 }
-
-
 
 
