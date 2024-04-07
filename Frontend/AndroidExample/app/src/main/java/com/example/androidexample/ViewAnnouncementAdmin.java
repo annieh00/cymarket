@@ -6,11 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -53,8 +55,8 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 //    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     //THIS IS THE MAPPING TO LIST ALL ANNOUNCEMENTS THAT WERE MADE
-//    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080/announcements/";
-    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
+    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8443";
+//    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     private AnnouncementAdapter adapter;
     private ListView announcements;
@@ -154,9 +156,9 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 
     private void postAnnouncement(String title, String description) {
         // Define your endpoint URL
-//        String postUrl = URL_JSON_ARRAY + "/create";
+        String postUrl = URL_JSON_ARRAY + "/announcements/create";
 
-        String postUrl = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements/create";
+//        String postUrl = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements/create";
 
         // Create a StringRequest for the POST request
         // Create a JSONObject to hold the announcement data
@@ -178,13 +180,24 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+
+                        // i want to parse the response so that i am able to save the created announcement id
                         // Handle response from the server
                         Log.d("POST Request", "Response: " + response);
 
                         Log.d("POST Request", "Title: " + title + ", Posted Data: " + requestBody.toString());
 
+                        int newAnnoncementId = 0;
 
-                        Announcement newAnnouncement = new Announcement(title, description);
+                        try {
+                            newAnnoncementId = response.getInt("id");
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        Announcement newAnnouncement = new Announcement(title, description, newAnnoncementId);
+
                         allAnnouncements.add(newAnnouncement);
 
                         // Notify the adapter that the data set has changed
@@ -207,9 +220,11 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 
 
     private void getAnnouncements() {
+
+        String getURL = URL_JSON_ARRAY + "/announcements";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL_JSON_ARRAY,
+                getURL,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -241,13 +256,10 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 //                int id = jsonObject.getInt("id");
                 String title = jsonObject.getString("title");
                 String description = jsonObject.getString("description");
+                int id = jsonObject.getInt("id");
 
                 // Create Announcement object
-                Announcement announcement = new Announcement(title, description);
-//                announcement.setId(id);
-//                announcement.setTitle(title);
-//                announcement.setDescription(description);
-
+                Announcement announcement = new Announcement(title, description, id);
                 announcements.add(announcement);
             }
         } catch (JSONException e) {
@@ -256,6 +268,137 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 
         return announcements;
     }
+
+
+
+        public void showModalBottomSheet(Announcement announcement) {
+            final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                    ViewAnnouncementAdmin.this, com.google.android.material.R.style.Base_Theme_Material3_Light_BottomSheetDialog);
+            View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.modal_bottom_sheet_update_announcement, null);
+
+            String title = announcement.getTitle();
+            String body = announcement.getDescription();
+
+            Log.d("testing update announcement ", title + body);
+
+            // Find the EditText views within the bottom sheet view
+            EditText announcementTitle = bottomSheetView.findViewById(R.id.announcement_title);
+            EditText announcementBody = bottomSheetView.findViewById(R.id.announcement_body);
+
+            // Set the text for the EditText views
+            announcementTitle.setText(title);
+            announcementBody.setText(body);
+
+            // Find the button within the bottom sheet view
+            Button sendEdit = bottomSheetView.findViewById(R.id.sendEdit);
+            Button delete = bottomSheetView.findViewById(R.id.sendDelete);
+
+            sendEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String updatedTitle = announcementTitle.getText().toString().trim();
+                    String updatedBody = announcementBody.getText().toString().trim();
+
+
+
+                    sendUpdatedAnnouncement(announcement.getID(), updatedTitle, updatedBody);
+                    bottomSheetDialog.dismiss();
+                }
+            });
+            
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteAnnouncement(announcement.getID());
+                    bottomSheetDialog.dismiss();
+                }
+            });
+
+
+
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+        }
+
+    private void deleteAnnouncement(int id) {
+        // Define the URL for deleting the announcement
+        String url = URL_JSON_ARRAY + "/announcements/del/" + id;
+
+        // Create a StringRequest for the DELETE request
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle successful response
+                        // Log the response from the server
+                        Log.d("DELETE Request", "Response: " + response);
+
+
+                        // Call getAnnouncements() to refresh the list
+                        getAnnouncements();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error response
+                        // Log the error message
+                        Log.e("DELETE Request", "Error: " + error.getMessage());
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void sendUpdatedAnnouncement(int id, String newTitle, String newBody) {
+        String updateAnnouncementURL = URL_JSON_ARRAY + "/announcements/update/" + id;
+
+//        String updateAnnouncementURL = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io" + "/announcements/update/" + id;
+
+        JSONObject requestBody = new JSONObject();
+        try {
+
+            requestBody.put("title", newTitle);
+            requestBody.put("description", newBody);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return; // Exit method if JSON creation fails
+        }
+
+        // Create a JsonObjectRequest for the PUT request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                updateAnnouncementURL,
+                requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("AnnouncementUpdate", "Announcement " + id + " updated successfully");
+                        getAnnouncements();
+                        adapter.notifyDataSetChanged();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d("AnnouncementUpdate", "Announcement did not update successfully");
+
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+
 }
 
 

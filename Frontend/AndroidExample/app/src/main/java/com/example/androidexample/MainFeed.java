@@ -134,16 +134,6 @@ public class MainFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
 
-//        xCoord = findViewById(R.id.xInput);
-//        yCoord = findViewById(R.id.yInput);
-//        setLocationBtn = findViewById(R.id.locationButton);
-//        seeCoordinates = findViewById(R.id.listCoords);
-//        coordListing = findViewById(R.id.coordList);
-//        deleteCoordButton = findViewById(R.id.deleteCoord);
-//        id = findViewById(R.id.coordIdDelete);
-//        updateLocationBtn = findViewById(R.id.updateCoord);
-//        updatedX = findViewById(R.id.updateX);
-//        updatedY = findViewById(R.id.updateY);
 
 
 
@@ -168,82 +158,6 @@ public class MainFeed extends AppCompatActivity {
 
         }
 
-
-//        setLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                final String
-////
-////                String announcement = adminMessage.toString();
-////                sendAnnouncementToServer(announcement);
-//
-//                final String x, y;
-//                x = xCoord.getText().toString();
-//                y = yCoord.getText().toString();
-//
-//
-//                JSONObject jsonBody = new JSONObject();
-//                try {
-//                    jsonBody.put("x", x);
-//                    jsonBody.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        builder.setTitle("Server Response");
-//                        try {
-//                            builder.setMessage("Response " + response.getString("status"));
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                xCoord.setText("");
-//                                yCoord.setText("");
-//                            }
-//                        });
-//                        AlertDialog alertDialog = builder.create();
-//                        alertDialog.show();
-//
-//                    }
-//
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainFeed.this, "Error....", Toast.LENGTH_LONG).show();
-//                        error.printStackTrace();
-//                    }
-//                }) {
-//                    //                    @Nullable
-//                    @Override
-//                    protected Map<String, String> getParams() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-////
-////                        params.put("title", msgTitle);
-////                        params.put("description", message);
-////
-//                        return params;
-//                    }
-//                };
-//
-//                MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
-//
-//            }
-//        });
-//
-//
-//
-//        seeCoordinates.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                makeJsonArrayReq();
-//            }
-//        });
 
         /** If a certain screen is pressed, it will go to that certain screen.
          *
@@ -282,7 +196,7 @@ public class MainFeed extends AppCompatActivity {
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
                         startActivity(intent);
                         break;
                     case "Settings":

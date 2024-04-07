@@ -9,16 +9,19 @@ public class Announcement {
 
 
 
-    public Announcement(String title, String description) {
+    public Announcement(String title, String description, int announcementID) {
 //        this.id = id;
         this.title = title;
         this.description = description;
+        this.ID = announcementID;
 //        this.ID = announcementID;
     }
 
     public String getTitle(){return title;}
 
     public String getDescription(){return description;}
+
+    public int getID(){return ID;}
 
 
 }
