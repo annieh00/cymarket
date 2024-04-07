@@ -54,7 +54,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
-//    private EditText categoryEditTxt;
+    //    private EditText categoryEditTxt;
     private HorizontalScrollView imagesHorizontalScrollView;
     private Uri pic;
     private ImageView image1 = null;
@@ -74,7 +74,6 @@ public class CreatePostActivity extends AppCompatActivity{
     private Bitmap bitmap;
     private String filePath;
     TextView textView;
-    private int price;
     private  int userType = 0;
 
     private EditText getCategoryEditTxt;
@@ -210,26 +209,26 @@ public class CreatePostActivity extends AppCompatActivity{
                                     break;
                             }
 
-                           imageIndex++;
+                            imageIndex++;
                         }else{
                             Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
                         }
 
 
                     }
-        });
+                });
 
 
         /*
-        *  click listener on post button pressed
-        */
+         *  click listener on post button pressed
+         */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               sendJsonObjReq();
-               Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-               startActivity(intent);
+                sendJsonObjReq();
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
 
             }
         });
@@ -267,72 +266,72 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
     private void sendImageToServer(int postId, int imageIndexStartFrom1){
-            JSONObject jo = new JSONObject();
+        JSONObject jo = new JSONObject();
+        try {
+
+
+            jo.put("id",postId);
+            jo.put("title", title);
+            jo.put("userName", usernameString);
+            jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
+            System.out.println("ABOUT TO SEND " + jo.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts/update", jo , response -> {
+            Log.d(TAG, response.toString());
             try {
-
-
-                jo.put("id",postId);
-                jo.put("title", title);
-                jo.put("userName", usernameString);
-                jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
-                System.out.println("ABOUT TO SEND " + jo.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                System.out.println("RECEIVED FROM UPDATE");
+                System.out.println("SENT THIS: " + jo.toString());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts/update", jo , response -> {
-                Log.d(TAG, response.toString());
-                try {
-                    System.out.println("RECEIVED FROM UPDATE");
-                    System.out.println("SENT THIS: " + jo.toString());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+
+            if (createPostSuccess) {
+                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
 
 
-                if (createPostSuccess) {
-                    Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
-                    //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-
-
-                    //startActivity(intent);
-                }else{
-                    Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
-                }
-
-
-
-
-
-            }, error -> {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                //startActivity(intent);
+            }else{
                 Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            }
+
+
+
+
+
+        }, error -> {
+            VolleyLog.d(TAG, "Error: " + error.getMessage());
+            Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
-            }) {
+        }) {
 
-                /**
-                 * Passing some request headers
-                 */
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json");
-                    return headers;
-                }
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
 
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
 //                params.put("param1", "value1");
 //                params.put("param2", "value2");
-                    return params;
-                }
+                return params;
+            }
 
-            };
+        };
 
-            //queue.add(jsonObjReq);
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
-            //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
+        //queue.add(jsonObjReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
     }
     /**
@@ -344,7 +343,7 @@ public class CreatePostActivity extends AppCompatActivity{
      */
     private void sendJsonObjReq() {
         JSONObject jsonObject = new JSONObject();
-       // JSONObject ret = new JSONObject();
+        // JSONObject ret = new JSONObject();
         try {
             //input your API parameters
 
