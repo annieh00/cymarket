@@ -34,7 +34,7 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
     private FriendAcceptedListener listener;
 
 
-    private String URL = "http://coms-309-060.class.las.iastate.edu:8443";
+    private String URL = "http://coms-309-060.class.las.iastate.edu:8080";
 
 //    private YourAdapter adapter;
 

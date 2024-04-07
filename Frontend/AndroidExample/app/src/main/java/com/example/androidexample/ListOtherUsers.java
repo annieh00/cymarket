@@ -84,7 +84,7 @@ public class ListOtherUsers extends ArrayAdapter<Friend> implements FriendAccept
 
     //THIS IS WORKING
     private void sendFriendRequest(Friend sentTo) {
-        String url = "http://coms-309-060.class.las.iastate.edu:8443" +  "/friendrequests/" + LoginActivity.loginID + "/send/" + sentTo.getId();
+        String url = "http://coms-309-060.class.las.iastate.edu:8080" +  "/friendrequests/" + LoginActivity.loginID + "/send/" + sentTo.getId();
 
         // Create a StringRequest with POST method
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,

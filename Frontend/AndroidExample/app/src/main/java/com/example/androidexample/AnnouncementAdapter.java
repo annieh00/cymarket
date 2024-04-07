@@ -15,7 +15,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
     private Context context;
     private List<Announcement> announcements;
 
-    private String URL = "http://coms-309-060.class.las.iastate.edu:8443";
+    private String URL = "http://coms-309-060.class.las.iastate.edu:8080";
 
 
     public AnnouncementAdapter(Context context, List<Announcement> announcements) {
