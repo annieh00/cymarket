@@ -1,21 +1,27 @@
 package com.example.androidexample;
 public class Announcement {
-    private int id;
+
     private String title;
     private String description;
 
-    public Announcement(String title, String description) {
+    private int ID;
+
+
+
+
+    public Announcement(String title, String description, int announcementID) {
 //        this.id = id;
         this.title = title;
         this.description = description;
+        this.ID = announcementID;
+//        this.ID = announcementID;
     }
 
     public String getTitle(){return title;}
 
     public String getDescription(){return description;}
 
+    public int getID(){return ID;}
 
 
-
-    // Getter methods for id, title, and description
 }

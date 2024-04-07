@@ -136,17 +136,7 @@ public class MainFeed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
-        refreshBtn = findViewById(R.id.refreshBtn);
-//        xCoord = findViewById(R.id.xInput);
-//        yCoord = findViewById(R.id.yInput);
-//        setLocationBtn = findViewById(R.id.locationButton);
-//        seeCoordinates = findViewById(R.id.listCoords);
-//        coordListing = findViewById(R.id.coordList);
-//        deleteCoordButton = findViewById(R.id.deleteCoord);
-//        id = findViewById(R.id.coordIdDelete);
-//        updateLocationBtn = findViewById(R.id.updateCoord);
-//        updatedX = findViewById(R.id.updateX);
-//        updatedY = findViewById(R.id.updateY);
+
 
 
 
@@ -287,7 +277,7 @@ public class MainFeed extends AppCompatActivity {
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
                         startActivity(intent);
                         break;
                     case "Settings":

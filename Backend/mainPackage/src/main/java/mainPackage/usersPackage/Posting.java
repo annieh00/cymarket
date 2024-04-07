@@ -3,6 +3,7 @@ package mainPackage.usersPackage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.imageProcess.Image;
 import mainPackage.websocket.AuctionTable;
@@ -34,8 +35,11 @@ public class Posting {
 
 
     @Column(name = "isAuction")
-    private boolean isAuction;
+    private boolean isAuction = false;
 
+
+    @Column(name = "isClosed")
+    private boolean isClosed = false;
     @Column(name = "picture1")
     private String picture1;
 
@@ -70,6 +74,14 @@ public class Posting {
         return userName;
     }
 
+    public boolean getIsClosed() {
+        return isClosed;
+    }
+
+    public void setIsClosed(boolean closed) {
+        isClosed = closed;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -83,6 +95,7 @@ public class Posting {
         this.description = description;
     }
 
+    @NonNull
     public String getPicture1() {
         return picture1;
     }
