@@ -16,7 +16,8 @@ import java.util.ArrayList;
 @Repository
 public interface AuctionTableRepository extends JpaRepository<AuctionTable,Long> {
    @Transactional
-   AuctionTable getAuctionTableById(String id);
+   AuctionTable getAuctionTableById(int id);
+
    
    AuctionTable getAuctionTableByPost(Posting p);
 
