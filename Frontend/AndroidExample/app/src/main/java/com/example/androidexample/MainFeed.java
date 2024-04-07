@@ -18,7 +18,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
+import android.view.DragEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -109,7 +112,7 @@ public class MainFeed extends AppCompatActivity {
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-
+    private ImageButton refreshBtn;
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
@@ -159,6 +162,85 @@ public class MainFeed extends AppCompatActivity {
         }
 
 
+
+
+
+//        setLocationBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+////                final String
+////
+////                String announcement = adminMessage.toString();
+////                sendAnnouncementToServer(announcement);
+//
+//                final String x, y;
+//                x = xCoord.getText().toString();
+//                y = yCoord.getText().toString();
+//
+//
+//                JSONObject jsonBody = new JSONObject();
+//                try {
+//                    jsonBody.put("x", x);
+//                    jsonBody.put("y", y);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        builder.setTitle("Server Response");
+//                        try {
+//                            builder.setMessage("Response " + response.getString("status"));
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                xCoord.setText("");
+//                                yCoord.setText("");
+//                            }
+//                        });
+//                        AlertDialog alertDialog = builder.create();
+//                        alertDialog.show();
+//
+//                    }
+//
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(MainFeed.this, "Error....", Toast.LENGTH_LONG).show();
+//                        error.printStackTrace();
+//                    }
+//                }) {
+//                    //                    @Nullable
+//                    @Override
+//                    protected Map<String, String> getParams() throws AuthFailureError {
+//                        Map<String, String> params = new HashMap<String, String>();
+////
+////                        params.put("title", msgTitle);
+////                        params.put("description", message);
+////
+//                        return params;
+//                    }
+//                };
+//
+//                MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
+//
+//            }
+//        });
+//
+//
+//
+//        seeCoordinates.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                makeJsonArrayReq();
+//            }
+//        });
+
         /** If a certain screen is pressed, it will go to that certain screen.
          *
          */
@@ -172,14 +254,13 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);
                         break;
                     case "Profile":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
+                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intent);
                         break;
                     case "Sell":
@@ -213,42 +294,7 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
-//        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int uid = Integer.parseInt(id.getText().toString());
-//
-//
-//                String x = updatedX.getText().toString();
-//                String y = updatedY.getText().toString();
-//
-//                String updateAnnouncementUrl = server_url_update + uid;
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("x", x);
-//                    jsonObject.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", "Announcement updated successfully");
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
-//                    }
-//                });
-//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-//            }
-//        });
-//
-//
-//
+
 //        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -281,48 +327,55 @@ public class MainFeed extends AppCompatActivity {
 
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearManager);
+
+
+
+
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-
-                // intent to the detail activity
-                Intent intent = new Intent(MainFeed.this, PostDetailActivity.class);
-                intent.putExtra("id", String.valueOf(item.getPostID()+1)); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                Log.d("Hi"," Bye");
+                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }
         });
 
-        mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+
+
+
     }
 
     private void fetchPosts() {
-        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray jsonArray = response.getJSONArray("posts");
+                        for (int i = jsonArray.length()-1; i >= 0; i--) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
-                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            int price = jsonObject.getInt("price");
+                            Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
-
-                            String date = "date"; // placeholder
-                            String category = "category"; // placeholder
-                            Boolean auction = true; // placeholder
-                            int flagCount = 0; // placeholder
-                            int userID = 0; // placeholder
-                            int postID = 0; // placeholder
-
-                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
+                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
+                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }, error -> {
             // Handle error
         });
@@ -484,7 +537,5 @@ public class MainFeed extends AppCompatActivity {
 
 
 }
-
-
 
 
