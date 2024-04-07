@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
+import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -171,6 +172,9 @@ public class MainFeed extends AppCompatActivity {
         }
 
 
+
+
+
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -300,64 +304,7 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //sendJsonObjReq();
-                mPostList = new ArrayList<>();
-              fetchPosts();
-                /* grab strings from user inputs */
-//                if (txtValidity == true) {
-//                    Pass();
-//                }else if (!txtValidity){
-//                    Pass();
-//                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
-//                }
-                /* when login button is pressed, use intent to switch to Login Activity */
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
-//                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
-//                startActivity(intent);  // go to MainActivity with the key-value data
-            }
-        });
 
-
-//        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int uid = Integer.parseInt(id.getText().toString());
-//
-//
-//                String x = updatedX.getText().toString();
-//                String y = updatedY.getText().toString();
-//
-//                String updateAnnouncementUrl = server_url_update + uid;
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("x", x);
-//                    jsonObject.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", "Announcement updated successfully");
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
-//                    }
-//                });
-//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-//            }
-//        });
-//
-//
-//
 //        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -390,12 +337,14 @@ public class MainFeed extends AppCompatActivity {
 
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearManager);
+
+
+
+
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-
-                // intent to the detail activity
                 Log.d("Hi"," Bye");
                 Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
@@ -405,16 +354,16 @@ public class MainFeed extends AppCompatActivity {
 
         fetchPosts();
 
+
+
     }
 
     private void fetchPosts() {
-        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
-
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
                         JSONArray jsonArray = response.getJSONArray("posts");
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = jsonArray.length()-1; i >= 0; i--) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String picture1 = jsonObject.getString("picture1");
                             String picture2 = jsonObject.getString("picture2");
