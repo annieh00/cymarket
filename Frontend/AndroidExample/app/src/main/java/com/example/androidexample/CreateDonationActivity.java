@@ -99,7 +99,7 @@ public class CreateDonationActivity extends AppCompatActivity{
     private static int ImageUploadedCounter = 0;
     private ImageButton deleteImageBtn;
     private CheckBox isDonation;
-    private boolean donation;
+    private boolean donation = false;
 
 
 
