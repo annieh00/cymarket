@@ -128,7 +128,7 @@ public class SellPostController {
             for(int i = 0; i < mylist.size(); i++){
                 //System.out.println(i);
                 Posting p = getPicturePaths(mylist.get(i));
-                if(p != null && !p.getIsAuction()){
+                if(p != null && !p.getIsAuction() && !p.getIsDonation()){
                     ret.add(p);
                 }
             }
@@ -141,6 +141,36 @@ public class SellPostController {
         Gson gson = builder.setPrettyPrinting().create();
         String json = gson.toJson(ret);
         return "{ \"posts\" :" +json + "}";
+    }
+
+
+    @Operation(summary = "get all donations in DB", description = "gets all posts in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "500", description = "bad request")
+    })
+    @GetMapping("/getAllDonations")
+    public String getDonations(){
+        ArrayList<Posting> mylist = postingRepository.findAll();
+        ArrayList<Posting> ret = new ArrayList<>();
+
+        try {
+            for(int i = 0; i < mylist.size(); i++){
+                //System.out.println(i);
+                Posting p = getPicturePaths(mylist.get(i));
+                if(p != null && p.getIsDonation()){
+                    ret.add(p);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(ret);
+        return "{ \"donations\" :" +json + "}";
     }
 
     @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")

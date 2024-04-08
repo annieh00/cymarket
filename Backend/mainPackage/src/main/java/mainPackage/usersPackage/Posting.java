@@ -207,11 +207,11 @@ public class Posting {
         this.picture6 = picture6;
     }
 
-    public boolean isDonation() {
+    public boolean getIsDonation() {
         return isDonation;
     }
 
-    public void setDonation(boolean donation) {
+    public void setIsDonation(boolean donation) {
         isDonation = donation;
     }
 }
