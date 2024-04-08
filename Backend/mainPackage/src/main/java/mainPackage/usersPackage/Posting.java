@@ -38,6 +38,8 @@ public class Posting {
     @Column(name = "isAuction")
     private boolean isAuction = false;
 
+    @Column(name = "isDonation")
+    private boolean isDonation = false;
 
     @Column(name = "isClosed")
     private boolean isClosed = false;
@@ -203,5 +205,13 @@ public class Posting {
 
     public void setPicture6(String picture6) {
         this.picture6 = picture6;
+    }
+
+    public boolean isDonation() {
+        return isDonation;
+    }
+
+    public void setDonation(boolean donation) {
+        isDonation = donation;
     }
 }

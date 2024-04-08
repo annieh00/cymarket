@@ -90,6 +90,12 @@ public class Auction {
             return;
         }
 
+
+        if(auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionID)).getPost().getIsClosed()){
+            broadcast("THIS AUCTION WAS CLOSED BY THE PUBLISHER");
+            session.close();
+        }
+
         logger.info("[onOpen] Auction associatedPostID: " + auctionID + " user joined: " + username);
 
 
@@ -175,6 +181,13 @@ public class Auction {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
 
+        if(auctionIDFromSession.containsKey(session)){
+            int aid =  Integer.parseInt(auctionIDFromSession.get(session));
+            Posting p = postingRepository.findPostingById(aid);
+            if(p.getIsClosed()){
+                session.close();
+            }
+        }
 
         // get the username by session
         String username = usernameFromSession.get(session);
@@ -231,7 +244,6 @@ public class Auction {
         // remove user from memory mappings
         usernameFromSession.remove(session);
         sessionFromUsername.remove(username);
-
 
 
         // send the message to chat
