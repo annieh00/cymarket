@@ -128,7 +128,7 @@ public class SellPostController {
             for(int i = 0; i < mylist.size(); i++){
                 //System.out.println(i);
                 Posting p = getPicturePaths(mylist.get(i));
-                if(p != null && !p.getIsAuction() && !p.getIsDonation()){
+                if(p != null && !p.getIsAuction()){
                     ret.add(p);
                 }
             }
