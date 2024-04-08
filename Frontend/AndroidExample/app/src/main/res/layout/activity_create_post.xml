@@ -84,6 +84,7 @@
 
             <EditText
                 android:id="@+id/priceEditTxt"
+                android:inputType="number"
                 android:layout_width="122dp"
                 android:layout_height="38dp"
                 android:layout_margin="15dip"

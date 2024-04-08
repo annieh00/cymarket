@@ -43,6 +43,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private int postID;
     private Button deletePostBtn;
     private Boolean auction;
+    private Boolean donation;
     private String userName;
     private Boolean serverResponse;
     private int id;
@@ -173,6 +174,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             description = response.getString("description");
                             userName = response.getString("userName");
                             id = response.getInt("id");
+                            donation = response.getBoolean("isDonation");
+
 
                             if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
                                 deletePostBtn.setVisibility(View.VISIBLE);
@@ -183,8 +186,12 @@ public class PostDetailActivity extends AppCompatActivity {
                             }
 
 
+
+
                             titleTxtView.setText(titleTxt);
-                            priceTxtView.setText(String.valueOf(price));
+                            if (donation != true){
+                                priceTxtView.setText(String.valueOf(price));
+                            }
                             descriptionTxtView.setText(description);
 
                         } catch (JSONException e) {

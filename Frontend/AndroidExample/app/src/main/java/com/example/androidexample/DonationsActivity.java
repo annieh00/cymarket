@@ -377,10 +377,10 @@ public class DonationsActivity extends AppCompatActivity {
     }
 
     private void fetchPosts() {
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_DONATIONS, null,
                 response -> {
                     try {
-                        JSONArray jsonArray = response.getJSONArray("posts");
+                        JSONArray jsonArray = response.getJSONArray("donations");
                         for (int i = jsonArray.length()-1; i >= 0; i--) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String picture1 = jsonObject.getString("picture1");
