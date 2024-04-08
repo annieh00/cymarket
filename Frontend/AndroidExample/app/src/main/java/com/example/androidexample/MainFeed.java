@@ -260,6 +260,10 @@ public class MainFeed extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
+                    case "Donation":
+                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
+                        startActivity(intent);
+                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);

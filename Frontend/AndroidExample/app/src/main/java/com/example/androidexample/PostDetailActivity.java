@@ -177,6 +177,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             donation = response.getBoolean("isDonation");
 
 
+                            Log.d("userName of the author:, username of the current user:", userName+ LoginActivity.username);
+                            Log.d("permissin of the current user", String.valueOf(LoginActivity.permission));
                             if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
                                 deletePostBtn.setVisibility(View.VISIBLE);
                                 editPostBtn.setVisibility(View.VISIBLE);
