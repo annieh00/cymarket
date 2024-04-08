@@ -82,22 +82,22 @@
             <!--                app:layout_constraintTop_toTopOf="parent"-->
             <!--                app:layout_constraintVertical_bias="0.402" />-->
 
-            <EditText
-                android:id="@+id/priceEditTxt"
-                android:layout_width="122dp"
-                android:layout_height="38dp"
-                android:layout_margin="15dip"
-                android:layout_marginStart="15dip"
-                android:layout_marginTop="15dip"
-                android:layout_marginEnd="15dip"
-                android:layout_marginBottom="15dip"
-                android:background="@drawable/border"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.324"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.834" />
+<!--            <EditText-->
+<!--                android:id="@+id/priceEditTxt"-->
+<!--                android:layout_width="122dp"-->
+<!--                android:layout_height="38dp"-->
+<!--                android:layout_margin="15dip"-->
+<!--                android:layout_marginStart="15dip"-->
+<!--                android:layout_marginTop="15dip"-->
+<!--                android:layout_marginEnd="15dip"-->
+<!--                android:layout_marginBottom="15dip"-->
+<!--                android:background="@drawable/border"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.324"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.834" />-->
 
             <TextView
                 android:id="@+id/title"
@@ -126,18 +126,18 @@
             <!--                app:layout_constraintVertical_bias="0.408" />-->
 
 
-            <TextView
-                android:id="@+id/priceTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Price:"
-                android:textSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.823" />
+<!--            <TextView-->
+<!--                android:id="@+id/priceTxt"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Price:"-->
+<!--                android:textSize="30dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.05"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.823" />-->
 
             <TextView
                 android:id="@+id/description"
@@ -150,7 +150,7 @@
                 app:layout_constraintHorizontal_bias="0.059"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.486" />
+                app:layout_constraintVertical_bias="0.198" />
 
             <EditText
                 android:id="@+id/DescriptionEditText"
@@ -167,20 +167,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.695" />
-
-            <Button
-                android:id="@+id/post_button"
-                android:layout_width="166dp"
-                android:layout_height="42dp"
-                android:text="Post"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.976" />
-
+                app:layout_constraintVertical_bias="0.325" />
 
 
             <!--            <ImageButton-->
@@ -263,6 +250,19 @@
 
             <!--            </HorizontalScrollView>-->
 
+            <Button
+                android:id="@+id/post_button"
+                android:layout_width="166dp"
+                android:layout_height="42dp"
+                android:backgroundTint="@color/cardinal"
+                android:text="Post"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.432"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.624" />
+
             <CheckBox
                 android:id="@+id/donationCheckBox"
                 android:layout_width="wrap_content"
@@ -270,10 +270,10 @@
                 android:text="Donation"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.051"
+                app:layout_constraintHorizontal_bias="0.049"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.901" />
+                app:layout_constraintVertical_bias="0.543" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -263,7 +263,7 @@ public class CreateDonationActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 sendJsonObjReq();
-                Intent intent = new Intent(CreateDonationActivity.this, MainFeed.class);
+                Intent intent = new Intent(CreateDonationActivity.this, DonationsActivity.class);
                 startActivity(intent);
 
             }

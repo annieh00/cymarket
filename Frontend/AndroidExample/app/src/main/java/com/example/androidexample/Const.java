@@ -30,5 +30,6 @@ public class Const {
     public static final String URL_IMAGES_POST = DOMAIN + "/image/";
     public static final String URL_EDIT_POST = DOMAIN + "/getPosts";
     public static final String URL_CLOSE_AUCTION = DOMAIN + "/auction" + "/close";
+    public static final String URL_AUCTION_WS = "ws://coms-309-060.class.las.iastate.edu:8080" + "/auction";
 
 }

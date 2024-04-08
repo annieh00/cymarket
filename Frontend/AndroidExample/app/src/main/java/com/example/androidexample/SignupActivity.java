@@ -42,6 +42,7 @@ public class SignupActivity extends AppCompatActivity {
     public String email;
     public Boolean signupSuccess = false;
     public String passsword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,14 +123,15 @@ public class SignupActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             if (signupSuccess){
-                Intent intent = new Intent(SignupActivity.this, MainFeed.class);
-                startActivity(intent);
-//                Toast.makeText(SignupActivity.this, "Please make your profile", Toast.LENGTH_LONG).show();
-            }else{
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                Toast.makeText(SignupActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
                 startActivity(intent);
+                Toast.makeText(SignupActivity.this, "Please sign in", Toast.LENGTH_LONG).show();
             }
+//            else{
+//                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+//                Toast.makeText(SignupActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
+//                startActivity(intent);
+//            }
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
