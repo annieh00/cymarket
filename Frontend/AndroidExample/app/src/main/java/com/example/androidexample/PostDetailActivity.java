@@ -1,12 +1,9 @@
 package com.example.androidexample;
 
-import com.android.volley.toolbox.HttpResponse;
-import com.example.androidexample.LoginActivity;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.util.Base64;
@@ -15,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -24,18 +20,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import com.android.volley.toolbox.ImageRequest;
-import com.example.androidexample.Post.PostItemObject;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,14 +41,16 @@ public class PostDetailActivity extends AppCompatActivity {
     private String description;
     private TextView descriptionTxtView;
     private int postID;
+    private Button deletePostBtn;
     private Boolean auction;
     private String userName;
+    private Boolean serverResponse;
     private int id;
     private ImageButton leftArrowBtn;
     private ImageButton rightArrowBtn;
-    private Button deleteBtn;
-    private String deletePostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + LoginActivity.username;
-    private Boolean isCurrentUserOwner;
+    private Button editPostBtn;
+    public static int pid;
+
     private int displayedImageIndex = 1;
     private void processURL(Bundle extras){
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
@@ -70,10 +59,8 @@ public class PostDetailActivity extends AppCompatActivity {
         }else{
             actualPostURL += ("/" + extras.getString("id"));
         }
-//        URL_JSON_OBJECT += extras.getString("id");
+        URL_JSON_OBJECT += extras.getString("id");
     }
-
-
 
 
     @Override
@@ -86,8 +73,10 @@ public class PostDetailActivity extends AppCompatActivity {
         descriptionTxtView = findViewById(R.id.descriptionTxt);
         leftArrowBtn = findViewById(R.id.leftArrowBtn);
         rightArrowBtn = findViewById(R.id.rightArrowBtn);
-        deleteBtn = findViewById(R.id.deletePostBtn);
+        deletePostBtn = findViewById(R.id.deletePostBtn);
+        editPostBtn = findViewById(R.id.editPostBtn);
 
+        pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 
         processURL(extras);
         makeJsonObjReq();
@@ -98,7 +87,13 @@ public class PostDetailActivity extends AppCompatActivity {
             System.out.println("CALLING FAILED");
         }
 
-
+        editPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), EditPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,11 +132,10 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
+        deletePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deletePosts();
-
+                deletePost();
             }
         });
 
@@ -158,48 +152,6 @@ public class PostDetailActivity extends AppCompatActivity {
     public static Bitmap decodeBase64ToBitmap(String base64Image) {
         byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-    }
-
-    /**
-     * Making json object request
-     */
-    private void deletePosts() {
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, deletePostURL, null,
-                response -> {
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("posts");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                            String picture1 = jsonObject.getString("picture1");
-//                            String picture2 = jsonObject.getString("picture2");
-//                            String picture3 = jsonObject.getString("picture3");
-//                            String picture4 = jsonObject.getString("picture4");
-//                            String picture5 = jsonObject.getString("picture5");
-//                            String picture6 = jsonObject.getString("picture6");
-                            String picture1 = null;
-                            String picture2 = null;
-                            String picture3 = null;
-                            String picture4 = null;
-                            String picture5 = null;
-                            String picture6 = null;
-
-                            String title = jsonObject.getString("title");
-                            int price = jsonObject.getInt("price");
-                            Boolean auction = jsonObject.getBoolean("isAuction");
-                            String description = jsonObject.getString("description");
-                            String userName = jsonObject.getString("userName");
-                            int id = jsonObject.getInt("id");
-                        }
-
-//                        mRecyclerView.setAdapter(mPostAdapter);
-//                        mPostAdapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-            // Handle error
-        });
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
     /**
@@ -222,26 +174,76 @@ public class PostDetailActivity extends AppCompatActivity {
                             userName = response.getString("userName");
                             id = response.getInt("id");
 
+                            if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
+                                deletePostBtn.setVisibility(View.VISIBLE);
+                                editPostBtn.setVisibility(View.VISIBLE);
+                            }else{
+                                deletePostBtn.setVisibility(View.GONE);
+                                editPostBtn.setVisibility(View.GONE);
+                            }
+
+
                             titleTxtView.setText(titleTxt);
                             priceTxtView.setText(String.valueOf(price));
                             descriptionTxtView.setText(description);
 
-                            //if the current user logged in is not the same as the owner of the post
-                            if (!userName.equals(LoginActivity.username)){
-                                isCurrentUserOwner = false;
-                            }else{
-                                //if the current user logged in is the same as the owner of the post
-                                isCurrentUserOwner = true;
-                            }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
 
-                            //set visibility based on ownership
-                            //if the current user logged in is not the same as the owner of the post
-                            if (!isCurrentUserOwner){
-                                deleteBtn.setVisibility(View.GONE);
-                            }else{
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
 
-                                deleteBtn.setVisibility(View.VISIBLE);
-                            }
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+    }
+
+    /**
+     * Making json object request
+     */
+    private void deletePost() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            //input your API parameters
+            jsonObject.put("userName", userName);
+            jsonObject.put("id", Integer.parseInt(getIntent().getExtras().getString("id")));
+            Log.d("JSON OBJ:", jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                Const.URL_DELETE_POST,
+                jsonObject, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        try {
+                            serverResponse = response.getBoolean("serverResponse");
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -283,7 +285,7 @@ public class PostDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.GET,
-                Const.URL_IMAGES_POST +extras.getString("id") +"/" +imageIndex,
+                "http://coms-309-060.class.las.iastate.edu:8080/image/" +extras.getString("id") +"/" +imageIndex,
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONObject>() {
                     @Override

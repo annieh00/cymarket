@@ -46,9 +46,9 @@ import java.util.Map;
 /**
  * The create post activity makes the user to be able to post items based off of the given information.
  */
-public class CreatePostActivity extends AppCompatActivity{
+public class CreateDonationActivity extends AppCompatActivity{
     private EditText titleEditText;
-//    private ImageButton addImageBtn;
+    //    private ImageButton addImageBtn;
     private EditText descriptionEditText;
     private EditText categoryEditTxt;
     private Button cancelBtn;
@@ -98,13 +98,15 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private static int ImageUploadedCounter = 0;
     private ImageButton deleteImageBtn;
+    private CheckBox isDonation;
+    private boolean donation;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);            // link to Login activity XML
+        setContentView(R.layout.activity_create_donation);            // link to Login activity XML
 
         /* initialize UI elements */
         //Text
@@ -112,7 +114,7 @@ public class CreatePostActivity extends AppCompatActivity{
         titleEditText.setSaveEnabled(true);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         descriptionEditText.setSaveEnabled(true);
-        isAuction = findViewById(R.id.auctionCheckBox);
+        isDonation = findViewById(R.id.donationCheckBox);
 //        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
 //        image1 = findViewById(R.id.imageSelView1);
 
@@ -133,23 +135,23 @@ public class CreatePostActivity extends AppCompatActivity{
 //
 //        image6 = findViewById(R.id.imageSelView6);
 
-        priceEditTxt = findViewById(R.id.priceEditTxt);
+//        priceEditTxt = findViewById(R.id.priceEditTxt);
 
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                Intent intent = new Intent(CreateDonationActivity.this, MainFeed.class);
                 startActivity(intent);
             }
         });
 
-        isAuction.setOnClickListener(new View.OnClickListener() {
+        isDonation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                if (auction){
-                    auction = false;
+                if (donation){
+                    donation = false;
                 }else{
-                    auction = true;
+                    donation = true;
                 }
             }
         });
@@ -261,7 +263,7 @@ public class CreatePostActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 sendJsonObjReq();
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                Intent intent = new Intent(CreateDonationActivity.this, MainFeed.class);
                 startActivity(intent);
 
             }
@@ -325,13 +327,13 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
             if (createPostSuccess) {
-                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
                 //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
 
 
                 //startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
 
 
@@ -340,7 +342,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
 
@@ -385,11 +387,11 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
             System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
-            jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
-            System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
-            jsonObject.put("isAuction", auction);
+//            jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
+//            System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
+            jsonObject.put("isDonation", donation);
             System.out.println("THE AUCTION STATUS WAS " + isAuction);
-            jsonObject.put("userName",LoginActivity.username);
+            jsonObject.put("userName", LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
 
         } catch (JSONException e) {
@@ -416,11 +418,11 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
             if (createPostSuccess) {
-                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
                 //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 //startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
 
 
@@ -429,7 +431,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
 

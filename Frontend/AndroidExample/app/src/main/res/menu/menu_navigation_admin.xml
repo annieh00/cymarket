@@ -3,6 +3,11 @@
     <item android:title="Administrator">
         <menu>
             <item
+                android:id="@+id/MainFeed"
+                android:title="Main Feed"
+                >
+            </item>
+            <item
                 android:id="@+id/flaggedPosts"
                 android:title="Flagged Posts"
                 >

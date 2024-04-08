@@ -6,40 +6,40 @@
     android:layout_height="match_parent"
     android:id="@+id/drawer"
     android:fitsSystemWindows="true"
-    tools:context=".CreatePostActivity">
+    tools:context=".EditPostActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/vwebtoolbar1"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/cardinal"
-            app:navigationIcon="?attr/homeAsUpIndicator">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/cymarket_logos_white">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/vwebtoolbar1"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/cardinal"
+                app:navigationIcon="?attr/homeAsUpIndicator">
 
-            </ImageView>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/cymarket_logos_white">
+
+                </ImageView>
 
 
-        </androidx.appcompat.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
 
-    </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
@@ -65,22 +65,22 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.101" />
 
-<!--            <EditText-->
-<!--                android:id="@+id/CategoryEditTxt"-->
-<!--                android:layout_width="228dp"-->
-<!--                android:layout_height="37dp"-->
-<!--                android:layout_margin="15dip"-->
-<!--                android:layout_marginStart="15dip"-->
-<!--                android:layout_marginTop="15dip"-->
-<!--                android:layout_marginEnd="15dip"-->
-<!--                android:layout_marginBottom="15dip"-->
-<!--                android:background="@drawable/border"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.947"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.402" />-->
+            <!--            <EditText-->
+            <!--                android:id="@+id/CategoryEditTxt"-->
+            <!--                android:layout_width="228dp"-->
+            <!--                android:layout_height="37dp"-->
+            <!--                android:layout_margin="15dip"-->
+            <!--                android:layout_marginStart="15dip"-->
+            <!--                android:layout_marginTop="15dip"-->
+            <!--                android:layout_marginEnd="15dip"-->
+            <!--                android:layout_marginBottom="15dip"-->
+            <!--                android:background="@drawable/border"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.947"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="0.402" />-->
 
             <EditText
                 android:id="@+id/priceEditTxt"
@@ -112,18 +112,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.118" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/CategoryTxt"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Category:"-->
-<!--                android:textSize="30dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.053"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.408" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/CategoryTxt"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="Category:"-->
+            <!--                android:textSize="30dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.053"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="0.408" />-->
 
 
             <TextView
@@ -173,6 +173,7 @@
                 android:id="@+id/post_button"
                 android:layout_width="166dp"
                 android:layout_height="42dp"
+                android:backgroundTint="@color/cardinal"
                 android:text="Post"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -181,45 +182,30 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.976" />
 
-
-
-<!--            <ImageButton-->
-<!--                android:id="@+id/deleteImageButton"-->
-<!--                android:layout_width="135dp"-->
-<!--                android:layout_height="110dp"-->
-<!--                android:background="@null"-->
-<!--                android:src="@drawable/minus_sign"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.262" />-->
-
 <!--            <ImageButton-->
 <!--                android:id="@+id/addImageButton"-->
-<!--                android:layout_width="114dp"-->
-<!--                android:layout_height="88dp"-->
+<!--                android:layout_width="135dp"-->
+<!--                android:layout_height="110dp"-->
 <!--                android:background="@null"-->
 <!--                android:src="@drawable/plus_sign"-->
 <!--                app:layout_constraintBottom_toBottomOf="parent"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.909"-->
+<!--                app:layout_constraintHorizontal_bias="0.916"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.27" />-->
+<!--                app:layout_constraintVertical_bias="0.241" />-->
 
 <!--            <HorizontalScrollView-->
-<!--                android:layout_width="229dp"-->
-<!--                android:layout_height="107dp"-->
+<!--                android:layout_width="226dp"-->
+<!--                android:layout_height="125dp"-->
 <!--                android:background="@drawable/border"-->
 <!--                android:fillViewport="true"-->
 <!--                app:layout_constraintBottom_toBottomOf="parent"-->
 <!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.082"-->
+<!--                app:layout_constraintHorizontal_bias="0.086"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.266">-->
+<!--                app:layout_constraintVertical_bias="0.222">-->
 
 <!--                <LinearLayout-->
 <!--                    android:id="@+id/scroll_layout"-->
@@ -229,13 +215,13 @@
 
 <!--                    <ImageView-->
 <!--                        android:id="@+id/imageSelView1"-->
-<!--                        android:layout_width="114dp"-->
+<!--                        android:layout_width="100dp"-->
 <!--                        android:layout_height="match_parent" />-->
 
 <!--                    <ImageView-->
 <!--                        android:id="@+id/imageSelView2"-->
 <!--                        android:layout_width="100dp"-->
-<!--                        android:layout_height="match_parent" />-->
+<!--                        android:layout_height="match_parent"/>-->
 
 <!--                    <ImageView-->
 <!--                        android:id="@+id/imageSelView3"-->

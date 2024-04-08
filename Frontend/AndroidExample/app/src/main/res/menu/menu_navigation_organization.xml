@@ -2,9 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Organization">
         <menu>
+
             <item
-                android:id="@+id/Donations"
-                android:title="Donations"
+                android:id="@+id/MainFeed"
+                android:title="Main Feed"
+                >
+            </item>
+            <item
+                android:id="@+id/CreateDonation"
+                android:title="Create Donation"
+                >
+
+            </item>
+            <item
+                android:id="@+id/DonationFeed"
+                android:title="Donation Feed"
                 >
 
             </item>

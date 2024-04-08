@@ -41,6 +41,9 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
 
     private ImageButton leftArrowBtn;
     private ImageButton rightArrowBtn;
+    public static int pid;
+    private String winner;
+
 
     public String actualPostURL = Const.URL_AUCTION;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
@@ -59,6 +62,8 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
 
     private volatile String incomingMessages;
 
+
+
     private ImageView imv;
     private int displayedImageIndex = 1;
     @Override
@@ -72,9 +77,12 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         leftArrowBtn = findViewById(R.id.leftArrowBtn);
         rightArrowBtn = findViewById(R.id.rightArrowBtn);
         imv = (ImageView) findViewById(R.id.imageSelView1);
+        closeAuctionBtn = findViewById(R.id.closeAuctionBtn);
 
 //        msgResponse = findViewById(R.id.msgResponse);
          msgTv = findViewById(R.id.tx1);
+
+        pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 
         int i = Const.URL_AUCTION.lastIndexOf("/");
         if (Const.URL_AUCTION.charAt(i+1) >= '0' && Const.URL_AUCTION.charAt(i+1) <= '9'){
@@ -105,6 +113,16 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
+
+
+        closeAuctionBtn.setOnClickListener(v -> {
+            try {
+                closeAuction();
+            } catch (Exception e) {
+                Log.d("ExceptionSendMessage:", e.getMessage().toString());
+            }
+        });
+
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +209,61 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
     public static Bitmap decodeBase64ToBitmap(String base64Image) {
         byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    private void closeAuction() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            //input your API parameters
+//            jsonObject.put("userName", LoginActivity.username);
+            jsonObject.put("id", pid);
+            Log.d("JSON OBJ:", jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                Const.URL_CLOSE_AUCTION,
+                jsonObject, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        try {
+                             winner = response.getString("winner");
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
 
     private void getImageAsJsonObjAndSetIt(ImageView imv, int imageIndex) {
