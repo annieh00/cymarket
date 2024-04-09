@@ -291,7 +291,7 @@ public class SellPostController {
 
 
             String img1 = p.getPicture1();
-            if(img1 != null){
+            if(img1 != null && !img1.equals("")){
                 String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic1.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
                 p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
@@ -653,8 +653,11 @@ public class SellPostController {
                 old.renameTo(newfile);
             }
         }
+
+        setPictures(p);
         p.setTitle(editpost.getTitle());
         p.setDescription(editpost.getDescription());
+
         /*if(editpost.getPicture1() != null && !editpost.getPicture1().equals("")){
             File f = new File(oldPhotoNamePrefix + "Pic1.png");
             if(f.exists()){
