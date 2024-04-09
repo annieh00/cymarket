@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -48,7 +47,7 @@ import java.util.Map;
  */
 public class CreatePostActivity extends AppCompatActivity{
     private EditText titleEditText;
-//    private ImageButton addImageBtn;
+    private ImageButton addImageBtn;
     private EditText descriptionEditText;
     private EditText categoryEditTxt;
     private Button cancelBtn;
@@ -78,7 +77,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private  int userType = 0;
 
     private EditText getCategoryEditTxt;
-    private boolean auction = false;
+    private Boolean auction;
 
     private ActivityResultLauncher<String> mGetContent;
 
@@ -92,12 +91,11 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private volatile Bitmap[] bitmap1to6 = new Bitmap[6];
 
-    private CheckBox isAuction;
+    private boolean isAuction;
 
     public volatile JSONObject ret = new JSONObject();
 
     private static int ImageUploadedCounter = 0;
-    private ImageButton deleteImageBtn;
 
 
 
@@ -105,35 +103,6 @@ public class CreatePostActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);            // link to Login activity XML
-
-        /* initialize UI elements */
-        //Text
-        titleEditText = findViewById(R.id.titleEditTxt);
-        titleEditText.setSaveEnabled(true);
-        descriptionEditText = findViewById(R.id.DescriptionEditText);
-        descriptionEditText.setSaveEnabled(true);
-        isAuction = findViewById(R.id.auctionCheckBox);
-//        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
-//        image1 = findViewById(R.id.imageSelView1);
-
-//        deleteImageBtn = findViewById(R.id.deleteImageButton);
-
-
-//        image2 = findViewById(R.id.imageSelView2);
-//
-//
-//        image3 = findViewById(R.id.imageSelView3);
-//
-//
-//        image4 = findViewById(R.id.imageSelView4);
-//
-//
-//        image5 = findViewById(R.id.imageSelView5);
-//
-//
-//        image6 = findViewById(R.id.imageSelView6);
-
-        priceEditTxt = findViewById(R.id.priceEditTxt);
 
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
 
@@ -143,114 +112,118 @@ public class CreatePostActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+        /* initialize UI elements */
+        //Text
+        titleEditText = findViewById(R.id.titleEditTxt);
+        titleEditText.setSaveEnabled(true);
+        descriptionEditText = findViewById(R.id.DescriptionEditText);
+        descriptionEditText.setSaveEnabled(true);
+//        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
+        image1 = findViewById(R.id.imageSelView1);
 
-        isAuction.setOnClickListener(new View.OnClickListener() {
+
+        image2 = findViewById(R.id.imageSelView2);
+
+
+        image3 = findViewById(R.id.imageSelView3);
+
+
+        image4 = findViewById(R.id.imageSelView4);
+
+
+        image5 = findViewById(R.id.imageSelView5);
+
+
+        image6 = findViewById(R.id.imageSelView6);
+
+        priceEditTxt = findViewById(R.id.priceEditTxt);
+
+
+        t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                if (auction){
-                    auction = false;
-                }else{
-                    auction = true;
-                }
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
             }
         });
 
-
-//        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                if (imageIndex == 0){
-//                    image1.setImageURI(null);
-//                }else if (imageIndex == 1){
-//                    image1.setImageURI(null);
-//                }else if (imageIndex == 2){
-//                    image1.setImageURI(null);
-//                }else if (imageIndex == 3){
-//                image1.setImageURI(null);
-//                }else if (imageIndex == 4){
-//                image1.setImageURI(null);
-//                }else if (imageIndex == 5){
-//                image1.setImageURI(null);
-//                }
-//            }
-//        });
-
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
-//        addIma\geBtn = findViewById(R.id.addImageButton); //link to add images
+        addImageBtn = findViewById(R.id.addImageButton); //link to add images
 
         // select image from gallery
-//        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-//                uri -> {
-//                    // Handle the returned Uri
-//                    Log.d("URI", "Received URI: " + uri);
-//                    selectiedUri = uri;
-//                    if (uri != null) {
-//                        if (imageIndex >= 0 && imageIndex < 6) {
-//                            switch (imageIndex) {
-//                                case 0:
-//                                    image1 = findViewById(R.id.imageSelView1);
-//                                    image1.setImageURI(uri);
-//                                    image1.setDrawingCacheEnabled(true);
-//                                    image1.layout(0, 0, 150, 150);
-//                                    image1.buildDrawingCache(true);
-//                                    bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
-//                                    image1.setDrawingCacheEnabled(false); // clear drawing cache
-//
-//                                    break;
-//                                case 1:
-//                                    image2 = findViewById(R.id.imageSelView2);
-//                                    image2.setImageURI(uri);
-//                                    image2.setDrawingCacheEnabled(true);
-//                                    image2.layout(0, 0, 150, 150);
-//                                    image2.buildDrawingCache(true);
-//                                    bitmap1to6[1] = Bitmap.createBitmap(image2.getDrawingCache());
-//                                    image2.setDrawingCacheEnabled(false); // clear drawing cache
-//                                    break;
-//                                case 2:
-//                                    image3 = findViewById(R.id.imageSelView3);
-//                                    image3.setImageURI(uri);
-//                                    image3.setDrawingCacheEnabled(true);
-//                                    image3.layout(0, 0, 150, 150);
-//                                    image3.buildDrawingCache(true);
-//                                    bitmap1to6[2] = Bitmap.createBitmap(image3.getDrawingCache());
-//                                    image3.setDrawingCacheEnabled(false); // clear drawing cache
-//                                    break;
-//                                case 3:
-//                                    image4 = findViewById(R.id.imageSelView4);
-//                                    image4.setImageURI(uri);
-//                                    image4.setDrawingCacheEnabled(true);
-//                                    image4.layout(0, 0, 150, 150);
-//                                    image4.buildDrawingCache(true);
-//                                    bitmap1to6[3] = Bitmap.createBitmap(image4.getDrawingCache());
-//                                    image4.setDrawingCacheEnabled(false); // clear drawing cache
-//                                    break;
-//                                case 4:
-//                                    image5 = findViewById(R.id.imageSelView5);
-//                                    image5.setImageURI(uri);
-//                                    image5.setDrawingCacheEnabled(true);
-//                                    image5.layout(0, 0, 150, 150);
-//                                    image5.buildDrawingCache(true);
-//                                    bitmap1to6[4] = Bitmap.createBitmap(image5.getDrawingCache());
-//                                    image5.setDrawingCacheEnabled(false); // clear drawing cache
-//                                    break;
-//                                case 5:
-//                                    image6 = findViewById(R.id.imageSelView6);
-//                                    image6.setImageURI(uri);
-//                                    image6.setDrawingCacheEnabled(true);
-//                                    image6.layout(0, 0, 150, 150);
-//                                    image6.buildDrawingCache(true);
-//                                    bitmap1to6[5] = Bitmap.createBitmap(image6.getDrawingCache());
-//                                    image6.setDrawingCacheEnabled(false); // clear drawing cache
-//                                    break;
-//                            }
-//
-//                            imageIndex++;
-//                        }else{
-//                            Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
-//                        }
-//
-//
-//                    }
-//                });
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                uri -> {
+                    // Handle the returned Uri
+                    Log.d("URI", "Received URI: " + uri);
+                    selectiedUri = uri;
+                    if (uri != null) {
+                        if (imageIndex >= 0 && imageIndex < 6) {
+                            switch (imageIndex) {
+                                case 0:
+                                    image1 = findViewById(R.id.imageSelView1);
+                                    image1.setImageURI(uri);
+                                    image1.setDrawingCacheEnabled(true);
+                                    image1.layout(0, 0, 150, 150);
+                                    image1.buildDrawingCache(true);
+                                    bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
+                                    image1.setDrawingCacheEnabled(false); // clear drawing cache
+
+                                    break;
+                                case 1:
+                                    image2 = findViewById(R.id.imageSelView2);
+                                    image2.setImageURI(uri);
+                                    image2.setDrawingCacheEnabled(true);
+                                    image2.layout(0, 0, 150, 150);
+                                    image2.buildDrawingCache(true);
+                                    bitmap1to6[1] = Bitmap.createBitmap(image2.getDrawingCache());
+                                    image2.setDrawingCacheEnabled(false); // clear drawing cache
+                                    break;
+                                case 2:
+                                    image3 = findViewById(R.id.imageSelView3);
+                                    image3.setImageURI(uri);
+                                    image3.setDrawingCacheEnabled(true);
+                                    image3.layout(0, 0, 150, 150);
+                                    image3.buildDrawingCache(true);
+                                    bitmap1to6[2] = Bitmap.createBitmap(image3.getDrawingCache());
+                                    image3.setDrawingCacheEnabled(false); // clear drawing cache
+                                    break;
+                                case 3:
+                                    image4 = findViewById(R.id.imageSelView4);
+                                    image4.setImageURI(uri);
+                                    image4.setDrawingCacheEnabled(true);
+                                    image4.layout(0, 0, 150, 150);
+                                    image4.buildDrawingCache(true);
+                                    bitmap1to6[3] = Bitmap.createBitmap(image4.getDrawingCache());
+                                    image4.setDrawingCacheEnabled(false); // clear drawing cache
+                                    break;
+                                case 4:
+                                    image5 = findViewById(R.id.imageSelView5);
+                                    image5.setImageURI(uri);
+                                    image5.setDrawingCacheEnabled(true);
+                                    image5.layout(0, 0, 150, 150);
+                                    image5.buildDrawingCache(true);
+                                    bitmap1to6[4] = Bitmap.createBitmap(image5.getDrawingCache());
+                                    image5.setDrawingCacheEnabled(false); // clear drawing cache
+                                    break;
+                                case 5:
+                                    image6 = findViewById(R.id.imageSelView6);
+                                    image6.setImageURI(uri);
+                                    image6.setDrawingCacheEnabled(true);
+                                    image6.layout(0, 0, 150, 150);
+                                    image6.buildDrawingCache(true);
+                                    bitmap1to6[5] = Bitmap.createBitmap(image6.getDrawingCache());
+                                    image6.setDrawingCacheEnabled(false); // clear drawing cache
+                                    break;
+                            }
+
+                            imageIndex++;
+                        }else{
+                            Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                });
 
 
         /*
@@ -272,7 +245,7 @@ public class CreatePostActivity extends AppCompatActivity{
         /*
          * click listener for adding an image
          */
-//        addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
+        addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
 
         /*
          * click listener for uploading the post
@@ -387,7 +360,7 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
             jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
             System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
-            jsonObject.put("isAuction", auction);
+            jsonObject.put("isAuction", isAuction);
             System.out.println("THE AUCTION STATUS WAS " + isAuction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
@@ -401,13 +374,12 @@ public class CreatePostActivity extends AppCompatActivity{
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = true;
-                int pid = Integer.parseInt(response.getString("id"));
+                int pid = response.getInt("id");
                 title = response.getString("title");
                 usernameString = response.getString("userName");
-//                Log.d("JSON Data:", jsonObject);
-//                for(int i = 0; i < imageIndex; i++ ) {
-//                    sendImageToServer(pid, i+1);
-//                }
+                for(int i = 0; i < imageIndex; i++ ) {
+                    sendImageToServer(pid, i+1);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");
