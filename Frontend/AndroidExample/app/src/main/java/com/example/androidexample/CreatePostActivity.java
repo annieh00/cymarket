@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -77,7 +78,7 @@ public class CreatePostActivity extends AppCompatActivity{
     private  int userType = 0;
 
     private EditText getCategoryEditTxt;
-    private Boolean auction;
+    private boolean auction = false;
 
     private ActivityResultLauncher<String> mGetContent;
 
@@ -91,11 +92,12 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private volatile Bitmap[] bitmap1to6 = new Bitmap[6];
 
-    private boolean isAuction;
+    private CheckBox isAuction;
 
     public volatile JSONObject ret = new JSONObject();
 
     private static int ImageUploadedCounter = 0;
+    private ImageButton deleteImageBtn;
 
 
 
@@ -104,22 +106,18 @@ public class CreatePostActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);            // link to Login activity XML
 
-        Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
-
-        t.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                startActivity(intent);
-            }
-        });
         /* initialize UI elements */
         //Text
         titleEditText = findViewById(R.id.titleEditTxt);
         titleEditText.setSaveEnabled(true);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         descriptionEditText.setSaveEnabled(true);
+        isAuction = findViewById(R.id.auctionCheckBox);
 //        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
         image1 = findViewById(R.id.imageSelView1);
+
+
+        deleteImageBtn = findViewById(R.id.deleteImageButton);
 
 
         image2 = findViewById(R.id.imageSelView2);
@@ -138,11 +136,47 @@ public class CreatePostActivity extends AppCompatActivity{
 
         priceEditTxt = findViewById(R.id.priceEditTxt);
 
+        Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);
+            }
+        });
+
+        isAuction.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                if (auction){
+                    auction = false;
+                }else{
+                    auction = true;
+                }
+            }
+        });
+
+
+        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                if (imageIndex == 6){
+                    image6.setImageURI(null);
+                    imageIndex--;
+                }else if (imageIndex == 5){
+                    image5.setImageURI(null);
+                    imageIndex--;
+                }else if (imageIndex == 4){
+                    image4.setImageURI(null);
+                    imageIndex--;
+                }else if (imageIndex == 3){
+                    image3.setImageURI(null);
+                    imageIndex--;
+                }else if (imageIndex == 2){
+                    image2.setImageURI(null);
+                    imageIndex--;
+                }else if (imageIndex == 1){
+                    image1.setImageURI(null);
+                    imageIndex--;
+                }
             }
         });
 
@@ -167,7 +201,6 @@ public class CreatePostActivity extends AppCompatActivity{
                                     image1.buildDrawingCache(true);
                                     bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
                                     image1.setDrawingCacheEnabled(false); // clear drawing cache
-
                                     break;
                                 case 1:
                                     image2 = findViewById(R.id.imageSelView2);
@@ -232,7 +265,6 @@ public class CreatePostActivity extends AppCompatActivity{
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 sendJsonObjReq();
                 Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 startActivity(intent);
@@ -275,14 +307,12 @@ public class CreatePostActivity extends AppCompatActivity{
     private void sendImageToServer(int postId, int imageIndexStartFrom1){
         JSONObject jo = new JSONObject();
         try {
-
-
             jo.put("id",postId);
             jo.put("title", title);
             jo.put("userName", usernameString);
             jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
             System.out.println("ABOUT TO SEND " + jo.toString());
-
+            Log.d("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -360,7 +390,7 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
             jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
             System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
-            jsonObject.put("isAuction", isAuction);
+            jsonObject.put("isAuction", auction);
             System.out.println("THE AUCTION STATUS WAS " + isAuction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
@@ -374,9 +404,10 @@ public class CreatePostActivity extends AppCompatActivity{
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = true;
-                int pid = response.getInt("id");
+                int pid = Integer.parseInt(response.getString("id"));
                 title = response.getString("title");
                 usernameString = response.getString("userName");
+                Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
                     sendImageToServer(pid, i+1);
                 }
