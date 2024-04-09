@@ -144,9 +144,9 @@ public class SellPostController {
     }
 
 
-    @Operation(summary = "get all donations in DB", description = "gets all posts in DB")
+    @Operation(summary = "get all donations in DB", description = "gets all donations in DB")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of donations", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllDonations")
@@ -175,7 +175,7 @@ public class SellPostController {
 
     @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object off posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object regarding a specific post", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllPosts/{id}")
@@ -577,7 +577,7 @@ public class SellPostController {
         return p;
     }
 
-    @Operation(summary = "updates picture in DB", description = "updates a post's picture (listing) in DB")
+    @Operation(summary = "updates a post in DB", description = "updates a post in DB")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Post successfully got updated", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
@@ -595,6 +595,9 @@ public class SellPostController {
 
         if(editpost.getTitle() != null && editpost.getTitle().equals("")){
             p.setTitle(editpost.getTitle());
+        }
+        if(editpost.getPrice() != 0){
+            p.setPrice(editpost.getPrice());
         }
 
 
