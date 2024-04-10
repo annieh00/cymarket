@@ -39,7 +39,7 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
 //    private String serverUrl = "ws://10.0.2.2:8080/chat/";
 
-    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8443/chat/%7B" + LoginActivity.username + "%7D";
+    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/%7B" + LoginActivity.username + "%7D";
 
 
 //    private boolean isWebSocketConnected = false;

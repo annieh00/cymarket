@@ -8,6 +8,7 @@ import mainPackage.announcementPackage.Announcement;
 import mainPackage.imageProcess.Image;
 import mainPackage.websocket.AuctionTable;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +38,8 @@ public class Posting {
     @Column(name = "isAuction")
     private boolean isAuction = false;
 
+    @Column(name = "isDonation")
+    private boolean isDonation = false;
 
     @Column(name = "isClosed")
     private boolean isClosed = false;
@@ -64,6 +67,12 @@ public class Posting {
     private int price;
 
 
+
+    @Column(name = "PublishedDate")
+    String date;
+
+
+
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
@@ -72,6 +81,14 @@ public class Posting {
     private int id;
     public String getUserName() {
         return userName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public boolean getIsClosed() {
@@ -188,5 +205,13 @@ public class Posting {
 
     public void setPicture6(String picture6) {
         this.picture6 = picture6;
+    }
+
+    public boolean getIsDonation() {
+        return isDonation;
+    }
+
+    public void setIsDonation(boolean donation) {
+        isDonation = donation;
     }
 }
