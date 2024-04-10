@@ -161,32 +161,56 @@ public class CreatePostActivity extends AppCompatActivity{
                 if (imageIndex == 5){
                     image6 = findViewById(R.id.imageSelView6);
                     image6.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image6.setDrawingCacheEnabled(true);
+                    image6.layout(0, 0, 150, 150);
+                    image6.buildDrawingCache(true);
+                    bitmap1to6[5] = null;
+                    image6.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
                 }else if (imageIndex == 4){
                     image5 = findViewById(R.id.imageSelView5);
                     image5.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image5.setDrawingCacheEnabled(true);
+                    image5.layout(0, 0, 150, 150);
+                    image5.buildDrawingCache(true);
+                    bitmap1to6[4] = null;
+                    image5.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
                 }else if (imageIndex == 3){
-                    image4 = findViewById(R.id.imageSelView4);
-                    image4.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image3 = findViewById(R.id.imageSelView3);
+                    image3.setImageURI(null);
+                    image3.setDrawingCacheEnabled(true);
+                    image3.layout(0, 0, 150, 150);
+                    image3.buildDrawingCache(true);
+                    bitmap1to6[2] = null;
+                    image3.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
                 }else if (imageIndex == 2){
                     image3 = findViewById(R.id.imageSelView3);
                     image3.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image3.setDrawingCacheEnabled(true);
+                    image3.layout(0, 0, 150, 150);
+                    image3.buildDrawingCache(true);
+                    bitmap1to6[2] = null;
+                    image3.setDrawingCacheEnabled(false);
                     imageIndex--;
                 }else if (imageIndex == 1){
                     image2 = findViewById(R.id.imageSelView2);
                     image2.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image2.setDrawingCacheEnabled(true);
+                    image2.layout(0, 0, 150, 150);
+                    image2.buildDrawingCache(true);
+                    bitmap1to6[1] = null;
+                    image2.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
                 }else if (imageIndex == 0){
                     image1 = findViewById(R.id.imageSelView1);
                     image1.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
+                    image1.setDrawingCacheEnabled(true);
+                    image1.layout(0, 0, 150, 150);
+                    image1.buildDrawingCache(true);
+                    bitmap1to6[0] = null;
+                    image1.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
                 }
             }
@@ -399,7 +423,7 @@ public class CreatePostActivity extends AppCompatActivity{
             jsonObject.put("title", titleEditText.getText().toString());
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
-            System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
+            System.out.println("THE DESCRIPTION WAS " + descriptionEditText.getText().toString());
             jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
             System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
             jsonObject.put("isAuction", auction);
