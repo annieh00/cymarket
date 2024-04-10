@@ -144,9 +144,9 @@ public class SellPostController {
     }
 
 
-    @Operation(summary = "get all donations in DB", description = "gets all posts in DB")
+    @Operation(summary = "get all donations in DB", description = "gets all donations in DB")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of donations", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllDonations")
@@ -175,7 +175,7 @@ public class SellPostController {
 
     @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object off posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object regarding a specific post", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllPosts/{id}")
@@ -291,7 +291,7 @@ public class SellPostController {
 
 
             String img1 = p.getPicture1();
-            if(img1 != null){
+            if(img1 != null && !img1.equals("")){
                 String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic1.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
                 p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
@@ -577,7 +577,7 @@ public class SellPostController {
         return p;
     }
 
-    @Operation(summary = "updates picture in DB", description = "updates a post's picture (listing) in DB")
+    @Operation(summary = "updates a post in DB", description = "updates a post in DB")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Post successfully got updated", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
@@ -595,6 +595,9 @@ public class SellPostController {
 
         if(editpost.getTitle() != null && editpost.getTitle().equals("")){
             p.setTitle(editpost.getTitle());
+        }
+        if(editpost.getPrice() != 0){
+            p.setPrice(editpost.getPrice());
         }
 
 
@@ -650,8 +653,11 @@ public class SellPostController {
                 old.renameTo(newfile);
             }
         }
+
+        setPictures(p);
         p.setTitle(editpost.getTitle());
         p.setDescription(editpost.getDescription());
+
         /*if(editpost.getPicture1() != null && !editpost.getPicture1().equals("")){
             File f = new File(oldPhotoNamePrefix + "Pic1.png");
             if(f.exists()){
