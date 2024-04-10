@@ -1,6 +1,9 @@
 package mainPackage.friendsService;
 
 import ch.qos.logback.classic.Logger;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,13 @@ public class FriendRequestsController {
     private GeneralUserRepository generalUserRepository;
 
     @PostMapping("/send/{friendId}")
+    @Operation(summary = "Send friend request",
+            description = "Send a friend request from the user with the specified ID to the friend with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Friend request sent successfully"),
+            @ApiResponse(responseCode = "404", description = "User or friend not found"),
+            @ApiResponse(responseCode = "409", description = "A pending friend request already exists")
+    })
     public String sendFriendRequest(@PathVariable int id, @PathVariable int friendId) {
         GeneralUser sender = generalUserRepository.findGeneralUserById(id);
         GeneralUser receiver = generalUserRepository.findGeneralUserById(friendId);
@@ -39,6 +49,12 @@ public class FriendRequestsController {
     }
 
     @PostMapping("/accept/{friendId}")
+    @Operation(summary = "Accept friend request",
+            description = "Accept a pending friend request from the user with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Friend request accepted successfully"),
+            @ApiResponse(responseCode = "404", description = "Friend request not found or already accepted")
+    })
     public String acceptFriendRequest(@PathVariable int id, @PathVariable int friendId) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
         GeneralUser friend = generalUserRepository.findGeneralUserById(friendId);
@@ -55,6 +71,12 @@ public class FriendRequestsController {
     }
 
     @PostMapping("/reject/{requesterId}")
+    @Operation(summary = "Reject friend request",
+            description = "Reject a pending friend request from the user with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Friend request rejected successfully"),
+            @ApiResponse(responseCode = "404", description = "Friend request not found or already rejected")
+    })
     public String rejectFriendRequest(@PathVariable int id, @PathVariable int requesterId) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
         GeneralUser requester = generalUserRepository.findGeneralUserById(requesterId);
@@ -70,6 +92,12 @@ public class FriendRequestsController {
     }
 
     @GetMapping("/")
+    @Operation(summary = "List friend requests",
+            description = "List all pending friend requests for the user with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of friend requests retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public List<Friend> listFriendRequests(@PathVariable int id) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
 
@@ -81,6 +109,12 @@ public class FriendRequestsController {
     }
 
     @GetMapping("/potential-friends")
+    @Operation(summary = "List potential friends",
+            description = "List all potential friends for the user with the specified ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of potential friends retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public List<GeneralUser> listPotentialFriends(@PathVariable int id) {
         GeneralUser user = generalUserRepository.findGeneralUserById(id);
 
