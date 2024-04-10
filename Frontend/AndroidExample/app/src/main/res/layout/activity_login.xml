@@ -79,6 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:text="Login"
+            android:backgroundTint="@color/cardinal"
             android:textColor="#ffffff"
             android:textSize="20sp"></Button>
 

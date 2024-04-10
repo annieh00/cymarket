@@ -46,9 +46,9 @@ import java.util.Map;
 /**
  * The create post activity makes the user to be able to post items based off of the given information.
  */
-public class CreatePostActivity extends AppCompatActivity{
+public class CreateDonationActivity extends AppCompatActivity{
     private EditText titleEditText;
-    private ImageButton addImageBtn;
+    //    private ImageButton addImageBtn;
     private EditText descriptionEditText;
     private EditText categoryEditTxt;
     private Button cancelBtn;
@@ -98,13 +98,15 @@ public class CreatePostActivity extends AppCompatActivity{
 
     private static int ImageUploadedCounter = 0;
     private ImageButton deleteImageBtn;
+    private CheckBox isDonation;
+    private boolean donation = false;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);            // link to Login activity XML
+        setContentView(R.layout.activity_create_donation);            // link to Login activity XML
 
         /* initialize UI elements */
         //Text
@@ -112,163 +114,145 @@ public class CreatePostActivity extends AppCompatActivity{
         titleEditText.setSaveEnabled(true);
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         descriptionEditText.setSaveEnabled(true);
-        isAuction = findViewById(R.id.auctionCheckBox);
+        isDonation = findViewById(R.id.donationCheckBox);
 //        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
-        image1 = findViewById(R.id.imageSelView1);
+//        image1 = findViewById(R.id.imageSelView1);
+
+//        deleteImageBtn = findViewById(R.id.deleteImageButton);
 
 
-        deleteImageBtn = findViewById(R.id.deleteImageButton);
+//        image2 = findViewById(R.id.imageSelView2);
+//
+//
+//        image3 = findViewById(R.id.imageSelView3);
+//
+//
+//        image4 = findViewById(R.id.imageSelView4);
+//
+//
+//        image5 = findViewById(R.id.imageSelView5);
+//
+//
+//        image6 = findViewById(R.id.imageSelView6);
 
-
-        image2 = findViewById(R.id.imageSelView2);
-
-
-        image3 = findViewById(R.id.imageSelView3);
-
-
-        image4 = findViewById(R.id.imageSelView4);
-
-
-        image5 = findViewById(R.id.imageSelView5);
-
-
-        image6 = findViewById(R.id.imageSelView6);
-
-        priceEditTxt = findViewById(R.id.priceEditTxt);
+//        priceEditTxt = findViewById(R.id.priceEditTxt);
 
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                Intent intent = new Intent(CreateDonationActivity.this, MainFeed.class);
                 startActivity(intent);
             }
         });
 
-        isAuction.setOnClickListener(new View.OnClickListener() {
+        isDonation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                if (auction){
-                    auction = false;
+                if (donation){
+                    donation = false;
                 }else{
-                    auction = true;
+                    donation = true;
                 }
             }
         });
 
 
-        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                if (imageIndex == 5){
-                    image6 = findViewById(R.id.imageSelView6);
-                    image6.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }else if (imageIndex == 4){
-                    image5 = findViewById(R.id.imageSelView5);
-                    image5.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }else if (imageIndex == 3){
-                    image4 = findViewById(R.id.imageSelView4);
-                    image4.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }else if (imageIndex == 2){
-                    image3 = findViewById(R.id.imageSelView3);
-                    image3.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }else if (imageIndex == 1){
-                    image2 = findViewById(R.id.imageSelView2);
-                    image2.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }else if (imageIndex == 0){
-                    image1 = findViewById(R.id.imageSelView1);
-                    image1.setImageURI(null);
-                    bitmap1to6[imageIndex] = null;
-                    imageIndex--;
-                }
-            }
-        });
+//        deleteImageBtn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view){
+//                if (imageIndex == 0){
+//                    image1.setImageURI(null);
+//                }else if (imageIndex == 1){
+//                    image1.setImageURI(null);
+//                }else if (imageIndex == 2){
+//                    image1.setImageURI(null);
+//                }else if (imageIndex == 3){
+//                image1.setImageURI(null);
+//                }else if (imageIndex == 4){
+//                image1.setImageURI(null);
+//                }else if (imageIndex == 5){
+//                image1.setImageURI(null);
+//                }
+//            }
+//        });
 
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
-        addImageBtn = findViewById(R.id.addImageButton); //link to add images
+//        addIma\geBtn = findViewById(R.id.addImageButton); //link to add images
 
         // select image from gallery
-        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
-                uri -> {
-                    // Handle the returned Uri
-                    Log.d("URI", "Received URI: " + uri);
-                    selectiedUri = uri;
-                    if (uri != null) {
-                        if (imageIndex >= 0 && imageIndex < 6) {
-                            switch (imageIndex) {
-                                case 0:
-                                    image1 = findViewById(R.id.imageSelView1);
-                                    image1.setImageURI(uri);
-                                    image1.setDrawingCacheEnabled(true);
-                                    image1.layout(0, 0, 150, 150);
-                                    image1.buildDrawingCache(true);
-                                    bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
-                                    image1.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                                case 1:
-                                    image2 = findViewById(R.id.imageSelView2);
-                                    image2.setImageURI(uri);
-                                    image2.setDrawingCacheEnabled(true);
-                                    image2.layout(0, 0, 150, 150);
-                                    image2.buildDrawingCache(true);
-                                    bitmap1to6[1] = Bitmap.createBitmap(image2.getDrawingCache());
-                                    image2.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                                case 2:
-                                    image3 = findViewById(R.id.imageSelView3);
-                                    image3.setImageURI(uri);
-                                    image3.setDrawingCacheEnabled(true);
-                                    image3.layout(0, 0, 150, 150);
-                                    image3.buildDrawingCache(true);
-                                    bitmap1to6[2] = Bitmap.createBitmap(image3.getDrawingCache());
-                                    image3.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                                case 3:
-                                    image4 = findViewById(R.id.imageSelView4);
-                                    image4.setImageURI(uri);
-                                    image4.setDrawingCacheEnabled(true);
-                                    image4.layout(0, 0, 150, 150);
-                                    image4.buildDrawingCache(true);
-                                    bitmap1to6[3] = Bitmap.createBitmap(image4.getDrawingCache());
-                                    image4.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                                case 4:
-                                    image5 = findViewById(R.id.imageSelView5);
-                                    image5.setImageURI(uri);
-                                    image5.setDrawingCacheEnabled(true);
-                                    image5.layout(0, 0, 150, 150);
-                                    image5.buildDrawingCache(true);
-                                    bitmap1to6[4] = Bitmap.createBitmap(image5.getDrawingCache());
-                                    image5.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                                case 5:
-                                    image6 = findViewById(R.id.imageSelView6);
-                                    image6.setImageURI(uri);
-                                    image6.setDrawingCacheEnabled(true);
-                                    image6.layout(0, 0, 150, 150);
-                                    image6.buildDrawingCache(true);
-                                    bitmap1to6[5] = Bitmap.createBitmap(image6.getDrawingCache());
-                                    image6.setDrawingCacheEnabled(false); // clear drawing cache
-                                    break;
-                            }
-
-                            imageIndex++;
-                        }else{
-                            Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
-                        }
-
-
-                    }
-                });
+//        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+//                uri -> {
+//                    // Handle the returned Uri
+//                    Log.d("URI", "Received URI: " + uri);
+//                    selectiedUri = uri;
+//                    if (uri != null) {
+//                        if (imageIndex >= 0 && imageIndex < 6) {
+//                            switch (imageIndex) {
+//                                case 0:
+//                                    image1 = findViewById(R.id.imageSelView1);
+//                                    image1.setImageURI(uri);
+//                                    image1.setDrawingCacheEnabled(true);
+//                                    image1.layout(0, 0, 150, 150);
+//                                    image1.buildDrawingCache(true);
+//                                    bitmap1to6[0] = Bitmap.createBitmap(image1.getDrawingCache());
+//                                    image1.setDrawingCacheEnabled(false); // clear drawing cache
+//
+//                                    break;
+//                                case 1:
+//                                    image2 = findViewById(R.id.imageSelView2);
+//                                    image2.setImageURI(uri);
+//                                    image2.setDrawingCacheEnabled(true);
+//                                    image2.layout(0, 0, 150, 150);
+//                                    image2.buildDrawingCache(true);
+//                                    bitmap1to6[1] = Bitmap.createBitmap(image2.getDrawingCache());
+//                                    image2.setDrawingCacheEnabled(false); // clear drawing cache
+//                                    break;
+//                                case 2:
+//                                    image3 = findViewById(R.id.imageSelView3);
+//                                    image3.setImageURI(uri);
+//                                    image3.setDrawingCacheEnabled(true);
+//                                    image3.layout(0, 0, 150, 150);
+//                                    image3.buildDrawingCache(true);
+//                                    bitmap1to6[2] = Bitmap.createBitmap(image3.getDrawingCache());
+//                                    image3.setDrawingCacheEnabled(false); // clear drawing cache
+//                                    break;
+//                                case 3:
+//                                    image4 = findViewById(R.id.imageSelView4);
+//                                    image4.setImageURI(uri);
+//                                    image4.setDrawingCacheEnabled(true);
+//                                    image4.layout(0, 0, 150, 150);
+//                                    image4.buildDrawingCache(true);
+//                                    bitmap1to6[3] = Bitmap.createBitmap(image4.getDrawingCache());
+//                                    image4.setDrawingCacheEnabled(false); // clear drawing cache
+//                                    break;
+//                                case 4:
+//                                    image5 = findViewById(R.id.imageSelView5);
+//                                    image5.setImageURI(uri);
+//                                    image5.setDrawingCacheEnabled(true);
+//                                    image5.layout(0, 0, 150, 150);
+//                                    image5.buildDrawingCache(true);
+//                                    bitmap1to6[4] = Bitmap.createBitmap(image5.getDrawingCache());
+//                                    image5.setDrawingCacheEnabled(false); // clear drawing cache
+//                                    break;
+//                                case 5:
+//                                    image6 = findViewById(R.id.imageSelView6);
+//                                    image6.setImageURI(uri);
+//                                    image6.setDrawingCacheEnabled(true);
+//                                    image6.layout(0, 0, 150, 150);
+//                                    image6.buildDrawingCache(true);
+//                                    bitmap1to6[5] = Bitmap.createBitmap(image6.getDrawingCache());
+//                                    image6.setDrawingCacheEnabled(false); // clear drawing cache
+//                                    break;
+//                            }
+//
+//                            imageIndex++;
+//                        }else{
+//                            Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
+//                        }
+//
+//
+//                    }
+//                });
 
 
         /*
@@ -277,8 +261,9 @@ public class CreatePostActivity extends AppCompatActivity{
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 sendJsonObjReq();
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                Intent intent = new Intent(CreateDonationActivity.this, DonationsActivity.class);
                 startActivity(intent);
 
             }
@@ -289,7 +274,7 @@ public class CreatePostActivity extends AppCompatActivity{
         /*
          * click listener for adding an image
          */
-        addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
+//        addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
 
         /*
          * click listener for uploading the post
@@ -319,17 +304,19 @@ public class CreatePostActivity extends AppCompatActivity{
     private void sendImageToServer(int postId, int imageIndexStartFrom1){
         JSONObject jo = new JSONObject();
         try {
+
+
             jo.put("id",postId);
             jo.put("title", title);
             jo.put("userName", usernameString);
             jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
             System.out.println("ABOUT TO SEND " + jo.toString());
-            Log.d("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jo , response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts/update", jo , response -> {
             Log.d(TAG, response.toString());
             try {
                 System.out.println("RECEIVED FROM UPDATE");
@@ -340,13 +327,13 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
             if (createPostSuccess) {
-                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
                 //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
 
 
                 //startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
 
 
@@ -355,7 +342,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
 
@@ -400,11 +387,11 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
             System.out.println("THE DESCRIPTION WAS " +descriptionEditText.getText().toString());
-            jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
-            System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
-            jsonObject.put("isAuction", auction);
+//            jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
+//            System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
+            jsonObject.put("isDonation", donation);
             System.out.println("THE AUCTION STATUS WAS " + isAuction);
-            jsonObject.put("userName",LoginActivity.username);
+            jsonObject.put("userName", LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
 
         } catch (JSONException e) {
@@ -419,10 +406,10 @@ public class CreatePostActivity extends AppCompatActivity{
                 int pid = Integer.parseInt(response.getString("id"));
                 title = response.getString("title");
                 usernameString = response.getString("userName");
-                Log.d("JSON Data:", jsonObject.toString());
-                for(int i = 0; i < imageIndex; i++ ) {
-                    sendImageToServer(pid, i+1);
-                }
+//                Log.d("JSON Data:", jsonObject);
+//                for(int i = 0; i < imageIndex; i++ ) {
+//                    sendImageToServer(pid, i+1);
+//                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");
@@ -431,11 +418,11 @@ public class CreatePostActivity extends AppCompatActivity{
 
 
             if (createPostSuccess) {
-                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
                 //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                 //startActivity(intent);
             }else{
-                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
 
 
@@ -444,7 +431,7 @@ public class CreatePostActivity extends AppCompatActivity{
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateDonationActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
 

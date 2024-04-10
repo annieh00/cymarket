@@ -41,6 +41,10 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
 
     private ImageButton leftArrowBtn;
     private ImageButton rightArrowBtn;
+    private TextView descriptionTxtView;
+    public static int pid;
+    private String winner;
+
 
     public String actualPostURL = Const.URL_AUCTION;
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
@@ -54,11 +58,16 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
     private Boolean auction;
     private String description;
     private String userName;
+    private TextView priceTxtView;
     private int id;
+    private TextView titleTxtView;
 
 
     private volatile String incomingMessages;
 
+
+
+    private String getRequest;
     private ImageView imv;
     private int displayedImageIndex = 1;
     @Override
@@ -72,22 +81,32 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         leftArrowBtn = findViewById(R.id.leftArrowBtn);
         rightArrowBtn = findViewById(R.id.rightArrowBtn);
         imv = (ImageView) findViewById(R.id.imageSelView1);
+        closeAuctionBtn = findViewById(R.id.closeAuctionBtn);
+        titleTxtView = findViewById(R.id.titleTxtView);
+//        priceTxtView = findViewById(R.id.priceTxt);
+        descriptionTxtView = findViewById(R.id.descriptionTxtView);
+
+        getRequest = Const.URL_GET_ALL_POSTS + "/" + extras.getString("id");
+        makeJsonObjReq();
 
 //        msgResponse = findViewById(R.id.msgResponse);
          msgTv = findViewById(R.id.tx1);
 
-        int i = Const.URL_AUCTION.lastIndexOf("/");
-        if (Const.URL_AUCTION.charAt(i+1) >= '0' && Const.URL_AUCTION.charAt(i+1) <= '9'){
-            actualPostURL = Const.URL_AUCTION.substring(0,i)+"/"+extras.getString("id")+"/" + "helloWorld5";
-            Log.d("Auction URL:", actualPostURL);
-        }else{
-            actualPostURL += ("/" + extras.getString("id"));
-            Log.d("Auction URL:", actualPostURL);
+        pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 
-        }
+//        int i = Const.URL_AUCTION.lastIndexOf("/");
+//        if (Const.URL_AUCTION.charAt(i+1) >= '0' && Const.URL_AUCTION.charAt(i+1) <= '9') {
+            actualPostURL = Const.URL_AUCTION + "/" + extras.getString("id") + "/" + LoginActivity.username;
+            Log.d("Auction URL:", actualPostURL);
+//        }else{
+//            actualPostURL += ("/" + extras.getString("id"));
+//            Log.d("Auction URL:", actualPostURL);
+//
+//        }
+//        }
         URL_JSON_OBJECT += extras.getString("id");
 
-        Log.d("userNmae:", username);
+//        Log.d("userNmae:", username);
         try {
             getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
         }catch (Exception e){
@@ -95,16 +114,29 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         }
 
         WebSocketManager.getInstance().connectWebSocket("ws://coms-309-060.class.las.iastate.edu:8080/auction/"+extras.getString("id")+"/"+username);
+        Log.d("actual auction url:", "ws://coms-309-060.class.las.iastate.edu:8080/auction/"+extras.getString("id")+"/"+username);
         WebSocketManager.getInstance().setWebSocketListener(AuctionDetailActivity.this);
+
 
         confirmBtn.setOnClickListener(v -> {
             try {
                 // send message
                 WebSocketManager.getInstance().sendMessage(bidEditTxt.getText().toString());
+                Log.d("BID:", bidEditTxt.getText().toString());
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
+
+
+        closeAuctionBtn.setOnClickListener(v -> {
+            try {
+                closeAuction();
+            } catch (Exception e) {
+                Log.d("ExceptionSendMessage:", e.getMessage().toString());
+            }
+        });
+
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +175,75 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         });
     }
 
+    /**
+     * Making json object request
+     */
+    private void makeJsonObjReq() {
+        Log.d("GET REQUEST:", getRequest);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.GET,
+                getRequest,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        try {
+                            titleTxt = response.getString("title");
+                            price = response.getInt("price");
+                            auction = response.getBoolean("isAuction");
+                            description = response.getString("description");
+                            userName = response.getString("userName");
+                            id = response.getInt("id");
+
+                            Log.d("title, price, auction, description, username, id", titleTxt+ price+ auction+description+userName);
+                            if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
+//                                deletePostBtn.setVisibility(View.VISIBLE);
+//                                editPostBtn.setVisibility(View.VISIBLE);
+                                closeAuctionBtn.setVisibility(View.VISIBLE);
+                            }else{
+//                                deletePostBtn.setVisibility(View.GONE);
+//                                editPostBtn.setVisibility(View.GONE);
+                                closeAuctionBtn.setVisibility(View.GONE);
+                            }
+
+                            highestBidTxt.setText("Inital Price:" + String.valueOf(price));
+                            titleTxtView.setText(titleTxt);
+//                            priceTxtView.setText(String.valueOf(price));
+                            descriptionTxtView.setText(description);
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+    }
 
 
 
@@ -191,6 +292,61 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
     public static Bitmap decodeBase64ToBitmap(String base64Image) {
         byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    private void closeAuction() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            //input your API parameters
+//            jsonObject.put("userName", LoginActivity.username);
+            jsonObject.put("id", pid);
+            Log.d("JSON OBJ:", jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                Const.URL_CLOSE_AUCTION,
+                jsonObject, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        try {
+                             winner = response.getString("winner");
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
 
     private void getImageAsJsonObjAndSetIt(ImageView imv, int imageIndex) {
