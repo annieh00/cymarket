@@ -41,7 +41,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     private List<Friend> generalUsers;
 
-    private String URL = "http://coms-309-060.class.las.iastate.edu:8443";
+    private String URL = "http://coms-309-060.class.las.iastate.edu:8080";
 
 
 
@@ -251,14 +251,8 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                     public void onResponse(JSONArray response) {
                         // Handle JSON response for friend requests data
                         generalUsers = parseFriendsJson(response);
-
-                        // Populate ListView with friend requests data
-//                        ListOtherUsers adapter = new ListOtherUsers(FriendFeatureActivity.this, generalUsers, FriendFeatureActivity.this);
-//                        listViewGenUsers.setAdapter(adapter);
                         friendList.addAll(generalUsers);
 
-                        // Notify the adapter that the data set has changed
-//                        ((ListFriends) listViewFriends.getAdapter()).notifyDataSetChanged();
                         ((ListFriends) listViewFriends.getAdapter()).updateFriendList(friendList);
 
                     }
@@ -312,7 +306,6 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
             }
         });
 
-        // You can set other details similarly...
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -320,12 +313,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
     //IDK if this being a string request is right
     private void deleteFriend(int userID) {
-//        Log.d("DeleteFriend", "Deleting friend with userID: " + userID);
-        // Construct the URL for the DELETE request
         String url = URL + "/friends/" + LoginActivity.loginID +"/del/" + userID;
-
-        //correct mapping
-//        String url = url+ "/friends/"+ LoginActivity.username+"/del/" +  + userID;
 
         // Create the DELETE request
         StringRequest request = new StringRequest(Request.Method.DELETE, url,

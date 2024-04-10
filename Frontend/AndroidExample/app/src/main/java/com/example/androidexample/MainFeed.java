@@ -119,17 +119,6 @@ public class MainFeed extends AppCompatActivity {
 //    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
 //    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
 
-    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation";
-
-    String server_url_create = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
-
-
-
-    String server_url_del = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/del/";
-
-    String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
-
-
 
 
     @Override

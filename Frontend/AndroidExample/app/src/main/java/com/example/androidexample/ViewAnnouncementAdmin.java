@@ -55,7 +55,7 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
 //    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     //THIS IS THE MAPPING TO LIST ALL ANNOUNCEMENTS THAT WERE MADE
-    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8443";
+    private static final String URL_JSON_ARRAY = "http://coms-309-060.class.las.iastate.edu:8080";
 //    private static final String URL_JSON_ARRAY = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/announcements";
 
     private AnnouncementAdapter adapter;

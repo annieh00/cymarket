@@ -1,6 +1,7 @@
 package mainPackage.postService;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -59,17 +60,20 @@ public class SellPostController {
         if(u2 == null){
             //System.out.println("user "+p.getUserName()+ " does not exist");
             ErrorMsg e = new ErrorMsg();
+            System.out.println("NO USER FOUND");
             e.setErrormsg("user does not exist, and therefore cannot create post");
-            return "{\"serverResponse\" : false}";
+            return "{\"serverResponse\" : \"No User Found\"}";
         }
+
         Posting p2 = postingRepository.findPostingByTitle(p.getTitle());
         if(p2 != null && p2.getUserName().equals(p.getUserName())){
-            return "{\"serverResponse\" : false}";
+
+            return "{\"serverResponse\" : \"duplicate entry\"}";
         }
 
         try {
             //nu.pattern.OpenCV.loadLocally();
-            setPictures(p);
+            //setPictures(p);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -79,7 +83,7 @@ public class SellPostController {
 
 
 
-
+        p.setDate((new java.util.Date()).toString());
         postingRepository.save(p);
         u2.getPublishedPosts().add(p);
         generalUserRepository.save(u2);
@@ -89,6 +93,7 @@ public class SellPostController {
             AuctionTable auction = new AuctionTable();
             auction.setPost(p);
             auction.setHighestBidder(u); //no one has placed a bid yet
+            auction.setHighestBidAmount(p.getPrice());
             //ArrayList<Posting> pa = postingRepository.findPostingsByTitle(p.getTitle());
 
             auction.setId(p.getId());
@@ -99,7 +104,11 @@ public class SellPostController {
         }
 
         //p gets altered as well
-        String json = new Gson().toJson(p);
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+
+        String json = gson.toJson(p);
         return json;
     }
 
@@ -127,13 +136,46 @@ public class SellPostController {
             e.printStackTrace();
         }
 
-        String json = new Gson().toJson(ret);
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(ret);
         return "{ \"posts\" :" +json + "}";
+    }
+
+
+    @Operation(summary = "get all donations in DB", description = "gets all donations in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON array of donations", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "500", description = "bad request")
+    })
+    @GetMapping("/getAllDonations")
+    public String getDonations(){
+        ArrayList<Posting> mylist = postingRepository.findAll();
+        ArrayList<Posting> ret = new ArrayList<>();
+
+        try {
+            for(int i = 0; i < mylist.size(); i++){
+                //System.out.println(i);
+                Posting p = getPicturePaths(mylist.get(i));
+                if(p != null && p.getIsDonation()){
+                    ret.add(p);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(ret);
+        return "{ \"donations\" :" +json + "}";
     }
 
     @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object off posts", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "200", description = "successfully returned a JSON Object regarding a specific post", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "500", description = "bad request")
     })
     @GetMapping("/getAllPosts/{id}")
@@ -141,7 +183,10 @@ public class SellPostController {
         Posting p = postingRepository.findPostingById(Integer.parseInt(id));
         if(p != null){
             //p = getPictures(p);
-            String json = new Gson().toJson(p);
+            GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
+            Gson gson = builder.setPrettyPrinting().create();
+            String json = gson.toJson(p);
             return json;
         }
         return null;
@@ -159,7 +204,7 @@ public class SellPostController {
 
         try {
             for(int i = 0; i < mylist.size(); i++){
-                if(mylist.get(i).getIsAuction()){
+                if(mylist.get(i).getIsAuction() && !mylist.get(i).getIsClosed()){
                     ret.add(mylist.get(i));
                 }
             }
@@ -167,7 +212,10 @@ public class SellPostController {
             e.printStackTrace();
         }
 
-        String json = new Gson().toJson(ret);
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(ret);
         return "{ \"auctions\" :" +json + "}";
 
     }
@@ -243,9 +291,7 @@ public class SellPostController {
 
 
             String img1 = p.getPicture1();
-            Gson g = new Gson();
-            System.out.println(g.toJson(p).toString());
-            if(img1 != null){
+            if(img1 != null && !img1.equals("")){
                 String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic1.png";
                 byte[] decoded = Base64.getDecoder().decode(p.getPicture1());
                 p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
@@ -531,12 +577,11 @@ public class SellPostController {
         return p;
     }
 
-    @Operation(summary = "updates picture in DB", description = "updates a post's picture (listing) in DB")
+    @Operation(summary = "updates a post in DB", description = "updates a post in DB")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Post successfully got updated", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
     })
-    //update
     @PostMapping("/posts/update")
     public String updatePost(@RequestBody Posting editpost){
 
@@ -545,46 +590,198 @@ public class SellPostController {
         if(p == null){
             return "{\"serverResponse\" : 0}";
         }
-        //updatePost(p,update);
-        //p.setTitle(editpost.getTitle());
-        //p.setDescription(editpost.getDescription());
-        if(editpost.getPicture1() != null && !editpost.getPicture1().equals("")){
-            p.setPicture1(editpost.getPicture1());
+
+        String oldPhotoNamePrefix = "./" + p.getUserName() + p.getTitle();
+
+        if(editpost.getTitle() != null && editpost.getTitle().equals("")){
+            p.setTitle(editpost.getTitle());
+        }
+        if(editpost.getPrice() != 0){
+            p.setPrice(editpost.getPrice());
+        }
+
+
+        if(p.getPicture1() != null && !p.getPicture1().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic1.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic1.png");
+
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        if(p.getPicture2() != null && !p.getPicture2().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic2.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic2.png");
+
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        if(p.getPicture3() != null && !p.getPicture3().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic3.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic3.png");
+
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        if(p.getPicture4() != null && !p.getPicture4().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic4.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic4.png");
+
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        if(p.getPicture5() != null && !p.getPicture5().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic5.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic5.png");
+
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        if(p.getPicture6() != null && !p.getPicture6().equals("")){
+            File old = new File(oldPhotoNamePrefix+"Pic6.png");
+            File newfile = new File(p.getUserName()+editpost.getUserName()+"Pic6.png");
+            if(!newfile.exists()&&old.exists()){
+                old.renameTo(newfile);
+            }
+        }
+
+        setPictures(p);
+        p.setTitle(editpost.getTitle());
+        p.setDescription(editpost.getDescription());
+
+        /*if(editpost.getPicture1() != null && !editpost.getPicture1().equals("")){
+            File f = new File(oldPhotoNamePrefix + "Pic1.png");
+            if(f.exists()){
+                f.delete();
+            }
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic1.png";
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture1());
+            p.setPicture1(p.getUserName() + p.getTitle()+"Pic1.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
+            //p.setPicture1(editpost.getPicture1());
         }
 
         if(editpost.getPicture2() != null && !editpost.getPicture2().equals("")){
-            p.setPicture2(editpost.getPicture2());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic2.png";
+            File f = new File(oldPhotoNamePrefix + "Pic2.png");
+            if(f.exists()){
+                f.delete();
+            }
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture2());
+            p.setPicture2(p.getUserName() + p.getTitle()+"Pic2.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED 2nd IMAGE");
+
+            //p.setPicture2(editpost.getPicture1());
         }
 
-        if(editpost.getPicture2() != null && !editpost.getPicture2().equals("")){
-            p.setPicture2(editpost.getPicture2());
-        }
 
         if(editpost.getPicture3() != null && !editpost.getPicture3().equals("")){
-            p.setPicture3(editpost.getPicture3());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic3.png";
+            File f = new File(oldPhotoNamePrefix + "Pic3.png");
+            if(f.exists()){
+                f.delete();
+            }
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture3());
+            p.setPicture3(p.getUserName() + p.getTitle()+"Pic3.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
+            //p.setPicture3(editpost.getPicture2());
         }
 
         if(editpost.getPicture4() != null && !editpost.getPicture4().equals("")){
-            p.setPicture4(editpost.getPicture4());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic4.png";
+            File f = new File(oldPhotoNamePrefix + "Pic4.png");
+            if(f.exists()){
+                f.delete();
+            }
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture4());
+            p.setPicture4(p.getUserName() + p.getTitle()+"Pic4.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
         }
 
         if(editpost.getPicture5() != null && !editpost.getPicture5().equals("")){
-            p.setPicture5(editpost.getPicture5());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic5.png";
+            File f = new File(oldPhotoNamePrefix + "Pic5.png");
+            if(f.exists()){
+                f.delete();
+            }
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture5());
+            p.setPicture5(p.getUserName() + p.getTitle()+"Pic5.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
         }
 
         if(editpost.getPicture6() != null && !editpost.getPicture6().equals("")){
-            p.setPicture6(editpost.getPicture6());
+            String fileName = "./" +  p.getUserName() + p.getTitle()+"Pic6.png";
+            File f = new File(oldPhotoNamePrefix + "Pic6.png");
+            if(f.exists()){
+                f.delete();
+            }
+            byte[] decoded = Base64.getDecoder().decode(editpost.getPicture6());
+            p.setPicture6(p.getUserName() + p.getTitle()+"Pic6.png");
+            try {
+                FileUtils.writeByteArrayToFile(new File(fileName), decoded);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("PRINTED FIRST IMAGE");
+
         }
-
+        */
         postingRepository.save(p);
-        String json = new Gson().toJson(p);
-        return "{\"serverResponse\" : true}";
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(p);
+        return json;
     }
-
+    @Operation(summary = "fetches the user's published posts", description = "fetches the user's published posts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "fetch successful", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
+    })
     @GetMapping("/getSpecificPosts/{userName}")
     public String getMyPosts(@PathVariable String userName){
         ArrayList<Posting> myposts = postingRepository.findPostingByUserName(userName);
-        String json = new Gson().toJson(myposts);
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(myposts);
         return "{ \"posts\" :" +json + "}";
     }
 
@@ -595,7 +792,7 @@ public class SellPostController {
     })
     @PostMapping("/posts/delete")
     public String deletePost(@RequestBody Posting delete){
-        System.out.println(delete.getUserName());
+        //System.out.println(delete.getUserName());
         Posting p = postingRepository.findPostingById(delete.getId());
 
         if(p == null){
@@ -604,7 +801,8 @@ public class SellPostController {
         }
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(delete.getUserName());
         System.out.println(delete.getUserName());
-        if(u != null){
+
+       if(u != null ){
             Set<Posting> hs = u.getPublishedPosts();
             for(Posting p3 : hs){
                 if(p3.getId() == delete.getId()){
@@ -613,18 +811,45 @@ public class SellPostController {
                 }
             }
             u.setPublishedPosts(hs);
-            generalUserRepository.save(u);
         }
-
+        generalUserRepository.save(u);
         AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
-        if(a != null){
+        if (a != null) {
             auctionTableRepository.delete(a);
         }
         postingRepository.delete(p);
 
-
         return  "{ \"serverResponse\" : true}";
     }
+
+    @Operation(summary = "closes an auction in DB", description = "deletes a post (listing) in DB")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Post successfully got deleted", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
+            @ApiResponse(responseCode = "400", description = "Post does not exist in DB")
+    })
+    @PostMapping("/auction/close")
+    public String CloseAuction(@RequestBody Posting edit){
+
+        Posting p = postingRepository.findPostingById(edit.getId());
+
+        if(p == null ){
+            return" {\"winner\" : null}";
+        }
+
+        if(p.getIsAuction()){
+            p.setIsClosed(true);
+            postingRepository.save(p);
+        }
+        AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
+        if(a.getHighestBidder() != null){
+            return "{\"winner\" : \"" + a.getHighestBidder().getUserName() +"\"}";
+        }else{
+            return "{\"winner\" : null}";
+        }
+
+    }
+
+
 }
 //testing
 
