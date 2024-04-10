@@ -158,23 +158,35 @@ public class CreatePostActivity extends AppCompatActivity{
 
         deleteImageBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                if (imageIndex == 6){
+                if (imageIndex == 5){
+                    image6 = findViewById(R.id.imageSelView6);
                     image6.setImageURI(null);
-                    imageIndex--;
-                }else if (imageIndex == 5){
-                    image5.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
                     imageIndex--;
                 }else if (imageIndex == 4){
-                    image4.setImageURI(null);
+                    image5 = findViewById(R.id.imageSelView5);
+                    image5.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
                     imageIndex--;
                 }else if (imageIndex == 3){
-                    image3.setImageURI(null);
+                    image4 = findViewById(R.id.imageSelView4);
+                    image4.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
                     imageIndex--;
                 }else if (imageIndex == 2){
-                    image2.setImageURI(null);
+                    image3 = findViewById(R.id.imageSelView3);
+                    image3.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
                     imageIndex--;
                 }else if (imageIndex == 1){
+                    image2 = findViewById(R.id.imageSelView2);
+                    image2.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
+                    imageIndex--;
+                }else if (imageIndex == 0){
+                    image1 = findViewById(R.id.imageSelView1);
                     image1.setImageURI(null);
+                    bitmap1to6[imageIndex] = null;
                     imageIndex--;
                 }
             }
@@ -317,7 +329,7 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts/update", jo , response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jo , response -> {
             Log.d(TAG, response.toString());
             try {
                 System.out.println("RECEIVED FROM UPDATE");
