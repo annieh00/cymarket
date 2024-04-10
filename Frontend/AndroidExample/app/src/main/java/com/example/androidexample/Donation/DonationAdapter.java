@@ -1,4 +1,4 @@
-package com.example.androidexample.Post;
+package com.example.androidexample.Donation;
 
 import static com.example.androidexample.PostDetailActivity.decodeBase64ToBitmap;
 
@@ -15,23 +15,23 @@ import com.example.androidexample.R;
 
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class DonationAdapter extends RecyclerView.Adapter<DonationAdapter.ViewHolder> {
 
-    private List<PostItemObject> mPostList;
+    private List<DonationItemObject> mPostList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener{
-        void onItemClick(PostItemObject post);
+        void onItemClick(DonationItemObject post);
     }
 
-    public PostAdapter(List<PostItemObject> mPostList, OnItemClickListener listener){
+    public DonationAdapter(List<DonationItemObject> mPostList, OnItemClickListener listener){
         this.mPostList = mPostList;
         this.mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.donation_item, parent, false);
         return new ViewHolder(v);
     }
 
@@ -62,9 +62,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         }
 
-        public void bind(final PostItemObject item, final OnItemClickListener listener) {
+        public void bind(final DonationItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
-            price.setText(String.valueOf(item.getPrice()));
+//            price.setText(String.valueOf(item.getPrice()));
 //            Bitmap bm = decodeBase64ToBitmap(item.getPicture1());
 //            bm = Bitmap.createScaledBitmap(bm,150,150,false);
 //            image.setImageBitmap(bm);

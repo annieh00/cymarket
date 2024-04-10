@@ -149,6 +149,16 @@ public class MainFeed extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+        refreshBtn = findViewById(R.id.refreshBtn);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshContent();
+            }
+        });
+
+
+
 
 
 
@@ -239,6 +249,10 @@ public class MainFeed extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
+//                    case "Donation":
+//                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
@@ -337,6 +351,14 @@ public class MainFeed extends AppCompatActivity {
 
     }
 
+    private void refreshContent() {
+        // Perform actions to refresh the content here
+        // For example, reload data from the server or reset the RecyclerView adapter
+        mPostList.clear(); // Clear the current list of posts
+        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+        fetchPosts(); // Fetch new posts from the server
+    }
+
     private void fetchPosts() {
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
@@ -358,6 +380,7 @@ public class MainFeed extends AppCompatActivity {
                             int id = jsonObject.getInt("id");
                             mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
+
 
                         mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();

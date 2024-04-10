@@ -19,7 +19,9 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -73,7 +75,8 @@ public class AuctionActivity extends AppCompatActivity {
     /**
      * this is a tag that is attached to the log
      */
-    private String TAG = MainFeed.class.getSimpleName();
+    private String TAG = AuctionActivity.class.getSimpleName();
+    private ImageButton refreshBtn;
 
 
     /**
@@ -138,6 +141,7 @@ public class AuctionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auction);
 
+        refreshBtn = findViewById(R.id.refreshBtn);
 
 
 //        xCoord = findViewById(R.id.xInput);
@@ -173,6 +177,13 @@ public class AuctionActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshContent();
+            }
+        });
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -388,6 +399,14 @@ public class AuctionActivity extends AppCompatActivity {
 
         mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+    }
+
+    private void refreshContent() {
+        // Perform actions to refresh the content here
+        // For example, reload data from the server or reset the RecyclerView adapter
+        mPostList.clear(); // Clear the current list of posts
+        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+        fetchPosts(); // Fetch new posts from the server
     }
 
     private void fetchPosts() {
