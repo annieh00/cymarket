@@ -4,4 +4,6 @@ import com.android.volley.Response;
 
 public interface FriendAcceptedListener{
     void onFriendAccepted();
+
+    void onFriendAccepted(String requesterUsername);
 }

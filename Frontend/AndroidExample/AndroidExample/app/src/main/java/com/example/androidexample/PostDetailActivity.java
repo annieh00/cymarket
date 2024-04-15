@@ -17,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import com.android.volley.toolbox.ImageRequest;
 
@@ -29,7 +28,7 @@ import java.util.Map;
 public class PostDetailActivity extends AppCompatActivity {
 
     private ImageView imageView;
-    private TextView titleTxt;
+    private TextView msgResponse;
 
     private String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
     private String URL_JSON_OBJECT = "https://jsonplaceholder.typicode.com/users/";
@@ -37,10 +36,10 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_item);
+        setContentView(R.layout.activity_post_detail);
 
-        imageView = (ImageView) findViewById(R.id.imageSelView1);
-        titleTxt = findViewById(R.id.titleTxt);
+        imageView = (ImageView) findViewById(R.id.imgView);
+        msgResponse = findViewById(R.id.msgResponse);
 
         Bundle extras = getIntent().getExtras();
         URL_JSON_OBJECT += extras.getString("id");
@@ -93,13 +92,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-                        try {
-                            titleTxt.setText(response.getString("title"));
-
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
+                        msgResponse.setText(response.toString());
                     }
                 },
                 new Response.ErrorListener() {

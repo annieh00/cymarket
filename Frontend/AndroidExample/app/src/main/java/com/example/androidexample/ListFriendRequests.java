@@ -1,8 +1,12 @@
 
 package com.example.androidexample;
+import static com.example.androidexample.FriendFeatureActivity.listViewFriends;
+import static com.example.androidexample.ListFriends.friendList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,11 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
     private List<Friend> pendingRequests;
 
     private FriendAcceptedListener listener;
+
+
+    private String URL = "http://coms-309-060.class.las.iastate.edu:8080";
+
+//    private YourAdapter adapter;
 
     public ListFriendRequests(Context context, List<Friend> friendList, FriendAcceptedListener listener) {
         super(context, 0, friendList);
@@ -66,22 +75,24 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
                 String newFirst = currentFriend.getFirstName();
                 String  newLast = currentFriend.getLastName();
                 int uid = currentFriend.getId();
+                String username = currentFriend.getUsername();
 
-                Friend acceptedFriend = new Friend(newFirst, newLast, uid);
-                ListFriends.friendList.add(acceptedFriend);
+                Friend acceptedFriend = new Friend(newFirst, newLast, uid, username);
+
+                acceptFriendRequest(acceptedFriend);
+                friendList.add(acceptedFriend);
 
                 if (listener != null) {
                     listener.onFriendAccepted();
                 }
 
+                //NEED SOME post request to back end
 //                acceptFriend(newFirst, newLast);
 
                 //need logic to add the user to the friend list, two different lists
                 // Add the user from the list
                 pendingRequests.remove(currentFriend);
                 notifyDataSetChanged(); // Notify the adapter that the dataset has changed
-
-
 
             }
         });
@@ -95,8 +106,9 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
                 // You can implement your logic here
 
                 // Assuming currentFriend has an ID to identify the user to delete
-                int friendId = currentFriend.getId();
-                deleteFriend(friendId);
+                String friendUsername = currentFriend.getUsername();
+                Friend delete = new Friend(currentFriend.getFirstName(), currentFriend.getLastName(), currentFriend.getId(), currentFriend.getUsername());
+                deleteFriend(delete);
 
                 // Remove the user from the list
                 pendingRequests.remove(currentFriend);
@@ -106,37 +118,54 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
         return listItemView;
     }
 
-    private void acceptFriend(int uid) {
+    //THIS MAPPING IS WORKING
+    private void acceptFriendRequest(Friend username) {
+        String newUrl = URL + "/friendrequests/" + LoginActivity.loginID + "/accept/" +username.getId();
+//        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friendrequests/userName123/accept/newfriend";
 
-        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friends";
-        StringRequest request = new StringRequest(Request.Method.PATCH, url,
+        StringRequest request = new StringRequest(Request.Method.POST, newUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(context, "Friend added successfully", Toast.LENGTH_SHORT).show();
-
+                        // Handle successful response
+                        Log.d("AcceptFriendRequest", "Friend request from " + username + " accepted successfully");
+                        // You can perform any further actions here after the request is successful
+                        //update of adapter not working here
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error....", Toast.LENGTH_SHORT).show();
+                        // Handle error
+                        Log.d("AcceptFriendRequest", "Error accepting friend request from " + username + ": " + error.toString());
+                        // You can show an error message to the user or perform any other error handling
                     }
                 });
 
         // Add the request to the RequestQueue
-        Volley.newRequestQueue(context).add(request);
+        Volley.newRequestQueue(this.getContext()).add(request);
+
+
+        if (listViewFriends != null && listViewFriends.getAdapter() instanceof ListFriends) {
+            ((ListFriends) listViewFriends.getAdapter()).notifyDataSetChanged();
+        }
+
     }
 
-    // Method to send DELETE request
-    private void deleteFriend(int friendId) {
+    //THIS MAPPING WORKS
+    private void deleteFriend(Friend id) {
         // Assuming you're using Volley for network requests
-        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/declineFriend/" + friendId;
+//        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friendsrequests/userName123/reject/";
+        String url = URL + "/friendrequests/"+ LoginActivity.loginID+"/reject/" + id.getId();
+
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.d("DeleteFriend", "Username of deleted user: " + id.getId());
+
                         Toast.makeText(context, "Friend deleted successfully", Toast.LENGTH_SHORT).show();
+
 
                     }
                 },
@@ -153,6 +182,11 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
 
     @Override
     public void onFriendAccepted() {
+
+    }
+
+    @Override
+    public void onFriendAccepted(String requesterUsername) {
 
     }
 }

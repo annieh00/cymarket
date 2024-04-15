@@ -42,6 +42,7 @@ public class SignupActivity extends AppCompatActivity {
     public String email;
     public Boolean signupSuccess = false;
     public String passsword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +104,8 @@ public class SignupActivity extends AppCompatActivity {
             //input your API parameters
             jsonObject.put("email", emailEditText.getText().toString());
             jsonObject.put("password", passwordEditText.getText().toString());
+            int atInex = emailEditText.getText().toString().lastIndexOf("@");
+            jsonObject.put("userName",emailEditText.getText().toString().substring(0,atInex));
 
             //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
@@ -120,14 +123,15 @@ public class SignupActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             if (signupSuccess){
-                Intent intent = new Intent(SignupActivity.this, ProfileSetUpActivity.class);
-                startActivity(intent);
-                Toast.makeText(SignupActivity.this, "Please make your profile", Toast.LENGTH_LONG).show();
-            }else{
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                Toast.makeText(SignupActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
                 startActivity(intent);
+                Toast.makeText(SignupActivity.this, "Please sign in", Toast.LENGTH_LONG).show();
             }
+//            else{
+//                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+//                Toast.makeText(SignupActivity.this, "User does not exist", Toast.LENGTH_LONG).show();
+//                startActivity(intent);
+//            }
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());

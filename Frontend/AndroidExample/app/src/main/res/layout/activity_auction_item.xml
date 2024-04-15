@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/vwebtoolbar1"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/cardinal"
@@ -36,6 +36,7 @@
                 </ImageView>
 
 
+
             </androidx.appcompat.widget.Toolbar>
 
 
@@ -49,7 +50,7 @@
 
 
             <TextView
-                android:id="@+id/titleTxt"
+                android:id="@+id/titleTxtView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -72,61 +73,32 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.25" />
 
-            <ImageView
-                android:id="@+id/imageSelView2"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+            <ImageButton
+                android:id="@+id/leftArrowBtn"
+                android:layout_width="81dp"
+                android:layout_height="67dp"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.109"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintVertical_bias="0.251"
+                app:srcCompat="@drawable/left_arrow" />
 
-            <ImageView
-                android:id="@+id/imageSelView3"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+            <ImageButton
+                android:id="@+id/rightArrowBtn"
+                android:layout_width="81dp"
+                android:layout_height="67dp"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.875"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
+                app:layout_constraintVertical_bias="0.251"
+                app:srcCompat="@drawable/right_arrow" />
 
-            <ImageView
-                android:id="@+id/imageSelView4"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
-
-
-            <ImageView
-                android:id="@+id/imageSelView5"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
-
-            <ImageView
-                android:id="@+id/imageSelView6"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.25" />
 
             <TextView
                 android:id="@+id/AuctionTxt"
@@ -151,48 +123,94 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.73">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tx1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text=""
+                    android:textSize="20dp" />
 
-                    <TextView
-                        android:id="@+id/highestBidTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Highest Bid:"
-                        app:layout_constraintEnd_toEndOf="parent">
 
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/highestBidNum"
-                        android:layout_width="109dp"
-                        android:layout_height="18dp"
-                        android:text=""
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.425"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0">
-
-                    </TextView>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+        \
 
             </ScrollView>
+
+            <EditText
+                android:id="@+id/bidEditTxt"
+                android:layout_width="318dp"
+                android:layout_height="41dp"
+                android:inputType="number"
+                android:hint="Enter your bid here..."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+
+            </EditText>
+
+            <Button
+                android:id="@+id/confirmBidBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm Bid"
+                android:backgroundTint="@color/cardinal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.96" />
+
+            <TextView
+                android:id="@+id/highestBidTxt"
+                android:layout_width="217dp"
+                android:layout_height="34dp"
+                android:text="Highest Bid:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.711"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.628">
+
+            </TextView>
+
+            <Button
+                android:id="@+id/closeAuctionBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/cardinal"
+                android:text="Close Auction"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.974"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.108" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/descriptionTxt"
+            android:id="@+id/descriptionTxtView"
             android:layout_width="283dp"
             android:layout_height="123dp"
             android:text=""
             app:layout_anchor="@+id/constraintLayout3"
             app:layout_anchorGravity="center" />
 
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navheader"
+        app:menu="@menu/menu_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

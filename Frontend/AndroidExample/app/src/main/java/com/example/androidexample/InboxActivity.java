@@ -39,7 +39,7 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
 
 //    private String serverUrl = "ws://10.0.2.2:8080/chat/";
 
-    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8443/chat/%7B" + LoginActivity.username + "%7D";
+    String serverUrl = "http://coms-309-060.class.las.iastate.edu:8080/chat/%7B" + LoginActivity.username + "%7D";
 
 
 //    private boolean isWebSocketConnected = false;
@@ -62,8 +62,19 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
+
         // Set the content view to the layout defined in activity_inbox.xml
         setContentView(R.layout.activity_inbox);
+
+
+        String userToText = getIntent().getStringExtra("userToText");
+        // Set the userToText to the EditText
+        EditText editText = findViewById(R.id.msgEdt);
+        editText.setText(userToText);
+
 
         sendBtn = findViewById(R.id.sendBtn);
 

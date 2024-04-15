@@ -18,7 +18,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
+import android.view.DragEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -109,23 +112,12 @@ public class MainFeed extends AppCompatActivity {
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-
+    private ImageButton refreshBtn;
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
 //    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
 //    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
-
-    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation";
-
-    String server_url_create = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
-
-
-
-    String server_url_del = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/del/";
-
-    String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
-
 
 
 
@@ -134,16 +126,6 @@ public class MainFeed extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
 
-//        xCoord = findViewById(R.id.xInput);
-//        yCoord = findViewById(R.id.yInput);
-//        setLocationBtn = findViewById(R.id.locationButton);
-//        seeCoordinates = findViewById(R.id.listCoords);
-//        coordListing = findViewById(R.id.coordList);
-//        deleteCoordButton = findViewById(R.id.deleteCoord);
-//        id = findViewById(R.id.coordIdDelete);
-//        updateLocationBtn = findViewById(R.id.updateCoord);
-//        updatedX = findViewById(R.id.updateX);
-//        updatedY = findViewById(R.id.updateY);
 
 
 
@@ -167,6 +149,19 @@ public class MainFeed extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+        refreshBtn = findViewById(R.id.refreshBtn);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshContent();
+            }
+        });
+
+
+
+
+
+
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -254,18 +249,21 @@ public class MainFeed extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
+//                    case "Donation":
+//                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);
                         break;
                     case "Profile":
                         // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileSetUpActivity.class);
+                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intent);
                         break;
                     case "Sell":
@@ -282,7 +280,7 @@ public class MainFeed extends AppCompatActivity {
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
                         startActivity(intent);
                         break;
                     case "Settings":
@@ -299,42 +297,7 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
-//        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int uid = Integer.parseInt(id.getText().toString());
-//
-//
-//                String x = updatedX.getText().toString();
-//                String y = updatedY.getText().toString();
-//
-//                String updateAnnouncementUrl = server_url_update + uid;
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("x", x);
-//                    jsonObject.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", "Announcement updated successfully");
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
-//                    }
-//                });
-//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-//            }
-//        });
-//
-//
-//
+
 //        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -367,48 +330,64 @@ public class MainFeed extends AppCompatActivity {
 
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearManager);
+
+
+
+
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-
-                // intent to the detail activity
-                Intent intent = new Intent(MainFeed.this, PostDetailActivity.class);
-                intent.putExtra("id", String.valueOf(item.getPostID()+1)); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                Log.d("Hi"," Bye");
+                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }
         });
 
-        mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+
+
+
+    }
+
+    private void refreshContent() {
+        // Perform actions to refresh the content here
+        // For example, reload data from the server or reset the RecyclerView adapter
+        mPostList.clear(); // Clear the current list of posts
+        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+        fetchPosts(); // Fetch new posts from the server
     }
 
     private void fetchPosts() {
-        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray jsonArray = response.getJSONArray("posts");
+                        for (int i = jsonArray.length()-1; i >= 0; i--) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
-                            int price = Integer.parseInt(jsonObject.getString("price"));
+                            int price = jsonObject.getInt("price");
+                            Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
-
-                            String date = "date"; // placeholder
-                            String category = "category"; // placeholder
-                            Boolean auction = true; // placeholder
-                            int flagCount = 0; // placeholder
-                            int userID = 0; // placeholder
-                            int postID = 0; // placeholder
-
-                            mPostList.add(new PostItemObject(null,null,null,null,null,null,title,price,date,category,auction,flagCount, description,userID,postID));
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
+                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
+
+                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }, error -> {
             // Handle error
         });
@@ -570,7 +549,5 @@ public class MainFeed extends AppCompatActivity {
 
 
 }
-
-
 
 
