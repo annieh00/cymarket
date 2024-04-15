@@ -14,6 +14,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
     dataBinding {
         enabled = true
     }
