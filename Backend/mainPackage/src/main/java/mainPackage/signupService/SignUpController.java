@@ -37,7 +37,13 @@ public class SignUpController {
             if(generalUserRepository.findGeneralUserByEmail(generalUser.getEmail()) != null){
                 return "{\"fromServer\" : false}";
             }
+            if(generalUser.getEmail() == null || generalUser.getEmail().equals("") || !generalUser.getEmail().contains("@")){
+                return "{\"fromServer\" : false}";
+            }
+
             generalUser.setUserType(2);
+            String username = generalUser.getEmail().substring(0,generalUser.getEmail().indexOf("@"));
+            generalUser.setUserName(username);
             generalUserRepository.save(generalUser);
         }catch (Exception e){
             e.printStackTrace();
