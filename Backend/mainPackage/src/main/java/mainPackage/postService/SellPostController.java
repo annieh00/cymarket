@@ -56,6 +56,7 @@ public class SellPostController {
     })
     @PostMapping("/posts")
     public String createPost(@RequestBody Posting p){
+        p.setId(0); //explicitly setting the ID by the user is not allowed, setting it to 0 tells the JPA to auto-configure it
         GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
         if(u2 == null){
             //System.out.println("user "+p.getUserName()+ " does not exist");
@@ -70,11 +71,9 @@ public class SellPostController {
 
             return "{\"serverResponse\" : \"duplicate entry\"}";
         }
-
         try {
-            //nu.pattern.OpenCV.loadLocally();
-            //setPictures(p);
-
+            nu.pattern.OpenCV.loadLocally();
+            setPictures(p);
         } catch (Exception e){
             e.printStackTrace();
             return "internal server error";
@@ -103,7 +102,8 @@ public class SellPostController {
             auctionTableRepository.save(auction);
         }
 
-        //p gets altered as well
+
+
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
         Gson gson = builder.setPrettyPrinting().create();
@@ -121,7 +121,7 @@ public class SellPostController {
     })
     @GetMapping("/getAllPosts")
     public String getPosts(){
-        ArrayList<Posting> mylist = postingRepository.findAll();
+        List<Posting> mylist = postingRepository.findAll();
         ArrayList<Posting> ret = new ArrayList<>();
 
         try {
@@ -151,7 +151,7 @@ public class SellPostController {
     })
     @GetMapping("/getAllDonations")
     public String getDonations(){
-        ArrayList<Posting> mylist = postingRepository.findAll();
+        List<Posting> mylist = postingRepository.findAll();
         ArrayList<Posting> ret = new ArrayList<>();
 
         try {
@@ -199,7 +199,7 @@ public class SellPostController {
     })
     @GetMapping("/auctions")
     public String getAuctions(){
-        ArrayList<Posting> mylist = postingRepository.findAll();
+        List<Posting> mylist = postingRepository.findAll();
         ArrayList<Posting> ret = new ArrayList<>();
 
         try {
@@ -478,18 +478,11 @@ public class SellPostController {
     private Posting getPicturePaths(Posting p){
         GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
         if(u2 == null){
-            u2 = generalUserRepository.findById(p.getId());
-            if(u2 == null){
-                return null;
-            }
+            return null;
         }
-
-
 
         try {
             nu.pattern.OpenCV.loadLocally();
-
-
             String img1 = p.getPicture1();
             if((img1 != null) && !img1.equals("") ){
                 String fileName = "./"+p.getUserName() + p.getTitle()+"Pic1.png";
@@ -796,7 +789,6 @@ public class SellPostController {
         Posting p = postingRepository.findPostingById(delete.getId());
 
         if(p == null){
-
             return "{ \"serverResponse\" : false}";
         }
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(delete.getUserName());
@@ -811,9 +803,10 @@ public class SellPostController {
                 }
             }
             u.setPublishedPosts(hs);
+            generalUserRepository.save(u);
         }
-        generalUserRepository.save(u);
-        AuctionTable a = auctionTableRepository.getAuctionTableByPost(p);
+
+        AuctionTable a = auctionTableRepository.getAuctionTableById(p.getId());
         if (a != null) {
             auctionTableRepository.delete(a);
         }
