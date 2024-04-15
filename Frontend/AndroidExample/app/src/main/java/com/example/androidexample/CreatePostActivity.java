@@ -167,6 +167,7 @@ public class CreatePostActivity extends AppCompatActivity{
                     bitmap1to6[5] = null;
                     image6.setDrawingCacheEnabled(false); // clear drawing cache
                     imageIndex--;
+                    Log.d("Image 6 successfully deleted", image6.toString());
                 }else if (imageIndex == 4){
                     image5 = findViewById(R.id.imageSelView5);
                     image5.setImageURI(null);
@@ -284,7 +285,6 @@ public class CreatePostActivity extends AppCompatActivity{
                                     image6.setDrawingCacheEnabled(false); // clear drawing cache
                                     break;
                             }
-
                             imageIndex++;
                         }else{
                             Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
@@ -353,7 +353,7 @@ public class CreatePostActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jo , response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jo, response -> {
             Log.d(TAG, response.toString());
             try {
                 System.out.println("RECEIVED FROM UPDATE");
@@ -427,7 +427,7 @@ public class CreatePostActivity extends AppCompatActivity{
             jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
             System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
             jsonObject.put("isAuction", auction);
-            System.out.println("THE AUCTION STATUS WAS " + isAuction);
+            System.out.println("THE AUCTION STATUS WAS " + auction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
 

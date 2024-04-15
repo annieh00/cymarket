@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -87,6 +88,15 @@ public class PostDetailActivity extends AppCompatActivity {
         }catch (Exception e){
             System.out.println("CALLING FAILED");
         }
+
+        Toolbar t = (Toolbar)findViewById(R.id.toolbar);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
+                startActivity(intent);
+            }
+        });
 
         editPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
