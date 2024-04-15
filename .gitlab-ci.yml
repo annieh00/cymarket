@@ -12,9 +12,6 @@ maven-build:
   script:               # what to execute for this job
     - cd Backend/mainPackage        # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
     - mvn package       # maven package
-  artifacts:            # where to output the packaged jar file, change 'Backend' to where you have the pom.xml
-    paths:
-    - Backend/mainPackage/target/*.jar
   only:
     refs:
       - main            # only to trigger the pipeline when changes are pushed to 'main'
@@ -40,6 +37,7 @@ auto-deploy:
   - springboot_tag      # change to your runner's tag
   script:               # script to run the deployment service you created
     - cd Backend/mainPackage        # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn package
     - sudo mv target/*.jar /target/web-demo.jar 
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo
