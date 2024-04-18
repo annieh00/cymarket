@@ -1,8 +1,5 @@
 .DS_Store
-<<<<<<< HEAD
 Experiments/JunhyungShimExperiment/plzIgnoreThis.txt
-=======
 Experiments/JunhyungShimExperiment/e.txt
->>>>>>> 2694e0710f0e0517897b93c2ce63c1ab356b249f
 .idea
 .gitlab-ci.yml
