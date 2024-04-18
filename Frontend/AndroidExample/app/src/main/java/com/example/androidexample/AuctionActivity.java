@@ -106,9 +106,9 @@ public class AuctionActivity extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private AuctionAdapter mPostAdapter;
+    public static AuctionAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
+    static ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
 
     private Button stopAuctionBtn;
     /**

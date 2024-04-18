@@ -102,9 +102,9 @@ public class MainFeed extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private PostAdapter mPostAdapter;
-    private RecyclerView mRecyclerView;
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+    public static PostAdapter mPostAdapter;
+    public RecyclerView mRecyclerView;
+    public static ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
 
     /**
@@ -149,13 +149,13 @@ public class MainFeed extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
-        refreshBtn = findViewById(R.id.refreshBtn);
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshContent();
-            }
-        });
+//        refreshBtn = findViewById(R.id.refreshBtn);
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refreshContent();
+//            }
+//        });
 
 
 
@@ -346,6 +346,8 @@ public class MainFeed extends AppCompatActivity {
         });
 
         fetchPosts();
+//        refreshContent();
+
 
 
 
@@ -355,6 +357,7 @@ public class MainFeed extends AppCompatActivity {
         // Perform actions to refresh the content here
         // For example, reload data from the server or reset the RecyclerView adapter
         mPostList.clear(); // Clear the current list of posts
+//        mPostList.de
         mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         fetchPosts(); // Fetch new posts from the server
     }

@@ -28,6 +28,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.android.volley.toolbox.ImageRequest;
+import com.example.androidexample.Auction.AuctionAdapter;
+import com.example.androidexample.Post.PostAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,6 +134,7 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         closeAuctionBtn.setOnClickListener(v -> {
             try {
                 closeAuction();
+
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
@@ -315,6 +318,15 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         Log.d("Volley Response", response.toString());
                         try {
                              winner = response.getString("winner");
+                            for (int i = 0; i < AuctionActivity.mPostList.size(); i++){
+                                if (AuctionActivity.mPostList.get(i).getPostID() == pid){
+                                    AuctionActivity.mPostList.remove(i);
+                                    break;
+                                }
+                            }
+
+                            ((AuctionAdapter) AuctionActivity.mPostAdapter).notifyDataSetChanged();
+
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);

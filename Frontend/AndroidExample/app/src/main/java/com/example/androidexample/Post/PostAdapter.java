@@ -5,6 +5,7 @@ import static com.example.androidexample.PostDetailActivity.decodeBase64ToBitmap
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,14 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
-    private List<PostItemObject> mPostList;
-    private OnItemClickListener mListener;
+    public List<PostItemObject> mPostList;
+    public OnItemClickListener mListener;
+
+    public Object getAdapter() {
+        return mPostList;
+    }
+
+
 
     public interface OnItemClickListener{
         void onItemClick(PostItemObject post);
@@ -65,6 +72,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void bind(final PostItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
             price.setText(String.valueOf(item.getPrice()));
+            Log.d("picture1:", item.getPicture1());
 //            Bitmap bm = decodeBase64ToBitmap(item.getPicture1());
 //            bm = Bitmap.createScaledBitmap(bm,150,150,false);
 //            image.setImageBitmap(bm);

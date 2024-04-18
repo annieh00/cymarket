@@ -430,7 +430,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="20dp"
                         android:layout_toEndOf="@+id/faqIcon"
-                        android:text="FAQs"
+                        android:text="Request to Become an Organization"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold" />
