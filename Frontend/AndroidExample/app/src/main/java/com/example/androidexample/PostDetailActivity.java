@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.androidexample.Post.PostAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,9 +53,10 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageButton rightArrowBtn;
     private Button editPostBtn;
     public static int pid;
-    private int imageNum = 1;
+    private int imageNum = 0;
 
     private int displayedImageIndex = 1;
+
     private void processURL(Bundle extras){
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
         if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
@@ -129,7 +131,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(displayedImageIndex  < (imageNum - 1)){
+                if(displayedImageIndex  < imageNum){
                     displayedImageIndex++;
 
                 }else{
@@ -148,11 +150,11 @@ public class PostDetailActivity extends AppCompatActivity {
                 if(displayedImageIndex < 1 || displayedImageIndex > 6){
                     return;
                 }
-                if(displayedImageIndex  > 1 ){
+                if(displayedImageIndex  > 1){
                     displayedImageIndex--;
                 }else{
                     //make it the number of images so that it feels like the user is rolling through the pictures
-                    displayedImageIndex = imageNum - 1;
+                    displayedImageIndex = imageNum;
                 }
                 getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
 
@@ -164,6 +166,7 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deletePost();
+
             }
         });
 
@@ -281,6 +284,16 @@ public class PostDetailActivity extends AppCompatActivity {
                         try {
                             serverResponse = response.getBoolean("serverResponse");
 
+//                            Bundle extras =
+                            for (int i = 0; i < MainFeed.mPostList.size(); i++){
+                                if (MainFeed.mPostList.get(i).getPostID() == pid){
+                                    MainFeed.mPostList.remove(i);
+                                    break;
+                                }
+                            }
+
+                            ((PostAdapter) MainFeed.mPostAdapter).notifyDataSetChanged();
+
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -381,7 +394,7 @@ public class PostDetailActivity extends AppCompatActivity {
 //    }
     //image index has to be from 1~6
     private void getImageNum() {
-        if(imageNum < 1 || imageNum > 6){return;}
+//        if(imageNum < 1 || imageNum > 6){return;}
 //        imageNum = 1; // Reset or initialize imageNum correctly
         Bundle extras = getIntent().getExtras();
         String postId = extras.getString("id");
@@ -389,7 +402,7 @@ public class PostDetailActivity extends AppCompatActivity {
         for(int i = 1; i < 7; i++){
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                     Request.Method.GET,
-                    "http://coms-309-060.class.las.iastate.edu:8080/image/" + extras.getString("id") +"/" + i,
+                    "http://coms-309-060.class.las.iastate.edu:8080/image/" + postId +"/" + i,
                     null, // Pass null as the request body since it's a GET request
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -397,7 +410,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             Log.d("Volley Response", response.toString());
                             try {
                                 String encodedString = response.getString("image");
-                                if (encodedString != null && !encodedString.isEmpty() && !encodedString.equals("null")) {                                    imageNum++;
+                                if (encodedString != null && !encodedString.isEmpty() && !encodedString.equals("null")) {
+                                    imageNum++;
                                 }
 
 
@@ -441,6 +455,7 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 
