@@ -1,0 +1,6 @@
+<vector android:height="17dp" android:tint="#FFFFFF"
+    android:viewportHeight="24" android:viewportWidth="100"
+    android:width="150dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Use rounded rectangle path data -->
+    <path android:fillColor="@android:color/white" android:pathData="M4,2a2,2 0 0 1 2,-2h84a2,2 0 0 1 2,2v20a2,2 0 0 1 -2,2h-84a2,2 0 0 1 -2,-2z"/>
+</vector>
