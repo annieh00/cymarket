@@ -103,6 +103,7 @@
             android:layout_marginRight="10dp"
             android:text="Signup"
             android:textSize="20sp"
+            android:backgroundTint="@color/cardinal"
             android:textColor="#ffffff">
         </Button>
 

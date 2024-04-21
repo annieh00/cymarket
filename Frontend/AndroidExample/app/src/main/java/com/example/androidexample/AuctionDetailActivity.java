@@ -5,6 +5,7 @@ import static com.example.androidexample.LoginActivity.username;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -134,6 +135,16 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         closeAuctionBtn.setOnClickListener(v -> {
             try {
                 closeAuction();
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
 
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());

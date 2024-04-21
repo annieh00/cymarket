@@ -140,8 +140,17 @@ public class CreatePostActivity extends AppCompatActivity{
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                startActivity(intent);
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -440,11 +449,11 @@ public class CreatePostActivity extends AppCompatActivity{
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = true;
-                int pid = Integer.parseInt(response.getString("id"));
                 title = response.getString("title");
                 usernameString = response.getString("userName");
                 Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
+                    int pid = response.getInt("id");
                     sendImageToServer(pid, i+1);
                 }
             } catch (Exception e) {

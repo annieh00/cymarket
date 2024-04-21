@@ -26,7 +26,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
 
-
+    public void updatePosts(List<PostItemObject> updated){
+         mPostList.clear();
+         mPostList.addAll(updated);
+         notifyDataSetChanged();
+    }
     public interface OnItemClickListener{
         void onItemClick(PostItemObject post);
     }

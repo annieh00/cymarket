@@ -167,6 +167,17 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 deletePost();
 
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -291,6 +302,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
+
 
                             ((PostAdapter) MainFeed.mPostAdapter).notifyDataSetChanged();
 

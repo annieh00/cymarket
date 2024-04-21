@@ -17,6 +17,7 @@
         <activity android:name=".MainFeedOrganizer" android:exported="false"/>
         <activity android:name=".AuctionDetailActivity" android:exported="true"/>
         <activity android:name=".FriendFeatureActivity" android:exported="false"/>
+        <activity android:name=".CreateDonationActivity" android:exported="false"/>
         <!--  <activity  -->
         <!--  android:name=".ViewAnnouncementAdmin"  -->
         <!--  android:exported="false" />  -->
