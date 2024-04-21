@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -28,9 +27,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.android.volley.toolbox.ImageRequest;
+
 import com.example.androidexample.Auction.AuctionAdapter;
-import com.example.androidexample.Post.PostAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
