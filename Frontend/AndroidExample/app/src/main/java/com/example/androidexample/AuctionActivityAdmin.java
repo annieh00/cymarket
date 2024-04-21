@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,7 +47,7 @@ import java.util.List;
 /**
  * Main feed displays the current posts.
  */
-public class AuctionActivityOrganizer extends AppCompatActivity {
+public class AuctionActivityAdmin extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
 
@@ -151,7 +150,7 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
 
 
 
-        builder = new AlertDialog.Builder(AuctionActivityOrganizer.this);
+        builder = new AlertDialog.Builder(AuctionActivityAdmin.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -172,12 +171,12 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
 
         }
 
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshContent();
-            }
-        });
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refreshContent();
+//            }
+//        });
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -266,25 +265,17 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
                 Intent intent;
                 switch (itemSelected) {
                     case "Main Feed":
-                        intent = new Intent(getApplicationContext(), MainFeedOrganizer.class);
+                        intent = new Intent(getApplicationContext(), MainFeed.class);
                         startActivity(intent);
                         break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-                    case "Create Donation":
-                        intent = new Intent(getApplicationContext(), CreateDonationActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Donation Feed":
-                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Auction":
-                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
-                        startActivity(intent);
-                        break;
+//                    case "Auction":
+//                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Profile":
                         // Handle click on the first item
                         intent = new Intent(getApplicationContext(), ProfileActivity.class);
@@ -300,10 +291,11 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
 //                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
+
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
                         startActivity(intent);
                         break;
                     case "Settings":
@@ -319,7 +311,6 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
                 return true; // Return true to indicate that the item is selected
             }
         });
-
 
 //        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -393,7 +384,7 @@ public class AuctionActivityOrganizer extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
-                Intent intent = new Intent(AuctionActivityOrganizer.this, AuctionDetailActivity.class);
+                Intent intent = new Intent(AuctionActivityAdmin.this, AuctionDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }

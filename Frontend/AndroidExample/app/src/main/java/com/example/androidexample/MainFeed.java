@@ -1,7 +1,5 @@
 package com.example.androidexample;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -18,9 +16,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
-import android.view.DragEvent;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -31,7 +27,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
@@ -41,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
