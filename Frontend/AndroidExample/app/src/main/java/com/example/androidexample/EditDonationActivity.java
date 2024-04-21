@@ -130,7 +130,7 @@ public class EditDonationActivity extends AppCompatActivity{
 //
 //        image6 = findViewById(R.id.imageSelView6);
 
-        priceEditTxt = findViewById(R.id.priceEditTxt);
+//        priceEditTxt = findViewById(R.id.priceEditTxt);
 
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
 

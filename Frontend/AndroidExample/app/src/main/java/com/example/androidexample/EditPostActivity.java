@@ -25,6 +25,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.androidexample.Post.PostAdapter;
 
 //import com.example.androidexample.Manifest;
 
@@ -69,7 +70,7 @@ public class EditPostActivity extends AppCompatActivity{
     private volatile String title;
     private String description;
     private volatile String usernameString;
-private int id;
+    private int id;
 
     private Bitmap bitmap;
     private String filePath;
@@ -432,64 +433,56 @@ private int id;
         }
 
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jsonObject, response -> {
-            Log.d(TAG, response.toString());
-            try {
-//                serverResponse = response.getBoolean("serverResponse");
-//                createPostSuccess = true;
-//                int pid = response.getInt("id");
-//                title = response.getString("title");
-//                usernameString = response.getString("userName");
-//                for(int i = 0; i < imageIndex; i++ ) {
-//                    sendImageToServer(pid, i+1);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("response", response.toString());
+                Log.d("Volley Response", response.toString());
+//                try {
+//                    serverResponse = response.getBoolean("serverResponse");
+
+//                    for (int i = 0; i < MainFeed.mPostList.size(); i++){
+//                        if (MainFeed.mPostList.get(i).getPostID() == PostDetailActivity.pid){
+//                            MainFeed.mPostList.remove(i);
+//                            break;
+//                        }
+//                    }
+
+
+
+                    ((PostAdapter) MainFeed.mPostAdapter).updatePosts(MainFeed.mPostList);
+
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
 //                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-                //System.out.println("FAILED AT LINE 350");
-                //createPostSuccess = false;
             }
-
-//
-//            if (serverResponse) {
-//                Toast.makeText(editPostActivity.this, "Edit is successful!", Toast.LENGTH_LONG).show();
-//                //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-//                //startActivity(intent);
-//            }else{
-//                Toast.makeText(editPostActivity.this, "Edit unsuccessful.", Toast.LENGTH_LONG).show();
-//            }
-
-
-
-
-
-        }, error -> {
-            VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(EditPostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
-//            txtValidity = true;
-        }) {
-
-            /**
-             * Passing some request headers
-             */
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
                 return headers;
             }
 
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 //                params.put("param1", "value1");
 //                params.put("param2", "value2");
                 return params;
             }
-
         };
 
-        //queue.add(jsonObjReq);
+        // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
-        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
     }
 
 

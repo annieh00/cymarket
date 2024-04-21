@@ -363,6 +363,7 @@ public class MainFeed extends AppCompatActivity {
     }
 
     private void fetchPosts() {
+        mPostList.clear();
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
