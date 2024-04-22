@@ -16,13 +16,12 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/announcements")
 public class AnnouncementController {
 
     @Autowired
     private AnnouncementRepository announcementRepository;
 
-    @GetMapping("/")
+    @GetMapping("/announcements")
     @Operation(summary = "List all announcements",
             description = "Lists all announcements for the specified user.")
     @ApiResponses(value = {
@@ -32,14 +31,12 @@ public class AnnouncementController {
         return announcementRepository.findAll();
     }
 
-    @GetMapping("/{announcementId}")
+    @GetMapping("/announcements/{announcementId}")
     @Operation(summary = "Get announcement by ID",
             description = "Gets the announcement with the specified ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Announcement retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Announcement not found")
     })
-    public Announcement getAnnouncementById(@PathVariable int announcementId) {
-        return announcementRepository.findAnnouncementById(announcementId);
-    }
+    public Announcement getAnnouncementById(@PathVariable int announcementId) { return announcementRepository.findAnnouncementById(announcementId); }
 }
