@@ -13,8 +13,10 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)  // Enables explicit ordering with @Order
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JimmyLeSystemTest {
+
+    private static int announcementId;
 
     @BeforeEach
     void setup() {
@@ -23,30 +25,32 @@ class JimmyLeSystemTest {
     }
 
     @Test
-    @Order(1)  // First test
+    @Order(1)
     void createAnnouncement() {
         String newAnnouncementJson = "{ \"title\": \"New Announcement\", \"description\": \"This is a new announcement.\" }";
 
-        given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(newAnnouncementJson)
-            .when()
-                .post("/announcements/create")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Announcement created."))
-                .body("id", notNullValue());
+        // Ensure the extracted id is treated as an integer
+        announcementId =
+                Integer.parseInt(given()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .body(newAnnouncementJson)
+                        .when()
+                        .post("/announcements/create")
+                        .then()
+                        .statusCode(200)
+                        .body("status", equalTo("Announcement created."))
+                        .extract()
+                        .path("id").toString()); // Ensure id is a string to check
     }
 
     @Test
-    @Order(2)  // Second test
+    @Order(2)
     void updateAnnouncement() {
-        int announcementIdToUpdate = 28;
         String updateDataJson = "{ \"title\": \"Updated Title\", \"description\": \"Updated description.\" }";
 
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .pathParam("id", announcementIdToUpdate)
+                .pathParam("id", announcementId)
                 .body(updateDataJson)
             .when()
                 .put("/announcements/update/{id}")
@@ -56,36 +60,32 @@ class JimmyLeSystemTest {
     }
 
     @Test
-    @Order(3)  // Third test
+    @Order(3)
     void readAnnouncement() {
-        int existingAnnouncementId = 28;
-
         given()
-                .pathParam("announcementId", existingAnnouncementId)
-            .when()
-                .get("/announcements/{announcementId}")
-            .then()
-                .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body("id", equalTo(existingAnnouncementId));
+                    .pathParam("announcementId", announcementId)
+                .when()
+                    .get("/announcements/{announcementId}")
+                .then()
+                    .statusCode(200)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .body("id", equalTo(announcementId));
     }
 
     @Test
-    @Order(5)  // Fourth test
+    @Order(5)
     void deleteAnnouncement() {
-        int announcementIdToDelete = 28;
-
         given()
-                .pathParam("id", announcementIdToDelete)
-            .when()
-                .delete("/announcements/del/{id}")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Announcement deleted successfully."));
+                    .pathParam("id", announcementId)
+                .when()
+                    .delete("/announcements/del/{id}")
+                .then()
+                    .statusCode(200)
+                    .body("status", equalTo("Announcement deleted successfully."));
     }
 
     @Test
-    @Order(4)  // Last test to confirm at least one announcement
+    @Order(4)
     void getAllAnnouncements() {
         when()
                 .get("/announcements")
