@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > P2UKey</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">mainPackage.usersPackage</a>
+</div>
+
+<h1>Coverage Summary for Class: P2UKey (mainPackage.usersPackage)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">P2UKey</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package mainPackage.usersPackage;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;/**
+&nbsp; * @author Junhyung Shim
+&nbsp; * */
+&nbsp;public class P2UKey implements Serializable {
+&nbsp;    private int pid;
+&nbsp;    private String uid;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object other){
+<b class="nc">&nbsp;        if(!(other instanceof P2UKey)||other == null)return false;</b>
+<b class="nc">&nbsp;        if(other == this)return true;</b>
+<b class="nc">&nbsp;        return ((P2UKey) other).pid == this.pid &amp;&amp; ((P2UKey) other).uid.equals(this.uid);</b>
+&nbsp;    }
+<b class="nc">&nbsp;    public P2UKey(int p, String u){pid = p; uid = u;}</b>
+<b class="nc">&nbsp;    public P2UKey(){};</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-22 14:22</div>
+</div>
+</body>
+</html>

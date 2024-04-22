@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > SignUpController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">mainPackage.signupService</a>
+</div>
+
+<h1>Coverage Summary for Class: SignUpController (mainPackage.signupService)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SignUpController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.3%
+  </span>
+  <span class="absValue">
+    (9/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package mainPackage.signupService;
+&nbsp;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.media.Content;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponses;
+&nbsp;import mainPackage.usersPackage.GeneralUser;
+&nbsp;import mainPackage.usersPackage.GeneralUserRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * @author Junhyung Shim
+&nbsp; * This controller will handle the get/post data for signup
+&nbsp; * for post data it will create a user to db
+&nbsp; * */
+&nbsp;@RestController
+<b class="fc">&nbsp;public class SignUpController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private GeneralUserRepository generalUserRepository;
+&nbsp;    @Operation(summary = &quot;create account for a user&quot;, description = &quot;creates a user in DB, type specified by an int (0,1) corresponding to (normal, organization), admin cannot sign up&quot;)
+&nbsp;    @ApiResponses(value = {
+&nbsp;            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;user created successfully&quot;, content = @Content(mediaType = &quot;text/plain&quot;, schema = @Schema(type = &quot;string&quot;))),
+&nbsp;            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;user already signed up with the email or illegal fields were given&quot;)
+&nbsp;    })
+&nbsp;    //create
+&nbsp;    @PostMapping(&quot;/signup&quot;)
+&nbsp;    public String createUser(@RequestBody GeneralUser generalUser){
+&nbsp;        try{
+<b class="fc">&nbsp;            if(generalUserRepository.findGeneralUserByEmail(generalUser.getEmail()) != null){</b>
+<b class="nc">&nbsp;                return &quot;{\&quot;fromServer\&quot; : false}&quot;;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            if(generalUser.getEmail() == null || generalUser.getEmail().equals(&quot;&quot;) || !generalUser.getEmail().contains(&quot;@&quot;)){</b>
+<b class="nc">&nbsp;                return &quot;{\&quot;fromServer\&quot; : false}&quot;;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            generalUser.setUserType(2);</b>
+<b class="fc">&nbsp;            String username = generalUser.getEmail().substring(0,generalUser.getEmail().indexOf(&quot;@&quot;));</b>
+<b class="fc">&nbsp;            generalUser.setUserName(username);</b>
+<b class="fc">&nbsp;            generalUserRepository.save(generalUser);</b>
+<b class="nc">&nbsp;        }catch (Exception e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            return &quot;{\&quot;fromServer\&quot; : false}&quot;;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return &quot;{\&quot;fromServer\&quot; : true}&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-22 14:22</div>
+</div>
+</body>
+</html>
