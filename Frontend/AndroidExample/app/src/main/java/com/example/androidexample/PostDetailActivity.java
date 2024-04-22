@@ -52,6 +52,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageButton rightArrowBtn;
     private Button editPostBtn;
     public static int pid;
+    private int imageNum = 1;
 
     private int displayedImageIndex = 1;
     private void processURL(Bundle extras){
@@ -63,6 +64,8 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         URL_JSON_OBJECT += extras.getString("id");
     }
+
+
 
 
     @Override
@@ -79,10 +82,13 @@ public class PostDetailActivity extends AppCompatActivity {
         editPostBtn = findViewById(R.id.editPostBtn);
 
         pid = Integer.parseInt(getIntent().getExtras().getString("id"));
+        getImageNum();
+
 
         processURL(extras);
         makeJsonObjReq();
         ImageView imv = (ImageView) findViewById(R.id.imageSelView1);
+
         try {
             getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
         }catch (Exception e){
@@ -93,8 +99,17 @@ public class PostDetailActivity extends AppCompatActivity {
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
-                startActivity(intent);
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -114,10 +129,10 @@ public class PostDetailActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(displayedImageIndex  <= 6){
+                if(displayedImageIndex  < (imageNum - 1)){
                     displayedImageIndex++;
 
-                }else if(displayedImageIndex == 7){
+                }else{
                     //make it to 1 so that it feels like the user is rolling through the pictures
                     displayedImageIndex = 1;
                 }
@@ -133,13 +148,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 if(displayedImageIndex < 1 || displayedImageIndex > 6){
                     return;
                 }
-                if(displayedImageIndex  >= 1 ){
+                if(displayedImageIndex  > 1 ){
                     displayedImageIndex--;
-                }else if(displayedImageIndex == 0){
-                    //make it to 6 so that it feels like the user is rolling through the pictures
-                    displayedImageIndex = 6;
+                }else{
+                    //make it the number of images so that it feels like the user is rolling through the pictures
+                    displayedImageIndex = imageNum - 1;
                 }
                 getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+
+
             }
         });
 
@@ -353,6 +370,78 @@ public class PostDetailActivity extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
+
+//    private void getImageNum(String url){
+//        Bundle extras = getIntent().getExtras();
+//        for(int i = 1; i < 7; i++){
+//            if ((url + extras.getString("id") +"/" + i) != "null"){
+//                imageNum++;
+//            }
+//        }
+//    }
+    //image index has to be from 1~6
+    private void getImageNum() {
+        if(imageNum < 1 || imageNum > 6){return;}
+//        imageNum = 1; // Reset or initialize imageNum correctly
+        Bundle extras = getIntent().getExtras();
+        String postId = extras.getString("id");
+//        Bundle extras = getIntent().getExtras();
+        for(int i = 1; i < 7; i++){
+            JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "http://coms-309-060.class.las.iastate.edu:8080/image/" + extras.getString("id") +"/" + i,
+                    null, // Pass null as the request body since it's a GET request
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Volley Response", response.toString());
+                            try {
+                                String encodedString = response.getString("image");
+                                if (encodedString != null && !encodedString.isEmpty() && !encodedString.equals("null")) {                                    imageNum++;
+                                }
+
+
+//                                Bitmap bm = decodeBase64ToBitmap(encodedString);
+//                                bm = Bitmap.createScaledBitmap(bm,150,150,false);
+//                                imv.setImageBitmap(bm);
+                            } catch (JSONException e) {
+                                //no json was in the response, which means that the user does not have the image with index
+
+                                return;
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Volley Error", error.toString());
+                        }
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                    return params;
+                }
+            };
+
+            // Adding request to request queue
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        }
+
+    }
+
 
 
 }
