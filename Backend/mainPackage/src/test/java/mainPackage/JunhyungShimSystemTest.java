@@ -102,10 +102,7 @@ class JunhyungShimSystemTest {
         System.out.println(r.asString());
 
         String val = jp.get("userName").toString();
-
-
     }
-
-
+    
 
 }
