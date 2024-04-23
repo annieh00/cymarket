@@ -2,13 +2,16 @@ package mainPackage.usersPackage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Fetch;
 import lombok.Getter;
 import lombok.NonNull;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.imageProcess.Image;
+import mainPackage.searchService.Categories;
 import mainPackage.websocket.AuctionTable;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +37,9 @@ public class Posting {
     @Column(name = "description")
     private String description;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Categories> categories;
 
     @Column(name = "isAuction")
     private boolean isAuction = false;
@@ -52,7 +58,6 @@ public class Posting {
     @Column(name = "picture3")
     private String picture3;
 
-
     @Column(name = "picture4")
     private String picture4;
 
@@ -62,17 +67,11 @@ public class Posting {
     @Column(name = "picture6")
     private String picture6;
 
-
     @Column(name = "price")
     private int price;
 
-
-
     @Column(name = "PublishedDate")
     String date;
-
-
-
 
     @Id
     @GeneratedValue(
@@ -80,6 +79,7 @@ public class Posting {
             generator="usersGenerator")
     @Column(name = "postId")
     private int id;
+
     public String getUserName() {
         return userName;
     }
@@ -219,4 +219,6 @@ public class Posting {
     public void setIsDonation(boolean donation) {
         isDonation = donation;
     }
+
+    public Set<Categories> getCategories() { return this.categories; }
 }
