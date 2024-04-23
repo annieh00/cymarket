@@ -50,7 +50,7 @@ class JunhyungShimSystemTest {
     }
 
     @Test
-    @Order(2)
+    @Order(4)
     void loginTest(){
         String email = globalEmail;
         String json = "{\"firstName\": \"ff\",\"lastName\": \"efg\",\"email\": \""+email+"\",\"password\": \"password\"}";
@@ -66,6 +66,7 @@ class JunhyungShimSystemTest {
     }
 
     @Test
+    @Order(2)
     void readPosts(){
 
         Response r = given().get("/getAllPosts");
@@ -76,7 +77,9 @@ class JunhyungShimSystemTest {
         System.out.println(list);
     }
 
+
     @Test
+    @Order(3)
     void makePost(){
         String title = (new java.util.Date()).toString();
         String json = "{\n" +
