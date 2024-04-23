@@ -41,7 +41,7 @@ public class SignUpController {
                 return "{\"fromServer\" : false}";
             }
 
-            generalUser.setUserType(2);
+            //generalUser.setUserType(2);
             String username = generalUser.getEmail().substring(0,generalUser.getEmail().indexOf("@"));
             generalUser.setUserName(username);
             generalUserRepository.save(generalUser);
