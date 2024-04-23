@@ -404,6 +404,7 @@ public class AuctionActivity extends AppCompatActivity {
 
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+//        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
 
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
                 response -> {
@@ -425,7 +426,7 @@ public class AuctionActivity extends AppCompatActivity {
                             int id = jsonObject.getInt("id");
                             mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
-
+                        mPostList.clear(); // Clear the current list of posts
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
