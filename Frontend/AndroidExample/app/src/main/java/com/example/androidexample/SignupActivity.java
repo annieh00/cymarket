@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,11 @@ public class SignupActivity extends AppCompatActivity {
     public String email;
     public Boolean signupSuccess = false;
     public String passsword;
+    private EditText firstNameEditTxt;
+    private EditText lastNameEditTxt;
+
+    private CheckBox reqOrg;
+    private boolean reqOrgBool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +59,14 @@ public class SignupActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.signup_username_edt);  // link to username edtext in the Signup activity XML
         passwordEditText = findViewById(R.id.signup_password_edt);  // link to password edtext in the Signup activity XML
         confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edtext in the Signup activity XML
-
+        firstNameEditTxt = findViewById(R.id.firstNameEditTxt);
+        lastNameEditTxt = findViewById(R.id.lastNameEditTxt);
         //Buttons
 //        loginButton = findViewById(R.id.signup_login_btn);    // link to login button in the Signup activity XML
         signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
 
+        //checkBox
+        reqOrg = findViewById(R.id.reqOrgPermissionCheckBox);
 
         //asking if the user already has an account
         TextView txtRegister = (TextView)findViewById(R.id.loginTxtBtn);
@@ -66,6 +75,16 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);  // go to SignupActivity
+            }
+        });
+
+        reqOrg.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                if (reqOrgBool){
+                    reqOrgBool = false;
+                }else{
+                    reqOrgBool = true;
+                }
             }
         });
         /* click listener on login button pressed */
@@ -106,7 +125,9 @@ public class SignupActivity extends AppCompatActivity {
             jsonObject.put("password", passwordEditText.getText().toString());
             int atInex = emailEditText.getText().toString().lastIndexOf("@");
             jsonObject.put("userName",emailEditText.getText().toString().substring(0,atInex));
-
+            jsonObject.put("firstName", firstNameEditTxt.getText().toString());
+            jsonObject.put("lastName", lastNameEditTxt.getText().toString());
+            jsonObject.put("reqOrg", reqOrgBool);
             //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();

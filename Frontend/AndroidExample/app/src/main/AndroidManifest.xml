@@ -35,9 +35,6 @@
             android:name=".MainFeed"
             android:exported="true" />
         <activity
-            android:name=".ProfileSetUpActivity"
-            android:exported="false" />
-        <activity
             android:name=".ProfileActivity"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".ProfileSetUpActivity" -->
