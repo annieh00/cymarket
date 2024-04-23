@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.RecentSearchesFragment">
+
+        <TextView
+            android:id="@+id/header_text_view_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Searches"
+            android:textSize="18sp"
+            android:padding="18dp"
+            android:layout_alignParentLeft="true"
+            />
+        <TextView
+            android:id="@+id/clearAllTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/header_text_view_friends"
+            android:layout_marginStart="135dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/header_text_view_friends"
+            android:clickable="true"
+            android:text="Clear All"
+            android:textColor="@color/cardinal" />
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_text_view_friends" />
+
+
+
+</RelativeLayout>
