@@ -56,7 +56,8 @@ public class LoginActivity extends AppCompatActivity {
 //    private Boolean userValidity = true; //this boolean is meant to validate the user
     private Boolean txtValidity = true;
     public Boolean validUser;
-
+    private EditText firstNameEditTxt;
+    private EditText lastNameEditTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         //Text
         emailTxt = findViewById(R.id.login_username_edt);
         passwordTxt = findViewById(R.id.login_password_edt);
+
 
         //Buttons
         loginButton = findViewById(R.id.login_login_btn);    // link to login button in the Login activity XML
@@ -146,6 +148,8 @@ public class LoginActivity extends AppCompatActivity {
             //input your API parameters
             jsonObject.put("email", emailTxt.getText().toString().trim());
             jsonObject.put("password", passwordTxt.getText().toString().trim());
+            jsonObject.put("firstName", emailTxt.getText().toString().trim());
+            jsonObject.put("lastName", passwordTxt.getText().toString().trim());
         } catch (JSONException e) {
             e.printStackTrace();
         }
