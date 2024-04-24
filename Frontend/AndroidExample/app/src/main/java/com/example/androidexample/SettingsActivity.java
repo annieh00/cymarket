@@ -66,8 +66,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 /* when login button is pressed, use intent to switch to Profile SetUp Activity */
-                Intent intent = new Intent(SettingsActivity.this, ProfileSetUpActivity.class);
-                startActivity(intent);  // go to LoginActivity
+//                Intent intent = new Intent(SettingsActivity.this, .class);
+//                startActivity(intent);  // go to LoginActivity
             }
         });
 
