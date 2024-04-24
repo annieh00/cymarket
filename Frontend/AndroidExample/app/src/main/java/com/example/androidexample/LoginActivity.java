@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
-            Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, "L", Toast.LENGTH_LONG).show();
             txtValidity = true;
         }) {
 
