@@ -66,7 +66,7 @@ public class SignupActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
 
         //checkBox
-        reqOrg = findViewById(R.id.reqOrgPermissionCheckBox);
+//        reqOrg = findViewById(R.id.reqOrgPermissionCheckBox);
 
         //asking if the user already has an account
         TextView txtRegister = (TextView)findViewById(R.id.loginTxtBtn);
@@ -127,7 +127,12 @@ public class SignupActivity extends AppCompatActivity {
             jsonObject.put("userName",emailEditText.getText().toString().substring(0,atInex));
             jsonObject.put("firstName", firstNameEditTxt.getText().toString());
             jsonObject.put("lastName", lastNameEditTxt.getText().toString());
-            jsonObject.put("reqOrg", reqOrgBool);
+//            if (reqOrgBool){
+//                jsonObject.put("permission", 1);
+//            }else{
+//                jsonObject.put("permission", 2);
+//            }
+//            jsonObject.put("reqOrg", reqOrgBool);
             //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
