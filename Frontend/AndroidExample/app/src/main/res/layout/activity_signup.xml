@@ -181,11 +181,11 @@
             android:clickable="true">
         </TextView>
 
-        <CheckBox
-            android:id="@+id/reqOrgPermissionCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Request Organization" />
+<!--        <CheckBox-->
+<!--            android:id="@+id/reqOrgPermissionCheckBox"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Request Organization" />-->
 
     </LinearLayout>
 
