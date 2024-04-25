@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.friendsService.Friend;
+import mainPackage.userRatingsService.Rating;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
@@ -21,6 +22,8 @@ import java.util.*;
 @Entity
 @Table(name="users")
 public class GeneralUser {
+
+
     @Column(name = "firstName")
     private String firstName;
 
@@ -50,6 +53,12 @@ public class GeneralUser {
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
 
+
+
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<Rating> myRatings = new HashSet<>();
+
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
@@ -69,6 +78,7 @@ public class GeneralUser {
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Friend> friendships;
+
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -143,4 +153,13 @@ public class GeneralUser {
     }
 
     public List<Announcement> getAnnouncements() { return this.announcements; }
+
+    public Set<Rating> getMyRatings() {
+        return myRatings;
+    }
+
+    public void setMyRatings(Set<Rating> myRatings) {
+        this.myRatings = myRatings;
+    }
+
 }
