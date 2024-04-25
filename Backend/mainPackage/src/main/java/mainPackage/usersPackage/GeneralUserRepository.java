@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,4 +33,6 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
             "AND u NOT IN (SELECT f.receiver FROM Friend f WHERE f.sender.id = :id AND f.status = 'ACCEPTED')" // Exclude users who are already friends with the user
     )
     List<GeneralUser> findPotentialFriends(@Param("id") int id);
+
+    List<GeneralUser> findByUserNameContainingIgnoreCase(String query);
 }
