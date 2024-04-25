@@ -1,5 +1,7 @@
 package mainPackage.userRatingsService;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,12 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -49,6 +49,30 @@ public class UserRatings {
         return "{\"serverResponse\":false}";
     }
 
+    @GetMapping("/getAllRatings")
+    public String getAllRatings(){
+        List<Rating> lr = ratingRepository.findAll();
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(lr);
+        return "{\"ratings\":" + json + "}";
+    }
+
+    @GetMapping("/getRatingsOf/{userName}")
+    public String getRatings(@PathVariable(name = "userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
+            Gson gson = builder.setPrettyPrinting().create();
+            String json = gson.toJson(lr);
+            return "{\"ratings\" : " + json + "}";
+        }
+        return "{\"ratings\" : null }";
+    }
 
 
 
