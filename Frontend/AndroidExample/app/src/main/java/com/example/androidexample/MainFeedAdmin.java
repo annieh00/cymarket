@@ -295,7 +295,7 @@ public class MainFeedAdmin extends AppCompatActivity {
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
                         startActivity(intent);
                         break;
                     case "Settings":
