@@ -33,4 +33,6 @@ public class Const {
     public static final String URL_AUCTION_WS = "ws://coms-309-060.class.las.iastate.edu:8080" + "/auction";
     public static final String URL_GET_ALL_DONATIONS = DOMAIN + "/getAllDonations";
 
+    public static final String URL_REQ_ORGANIZER = DOMAIN + "/updatePrivilege";
+
 }

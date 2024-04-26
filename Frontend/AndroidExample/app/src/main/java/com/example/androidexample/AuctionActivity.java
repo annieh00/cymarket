@@ -1,7 +1,5 @@
 package com.example.androidexample;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -19,7 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,15 +28,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.androidexample.Auction.AuctionAdapter;
 import com.example.androidexample.Auction.AuctionItemObject;
-import com.example.androidexample.Post.PostAdapter;
-import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
 
-import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -106,9 +99,9 @@ public class AuctionActivity extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private AuctionAdapter mPostAdapter;
+    public static AuctionAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
+    static ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
 
     private Button stopAuctionBtn;
     /**
@@ -141,7 +134,7 @@ public class AuctionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auction);
 
-        refreshBtn = findViewById(R.id.refreshBtn);
+//        refreshBtn = findViewById(R.id.refreshBtn);
 
 
 //        xCoord = findViewById(R.id.xInput);
@@ -178,12 +171,12 @@ public class AuctionActivity extends AppCompatActivity {
 
         }
 
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshContent();
-            }
-        });
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refreshContent();
+//            }
+//        });
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -411,6 +404,7 @@ public class AuctionActivity extends AppCompatActivity {
 
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+//        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
 
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
                 response -> {
@@ -432,7 +426,7 @@ public class AuctionActivity extends AppCompatActivity {
                             int id = jsonObject.getInt("id");
                             mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
-
+                        mPostList.clear(); // Clear the current list of posts
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
