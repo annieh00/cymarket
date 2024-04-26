@@ -81,7 +81,7 @@ public class SellPostController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 
         String json = gson.toJson(p);
         return json;
@@ -113,7 +113,7 @@ public class SellPostController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
         return "{ \"posts\" :" +json + "}";
     }
