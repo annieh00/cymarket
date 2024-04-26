@@ -19,12 +19,12 @@
         <activity android:name=".AuctionDetailActivity" android:exported="true"/>
         <activity android:name=".FriendFeatureActivity" android:exported="false"/>
         <activity android:name=".CreateDonationActivity" android:exported="false"/>
-        <!--  <activity  -->
-        <!--  android:name=".ViewAnnouncementAdmin"  -->
-        <!--  android:exported="false" />  -->
-        <!--  <activity  -->
-        <!--  android:name=".ViewPostActivity"  -->
-        <!--  android:exported="true" /> &lt;!&ndash; //changed this activity to true for testing purposes &ndash;&gt;  -->
+          <activity
+          android:name=".ViewAnnouncementAdmin"
+          android:exported="false" />
+<!--          <activity  -->
+<!--          android:name=".ViewPostActivity"  -->
+<!--          android:exported="true" /> &lt;!&ndash; //changed this activity to true for testing purposes &ndash;&gt;  -->
         <activity android:name=".MainFeedAdmin" android:exported="true">
             <!--  <intent-filter>  -->
             <!--  <action android:name="android.intent.action.MAIN" />  -->
@@ -55,11 +55,14 @@
             android:exported="true" /> <!-- <activity -->
         <!-- android:name=".postActivity" -->
         <!-- android:exported="true" /> -->
-        <activity
-            android:name=".ViewAnnouncementAdmin"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ViewAnnouncementAdmin"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ViewAnnouncementsGenUser"
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -123,6 +124,8 @@ public class MainFeed extends AppCompatActivity {
         setContentView(R.layout.activity_main_feed);
 
 
+
+        search = findViewById(R.id.searchBtn);
 
 
         builder = new AlertDialog.Builder(MainFeed.this);
