@@ -42,7 +42,7 @@ class JunhyungShimSystemTest {
         r.then().statusCode(200);
         JsonPath jp = new JsonPath(r.asString());
         String response = jp.get("fromServer").toString();
-        Assertions.assertEquals(response,"true");
+        Assertions.assertEquals("true", response);
         System.out.println(r.asString());
     }
 
@@ -70,7 +70,7 @@ class JunhyungShimSystemTest {
         r.then().statusCode(200);
         JsonPath jp = new JsonPath(r.asString());
         String list  = jp.get("posts").toString();
-        Assertions.assertEquals(list.length() == 0, false);
+        Assertions.assertEquals(false, list.length() == 0;
         System.out.println(list);
     }
 
