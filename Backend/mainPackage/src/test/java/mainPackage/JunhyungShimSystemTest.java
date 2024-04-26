@@ -70,7 +70,7 @@ class JunhyungShimSystemTest {
         r.then().statusCode(200);
         JsonPath jp = new JsonPath(r.asString());
         String list  = jp.get("posts").toString();
-        Assertions.assertEquals(false, list.length() == 0;
+        Assertions.assertEquals(false, list.length() == 0);
         System.out.println(list);
     }
 

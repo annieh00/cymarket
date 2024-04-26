@@ -129,17 +129,17 @@ public class LogInController {
     }
 
     //delete
-//    @DeleteMapping("/login/deleteUser/{email}")
-//    public String deleteUser(@PathVariable(name = "email") String email){
-//        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
-//        if(db == null){
-//            return "{\"deleteUser\" : false}";
-//        }
-//
-//        //String msg = db.getUserName() + " was successfully deleted";
-//        generalUserRepository.delete(db);
-//        return "{\"deleteUser\" : true}";
-//    }
+    @DeleteMapping("/login/deleteUser/{email}")
+    public String deleteUser(@PathVariable(name = "email") String email){
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email);
+        if(db == null){
+            return "{\"deleteUser\" : false}";
+        }
+
+        //String msg = db.getUserName() + " was successfully deleted";
+        generalUserRepository.delete(db);
+        return "{\"deleteUser\" : true}";
+    }
 
     @Operation(summary = "deletes specific user in DB", description = "deletes specific user in DB, password is required")
     @ApiResponses(value = {
