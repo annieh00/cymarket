@@ -5,6 +5,7 @@ import static com.example.androidexample.LoginActivity.username;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -15,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -27,7 +27,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.android.volley.toolbox.ImageRequest;
+
+import com.example.androidexample.Auction.AuctionAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,6 +133,17 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         closeAuctionBtn.setOnClickListener(v -> {
             try {
                 closeAuction();
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(AuctionDetailActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
@@ -315,6 +327,15 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         Log.d("Volley Response", response.toString());
                         try {
                              winner = response.getString("winner");
+                            for (int i = 0; i < AuctionActivity.mPostList.size(); i++){
+                                if (AuctionActivity.mPostList.get(i).getPostID() == pid){
+                                    AuctionActivity.mPostList.remove(i);
+                                    break;
+                                }
+                            }
+
+                            ((AuctionAdapter) AuctionActivity.mPostAdapter).notifyDataSetChanged();
+
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
