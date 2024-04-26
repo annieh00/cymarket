@@ -61,6 +61,7 @@ class JunhyungShimSystemTest {
 
     }
 
+    //run pipeline
     @Test
     @Order(2)
     void readPosts(){
