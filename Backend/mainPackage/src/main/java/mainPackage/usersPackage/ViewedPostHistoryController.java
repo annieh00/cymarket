@@ -40,15 +40,14 @@ public class ViewedPostHistoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found with id: " + pid);
         }
 
-        if (!u.getViewedPostHistory().contains(p)) {
-            u.getViewedPostHistory().add(p);
-        }
-        if (!p.getViewedUsers().contains(u)) {
-            p.getViewedUsers().add(u);
-        }
+        System.out.println("\nBEFORE USER HISTORY: " + u.getViewedPostHistory() + "\n");
 
+        u.getViewedPostHistory().add(p);
+        p.getViewedUsers().add(u);
         generalUserRepository.save(u);
         postingRepository.save(p);
+
+        System.out.println("\nAFTER USER HISTORY: " + u.getViewedPostHistory() + "\n");
 
         return ResponseEntity.ok("Post view recorded");
     }
@@ -84,6 +83,8 @@ public class ViewedPostHistoryController {
         List<Posting> viewedPosts = u.getViewedPostHistory();
 
         boolean removed = viewedPosts.removeIf(post -> post.getId() == pid);
+
+        System.out.println("\nREMOVED STATUS:" + removed + "\n");
 
         if (removed) {
             generalUserRepository.save(u);

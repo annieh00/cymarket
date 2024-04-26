@@ -106,7 +106,7 @@ public class Posting {
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
-            generator="usersGenerator")
+            generator="postsGenerator")
     @Column(name = "postId")
     private int id;
 
