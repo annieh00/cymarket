@@ -13,6 +13,13 @@
                 >
 
             </item>
+
+            <item
+                android:id="@+id/AuctionOrganizer"
+                android:title="Organization Auction"
+                >
+
+            </item>
             <item
                 android:id="@+id/Announcements"
                 android:title="Announcements"
