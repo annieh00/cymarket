@@ -74,6 +74,72 @@ public class UserRatings {
         return "{\"ratings\" : null }";
     }
 
+    @PostMapping("/deleteRating/{author}/{userName}")
+    public String deleteRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            Set<Rating> modified = new HashSet<>();
+            Rating del = null;
+            for(int i = 0; i < lr.size(); i++){
+                if(lr.get(i).getAuthorUsername().equals(userName)){
+                    del = lr.get(i);
+                    continue;
+                }
+                modified.add(lr.get(i));
+            }
 
+            if(del != null){
+                ratingRepository.delete(del);
+                u.setMyRatings(modified);
+                generalUserRepository.save(u);
+                return "{\"serverResponse\" : true}";
 
+            }
+
+        }
+        return "{\"serverResponse\" : false}";
+    }
+
+    @PostMapping("/modifyRating/{author}/{userName}")
+    public String modifyRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            Set<Rating> modified = new HashSet<>();
+            Rating del = null;
+
+            for(int i = 0; i < lr.size(); i++){
+                if(lr.get(i).getAuthorUsername().equals(userName)){
+                    del = lr.get(i);
+                    continue;
+                }
+                modified.add(lr.get(i));
+            }
+
+            if(del != null){
+                ratingRepository.delete(del);
+                u.setMyRatings(modified);
+                generalUserRepository.save(u);
+                return "{\"serverResponse\" : true}";
+
+            }
+
+        }
+        return "{\"serverResponse\" : false}";
+    }
+
+    @GetMapping("getMyRatings/{userName}")
+    public String getMyRatings(@PathVariable(name = "userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> myratings = ratingRepository.findRatingsByAuthorUsername(u.getUserName());
+            GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
+            Gson gson = builder.setPrettyPrinting().create();
+            String json = gson.toJson(myratings);
+            return "{\"ratings\" : " + json + "}";
+        }
+        return "{\"ratings\" : null}";
+    }
 }
