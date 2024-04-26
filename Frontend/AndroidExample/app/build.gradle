@@ -85,6 +85,7 @@ dependencies {
 //    implementation 'com.google.android.gms:play-services-maps:18.2.0'
     //open street map dependency
     implementation 'org.osmdroid:osmdroid-android:6.1.18'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 //    implementation 'androidx.navigation:navigation-fragment:2.7.7'
 //    implementation 'androidx.navigation:navigation-ui:2.7.7'
     testImplementation 'junit:junit:4.13.2'
@@ -94,6 +95,9 @@ dependencies {
     //added this for main listing page
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+
+//    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
+
 //    implementation 'com.google.android.material:material:1.2.0-alpha02'
 
 //

@@ -2,8 +2,11 @@ package com.example.androidexample;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import static com.example.androidexample.LoginActivity.username;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,12 +15,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 //import android.widget.Toolbar;
@@ -29,8 +38,10 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.card.MaterialCardView;
 //import com.example.androidexample.Manifest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+
+//import kotlin.collections.builders.SetBuilder;
 
 /**
  * The create post activity makes the user to be able to post items based off of the given information.
@@ -99,6 +112,25 @@ public class CreatePostActivity extends AppCompatActivity{
     private static int ImageUploadedCounter = 0;
     private ImageButton deleteImageBtn;
 
+//    Spinner spinner;
+
+    String[] categoryArray = {"Antiques and Collectibles", "Appliances", "Arts and Crafts", "Auto Parts", "Baby",
+            "Books, Movies and Music" ,
+    "Electronics", "Furniture", "Garage Sale", "Health and Beauty", "Home Goods and Decor",
+            "Home Improvements and Tools",
+    "Housing for Sale", "Jewelry and Watches", "Kidswear", "Luggage and Bags", "Menswear", "Miscellaneous",
+            "Musical Instruments", "Patio and Garden",
+    "Pet Supplies", "Rentals", "Sporting Goods", "Toys and Games", "Vehicles", "Womenswear"};
+
+
+    MaterialCardView selectCard;
+
+    boolean []selectedCategories;
+
+    ArrayList<Integer> categoriesList = new ArrayList<>();
+
+    ArrayList<String> selectedCategoriesNames;
+
 
 
     @Override
@@ -136,7 +168,16 @@ public class CreatePostActivity extends AppCompatActivity{
 
         priceEditTxt = findViewById(R.id.priceEditTxt);
 
+        selectCard = findViewById(R.id.categorySpinner);
+
+        selectedCategories = new boolean[categoryArray.length];
+
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
+
+        selectCard.setOnClickListener(v ->{
+            showCategoryDialog();
+        });
+
 
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -317,27 +358,86 @@ public class CreatePostActivity extends AppCompatActivity{
             }
         });
 
-
-
         /*
          * click listener for adding an image
          */
         addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
-
-        /*
-         * click listener for uploading the post
-         */
-//        postBtn.setOnClickListener(v -> uploadImage());
-
-
-        /* click listener on login button pressed */
-//        cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        });
     }
 
+    //method for category setting
+    private void showCategoryDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreatePostActivity.this);
+
+        builder.setTitle("Select Categories");
+        builder.setCancelable(false);
+
+        builder.setMultiChoiceItems(categoryArray, selectedCategories, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if(!isChecked){
+                    categoriesList.add(which);
+                }else{
+//                    categoriesList.remove(which);
+
+                    categoriesList.remove(Integer.valueOf(which)); // Remove the Integer object, not the index
+
+                }
+
+            }
+        }).setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Clear the existing list
+                categoriesList.clear();
+
+                // Iterate over the selected categories
+                for (int i = 0; i < selectedCategories.length; i++) {
+                    if (selectedCategories[i]) {
+                        // Add the index of the selected category to the list
+                        categoriesList.add(i);
+                    }
+                }
+
+                selectedCategoriesNames = new ArrayList<>();
+
+                for (int index : categoriesList) {
+                    selectedCategoriesNames.add(categoryArray[index]);
+
+                }
+
+                Log.d("SelectedCategories", selectedCategoriesNames.toString());
+
+
+            }
+
+
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //clearing all selected courses all click
+                for(int i = 0; i< selectedCategories.length; i++){
+                    selectedCategories[i] = false;
+
+                    categoriesList.clear();
+
+                    //set the text view to nothing
+                }
+            }
+        });
+
+        builder.show();
+
+
+
+    }
 
 
     private String convertBitmapToBase64(Bitmap b) {
@@ -439,6 +539,13 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE AUCTION STATUS WAS " + auction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
+
+
+            JSONArray categoriesArray = new JSONArray(selectedCategoriesNames);
+            //adding categories feature
+            jsonObject.put("categories", categoriesArray);
+            System.out.println("THE categories were " + categoriesArray.toString());
+
 
         } catch (JSONException e) {
             e.printStackTrace();

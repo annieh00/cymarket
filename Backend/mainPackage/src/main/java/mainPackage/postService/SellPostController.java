@@ -7,25 +7,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.websocket.server.PathParam;
 import mainPackage.errorMsg.ErrorMsg;
 import mainPackage.usersPackage.*;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.AuctionTableRepository;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -46,8 +37,9 @@ public class SellPostController {
 
     @Autowired
     public void setAuctionTableRepository(AuctionTableRepository repo) {
-        auctionTableRepository= repo;  // we are setting the static variable
+        auctionTableRepository = repo;  // we are setting the static variable
     }
+
     //create
     @Operation(summary = "create post in DB", description = "creates a post (listing) in DB")
     @ApiResponses(value = {
@@ -59,7 +51,6 @@ public class SellPostController {
         p.setId(0); //explicitly setting the ID by the user is not allowed, setting it to 0 tells the JPA to auto-configure it
         GeneralUser u2 = generalUserRepository.findGeneralUserByUserName(p.getUserName());
         if(u2 == null){
-            //System.out.println("user "+p.getUserName()+ " does not exist");
             ErrorMsg e = new ErrorMsg();
             System.out.println("NO USER FOUND");
             e.setErrormsg("user does not exist, and therefore cannot create post");
@@ -68,35 +59,25 @@ public class SellPostController {
 
         Posting p2 = postingRepository.findPostingByTitle(p.getTitle());
         if(p2 != null && p2.getUserName().equals(p.getUserName())){
-
             return "{\"serverResponse\" : \"duplicate entry\"}";
         }
 
-
-
-
-
         p.setDate((new java.util.Date()).toString());
         postingRepository.save(p);
+        // save categories to posts
         u2.getPublishedPosts().add(p);
         generalUserRepository.save(u2);
 
-        if(p.getIsAuction()){//this post is an auction
+        if(p.getIsAuction()){ //this post is an auction
             GeneralUser u = generalUserRepository.findGeneralUserByUserName(p.getUserName());
             AuctionTable auction = new AuctionTable();
             auction.setPost(p);
             auction.setHighestBidder(u); //no one has placed a bid yet
             auction.setHighestBidAmount(p.getPrice());
-            //ArrayList<Posting> pa = postingRepository.findPostingsByTitle(p.getTitle());
 
             auction.setId(p.getId());
-//            if(p.getTimeAliveInMinutes() == 0){
-//                p.setTimeAliveInMinutes(5);
-//            }
             auctionTableRepository.save(auction);
         }
-
-
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();

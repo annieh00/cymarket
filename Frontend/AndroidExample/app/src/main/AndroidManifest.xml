@@ -59,6 +59,9 @@
             android:name=".ViewAnnouncementAdmin"
             android:exported="false" />
         <activity
+            android:name=".ViewAnnouncementsGenUser"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
