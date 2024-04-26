@@ -1,6 +1,7 @@
 package mainPackage.userRatingsService;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import mainPackage.usersPackage.GeneralUser;
 
@@ -11,7 +12,7 @@ import mainPackage.usersPackage.GeneralUser;
 @Entity
 @Table(name="Rating")
 public class Rating {
-
+    @Expose
     @GeneratedValue(
             strategy=GenerationType.TABLE,
             generator="RatingGenerator")
@@ -19,21 +20,30 @@ public class Rating {
     @Column(name = "rid")
     private int rid;
 
-
+    @Expose
     @Column(name = "author_username")
     private String authorUsername;
 
 
-
+    @Expose
     @Column(name = "description")
     private String description;
 
 
-
+    @Expose
     @Column(name = "stars")
     private int stars;
 
+    public String getRevieweeUserName() {
+        return revieweeUserName;
+    }
 
+    public void setRevieweeUserName(String revieweeUserName) {
+        this.revieweeUserName = revieweeUserName;
+    }
+
+    @Expose
+    private String revieweeUserName;
 
 
 
