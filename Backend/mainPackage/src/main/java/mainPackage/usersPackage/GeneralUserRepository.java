@@ -40,5 +40,4 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
 
     List<GeneralUser> findByLastNameContainingIgnoreCase(String query);
 
-
 }

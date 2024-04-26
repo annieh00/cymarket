@@ -66,6 +66,24 @@ public class GeneralUser {
     )
     private List<String> searchHistory;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "viewed_post_history",
+            joinColumns = @JoinColumn(name = "uid"),
+            inverseJoinColumns = @JoinColumn(name = "postId")
+    )
+    private List<Posting> viewedPostHistory;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_post_bookmarks",
+            joinColumns = @JoinColumn(name = "uid"),
+            inverseJoinColumns = @JoinColumn(name = "postId")
+    )
+    private List<Posting> postBookmarks;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
@@ -184,5 +202,21 @@ public class GeneralUser {
 
     public void setSearchHistory(List<String> searchHistory) {
         this.searchHistory = searchHistory;
+    }
+
+    public List<Posting> getViewedPostHistory() {
+        return viewedPostHistory;
+    }
+
+    public void setViewedPostHistory(List<Posting> viewedPostHistory) {
+        this.viewedPostHistory = viewedPostHistory;
+    }
+
+    public List<Posting> getPostBookmarks() {
+        return postBookmarks;
+    }
+
+    public void setPostBookmarks(List<Posting> postBookmarks) {
+        this.postBookmarks = postBookmarks;
     }
 }
