@@ -30,4 +30,6 @@ public interface PostingRepository extends JpaRepository<Posting,Long> {
 
     @Query("SELECT p FROM Posting p WHERE :category MEMBER OF p.categories")
     List<Posting> findByCategory(String category);
+
+
 }
