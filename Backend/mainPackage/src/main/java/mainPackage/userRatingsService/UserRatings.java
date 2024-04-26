@@ -20,10 +20,10 @@ import java.util.Set;
 public class UserRatings {
 
     @Autowired
-    private static GeneralUserRepository generalUserRepository;
+    private GeneralUserRepository generalUserRepository;
 
     @Autowired
-    private static RatingRepository ratingRepository;
+    private RatingRepository ratingRepository;
     @Operation(summary = "updates the user's rating", description = "user rating is between 0 to 5")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "user rating was set successfully", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
@@ -32,7 +32,7 @@ public class UserRatings {
     //create
     @PostMapping("/setUserRating/{userName}")
     public String setUserRating(@PathVariable("userName") String userName, @RequestBody Rating r){
-
+        //userName is the person getting reviewed
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u == null){
             return "{\"serverResponse\":false}";
@@ -52,10 +52,14 @@ public class UserRatings {
     @GetMapping("/getAllRatings")
     public String getAllRatings(){
         List<Rating> lr = ratingRepository.findAll();
+        for(int i = 0; i < lr.size(); i++){
+            Rating rating = lr.get(i);
+            rating.setRevieweeUserName(rating.getReviewee().getUserName());
+        }
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(lr);
         return "{\"ratings\":" + json + "}";
     }
@@ -74,6 +78,72 @@ public class UserRatings {
         return "{\"ratings\" : null }";
     }
 
+    @PostMapping("/deleteRating/{author}/{userName}")
+    public String deleteRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            Set<Rating> modified = new HashSet<>();
+            Rating del = null;
+            for(int i = 0; i < lr.size(); i++){
+                if(lr.get(i).getAuthorUsername().equals(userName)){
+                    del = lr.get(i);
+                    continue;
+                }
+                modified.add(lr.get(i));
+            }
 
+            if(del != null){
+                ratingRepository.delete(del);
+                u.setMyRatings(modified);
+                generalUserRepository.save(u);
+                return "{\"serverResponse\" : true}";
 
+            }
+
+        }
+        return "{\"serverResponse\" : false}";
+    }
+
+    @PostMapping("/modifyRating/{author}/{userName}")
+    public String modifyRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            Set<Rating> modified = new HashSet<>();
+            Rating del = null;
+
+            for(int i = 0; i < lr.size(); i++){
+                if(lr.get(i).getAuthorUsername().equals(userName)){
+                    del = lr.get(i);
+                    continue;
+                }
+                modified.add(lr.get(i));
+            }
+
+            if(del != null){
+                ratingRepository.delete(del);
+                u.setMyRatings(modified);
+                generalUserRepository.save(u);
+                return "{\"serverResponse\" : true}";
+
+            }
+
+        }
+        return "{\"serverResponse\" : false}";
+    }
+
+    @GetMapping("getMyRatings/{userName}")
+    public String getMyRatings(@PathVariable(name = "userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u != null){
+            List<Rating> myratings = ratingRepository.findRatingsByAuthorUsername(u.getUserName());
+            GsonBuilder builder = new GsonBuilder();
+            builder.serializeNulls();
+            Gson gson = builder.setPrettyPrinting().create();
+            String json = gson.toJson(myratings);
+            return "{\"ratings\" : " + json + "}";
+        }
+        return "{\"ratings\" : null}";
+    }
 }

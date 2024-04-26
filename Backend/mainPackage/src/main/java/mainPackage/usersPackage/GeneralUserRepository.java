@@ -35,4 +35,10 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser,Long> {
     List<GeneralUser> findPotentialFriends(@Param("id") int id);
 
     List<GeneralUser> findByUserNameContainingIgnoreCase(String query);
+
+    List<GeneralUser> findByFirstNameContainingIgnoreCase(String query);
+
+    List<GeneralUser> findByLastNameContainingIgnoreCase(String query);
+
+
 }
