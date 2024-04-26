@@ -1,5 +1,6 @@
 package mainPackage.loginService;
 
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,8 +67,10 @@ public class LogInController {
     @GetMapping("/login/getAllUsers")
     public String getUsers(){
         ArrayList<GeneralUser> mylist = generalUserRepository.findAll();
-        String json = new Gson().toJson(mylist);
-
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(mylist);
         return "{ \"users\" :" +json + "}";
     }
 
