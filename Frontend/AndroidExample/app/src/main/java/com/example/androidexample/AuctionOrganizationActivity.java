@@ -31,6 +31,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.androidexample.Auction.AuctionAdapter;
 import com.example.androidexample.Auction.AuctionItemObject;
+import com.example.androidexample.AuctionOrganization.AuctionOrganizationAdapter;
+import com.example.androidexample.AuctionOrganization.AuctionOrganizationItemObject;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
@@ -68,7 +70,7 @@ public class AuctionOrganizationActivity extends AppCompatActivity {
     /**
      * this is a tag that is attached to the log
      */
-    private String TAG = AuctionActivity.class.getSimpleName();
+    private String TAG = AuctionOrganizationActivity.class.getSimpleName();
     private ImageButton refreshBtn;
 
 
@@ -99,9 +101,9 @@ public class AuctionOrganizationActivity extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    public static AuctionAdapter mPostAdapter;
+    public static AuctionOrganizationAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    static ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
+    static ArrayList<AuctionOrganizationItemObject> mPostList = new ArrayList<>();
 
     private Button stopAuctionBtn;
     /**
@@ -379,8 +381,8 @@ public class AuctionOrganizationActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mPostAdapter = new AuctionAdapter(mPostList, new AuctionAdapter.OnItemClickListener() {
-            @Override public void onItemClick(AuctionItemObject item) {
+        mPostAdapter = new AuctionOrganizationAdapter(mPostList, new AuctionOrganizationAdapter.OnItemClickListener() {
+            @Override public void onItemClick(AuctionOrganizationItemObject item) {
                 Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
@@ -424,7 +426,7 @@ public class AuctionOrganizationActivity extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            mPostList.add(new AuctionOrganizationItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
                         mPostList.clear(); // Clear the current list of posts
                         mPostAdapter.notifyDataSetChanged();
