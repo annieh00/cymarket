@@ -9,6 +9,8 @@ import mainPackage.userRatingsService.Rating;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
+import javax.swing.text.View;
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -66,23 +68,13 @@ public class GeneralUser {
     )
     private List<String> searchHistory;
 
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "viewed_post_history",
-            joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name = "postId")
-    )
-    private List<Posting> viewedPostHistory;
+    private List<ViewedPostHistory> viewedPostHistory;
 
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_post_bookmarks",
-            joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name = "postId")
-    )
-    private List<Posting> postBookmarks;
+    private List<Bookmark> postBookmarks;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -204,19 +196,15 @@ public class GeneralUser {
         this.searchHistory = searchHistory;
     }
 
-    public List<Posting> getViewedPostHistory() {
+    public List<ViewedPostHistory> getViewedPostHistory() {
         return viewedPostHistory;
     }
 
-    public void setViewedPostHistory(List<Posting> viewedPostHistory) {
-        this.viewedPostHistory = viewedPostHistory;
-    }
-
-    public List<Posting> getPostBookmarks() {
+    public List<Bookmark> getPostBookmarks() {
         return postBookmarks;
     }
 
-    public void setPostBookmarks(List<Posting> postBookmarks) {
+    public void setPostBookmarks(List<Bookmark> postBookmarks) {
         this.postBookmarks = postBookmarks;
     }
 }

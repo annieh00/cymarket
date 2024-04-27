@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,9 @@ public class ViewedPostHistoryController {
 
     @Autowired
     PostingRepository postingRepository;
+
+    @Autowired
+    ViewedPostRepository viewedPostRepository;
 
     @Operation(summary = "Record a user viewing a post", description = "Records that a specific user viewed a specific post")
     @ApiResponses(value = {
@@ -42,10 +46,10 @@ public class ViewedPostHistoryController {
 
         System.out.println("\nBEFORE USER HISTORY: " + u.getViewedPostHistory() + "\n");
 
-        u.getViewedPostHistory().add(p);
-        p.getViewedUsers().add(u);
-        generalUserRepository.save(u);
-        postingRepository.save(p);
+        ViewedPostHistory viewedPost = new ViewedPostHistory();
+        viewedPost.setPost(p);
+        viewedPost.setUser(u);
+        viewedPostRepository.save(viewedPost);
 
         System.out.println("\nAFTER USER HISTORY: " + u.getViewedPostHistory() + "\n");
 
@@ -58,7 +62,7 @@ public class ViewedPostHistoryController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}/view_history")
-    public ResponseEntity<List<Posting>> findRecentlyViewedPosts(@PathVariable int uid) {
+    public ResponseEntity<List<ViewedPostHistory>> findRecentlyViewedPosts(@PathVariable int uid) {
         GeneralUser u = generalUserRepository.findGeneralUserById(uid);
         if (u == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -72,25 +76,54 @@ public class ViewedPostHistoryController {
             @ApiResponse(responseCode = "200", description = "Successfully deleted the post from the view history"),
             @ApiResponse(responseCode = "404", description = "User or post not found")
     })
-    @DeleteMapping("/{uid}/view_history/delete/{pid}")
-    public ResponseEntity<String> deletePostFromViewHistory(@PathVariable int uid, @PathVariable int pid) {
+    @DeleteMapping("/{uid}/view_history/delete/{vpid}")
+    public ResponseEntity<String> deletePostFromViewHistory(@PathVariable int uid, @PathVariable int vpid) {
         GeneralUser u = generalUserRepository.findGeneralUserById(uid);
 
         if (u == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        List<Posting> viewedPosts = u.getViewedPostHistory();
-
-        boolean removed = viewedPosts.removeIf(post -> post.getId() == pid);
-
-        System.out.println("\nREMOVED STATUS:" + removed + "\n");
-
-        if (removed) {
-            generalUserRepository.save(u);
-            return ResponseEntity.ok("Post removed from view history");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found in view history");
+        List<ViewedPostHistory> viewedPosts = u.getViewedPostHistory();
+        
+        ViewedPostHistory targetPost = null;
+        for (ViewedPostHistory vph : viewedPosts) {
+            if (vph.getId() == vpid) { 
+                targetPost = vph;
+                break;
+            }
         }
+
+        if (targetPost == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Viewed post not found");
+        }
+
+
+        viewedPosts.remove(targetPost);
+        viewedPostRepository.delete(targetPost);
+
+        return ResponseEntity.ok("Post removed from view history");
     }
+
+    @Operation(summary = "Clear a user's viewed post history", description = "Clears all posts from a user's viewed post history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully cleared the viewed post history"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @DeleteMapping("/{uid}/view_history/clear")
+    @Transactional
+    public ResponseEntity<String> clearViewHistory(@PathVariable int uid) {
+        GeneralUser u = generalUserRepository.findGeneralUserById(uid);
+
+        if (u == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        List<ViewedPostHistory> viewedPosts = u.getViewedPostHistory();
+
+        viewedPostRepository.deleteAll(viewedPosts);
+
+        return ResponseEntity.ok("Viewed post history cleared");
+    }
+
 }

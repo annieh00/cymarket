@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
 import java.util.List;
 
 @RestController
@@ -22,6 +23,8 @@ public class BookmarkPostController {
 
     @Autowired
     private PostingRepository postingRepository;
+
+    @Autowired BookmarkRepository bookmarkRepository;
 
     @Operation(summary = "Add a bookmark", description = "Adds a post to a user's bookmarks")
     @ApiResponses(value = {
@@ -42,12 +45,10 @@ public class BookmarkPostController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
         }
 
-        if (!user.getPostBookmarks().contains(post)) {
-            user.getPostBookmarks().add(post);
-            post.getUsersBookmarked().add(user);
-            generalUserRepository.save(user);
-            postingRepository.save(post);
-        }
+        Bookmark bookmark = new Bookmark();
+        bookmark.setPost(post);
+        bookmark.setUser(user);
+        bookmarkRepository.save(bookmark);
 
         return ResponseEntity.ok("Bookmark added");
     }
@@ -71,12 +72,13 @@ public class BookmarkPostController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found");
         }
 
-        if (user.getPostBookmarks().contains(post)) {
-            user.getPostBookmarks().remove(post);
-            post.getUsersBookmarked().remove(user);
-            generalUserRepository.save(user);
-            postingRepository.save(post);
+        Bookmark bookmark = bookmarkRepository.findByUserAndPost(user, post);
+
+        if (bookmark == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Bookmark not found");
         }
+
+        bookmarkRepository.delete(bookmark);
 
         return ResponseEntity.ok("Bookmark removed");
     }
@@ -87,7 +89,7 @@ public class BookmarkPostController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}")
-    public ResponseEntity<List<Posting>> getBookmarks(@PathVariable int uid) {
+    public ResponseEntity<List<Bookmark>> getBookmarks(@PathVariable int uid) {
         GeneralUser user = generalUserRepository.findGeneralUserById(uid);
 
         if (user == null) {

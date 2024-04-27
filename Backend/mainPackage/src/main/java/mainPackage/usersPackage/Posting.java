@@ -43,23 +43,13 @@ public class Posting {
     @Column(name = "categories")
     private List<String> categories;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "viewed_post_history",
-            joinColumns = @JoinColumn(name = "postId"),
-            inverseJoinColumns = @JoinColumn(name = "uid")
-    )
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<GeneralUser> viewedUsers = new ArrayList<>();
+    private List<ViewedPostHistory> viewedUsers = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_post_bookmarks",
-            joinColumns = @JoinColumn(name = "postId"),
-            inverseJoinColumns = @JoinColumn(name = "uid")
-    )
+    @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<GeneralUser> usersBookmarked = new ArrayList<>();
+    private List<Bookmark> usersBookmarked = new ArrayList<>();
 
     @Expose
     @Column(name = "isAuction")
@@ -253,15 +243,15 @@ public class Posting {
     public void setCategories(List<String> categories) { this.categories = categories; }
     public List<String> getCategories() { return this.categories; }
 
-    public List<GeneralUser> getViewedUsers() {
+    public List<ViewedPostHistory> getViewedUsers() {
         return viewedUsers;
     }
 
-    public List<GeneralUser> getUsersBookmarked() {
+    public List<Bookmark> getUsersBookmarked() {
         return usersBookmarked;
     }
 
-    public void setUsersBookmarked(List<GeneralUser> usersBookmarked) {
+    public void setUsersBookmarked(List<Bookmark> usersBookmarked) {
         this.usersBookmarked = usersBookmarked;
     }
 }
