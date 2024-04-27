@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Book;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bookmarks")
@@ -89,13 +90,19 @@ public class BookmarkPostController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}")
-    public ResponseEntity<List<Bookmark>> getBookmarks(@PathVariable int uid) {
+    public ResponseEntity<List<Posting>> getBookmarks(@PathVariable int uid) {
         GeneralUser user = generalUserRepository.findGeneralUserById(uid);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return ResponseEntity.ok(user.getPostBookmarks());
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
+
+        List<Posting> bookmarkedPosts = bookmarks.stream()
+                .map(Bookmark::getPost)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(bookmarkedPosts);
     }
 }

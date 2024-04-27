@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -44,14 +45,10 @@ public class ViewedPostHistoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Post not found with id: " + pid);
         }
 
-        System.out.println("\nBEFORE USER HISTORY: " + u.getViewedPostHistory() + "\n");
-
         ViewedPostHistory viewedPost = new ViewedPostHistory();
         viewedPost.setPost(p);
         viewedPost.setUser(u);
         viewedPostRepository.save(viewedPost);
-
-        System.out.println("\nAFTER USER HISTORY: " + u.getViewedPostHistory() + "\n");
 
         return ResponseEntity.ok("Post view recorded");
     }
@@ -62,13 +59,19 @@ public class ViewedPostHistoryController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}/view_history")
-    public ResponseEntity<List<ViewedPostHistory>> findRecentlyViewedPosts(@PathVariable int uid) {
+    public ResponseEntity<List<Posting>> findRecentlyViewedPosts(@PathVariable int uid) {
         GeneralUser u = generalUserRepository.findGeneralUserById(uid);
         if (u == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return ResponseEntity.ok(u.getViewedPostHistory());
+        List<ViewedPostHistory> viewedPostHistories = viewedPostRepository.findAllByUser(u);
+
+        List<Posting> viewedPosts = viewedPostHistories.stream()
+                .map(ViewedPostHistory::getPost)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(viewedPosts);
     }
 
     @Operation(summary = "Delete a post from a user's viewed history", description = "Deletes a specific post from a user's viewed post history")
@@ -84,23 +87,13 @@ public class ViewedPostHistoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        List<ViewedPostHistory> viewedPosts = u.getViewedPostHistory();
-        
-        ViewedPostHistory targetPost = null;
-        for (ViewedPostHistory vph : viewedPosts) {
-            if (vph.getId() == vpid) { 
-                targetPost = vph;
-                break;
-            }
-        }
+        ViewedPostHistory viewedPost = viewedPostRepository.findViewedPostById(vpid);
 
-        if (targetPost == null) {
+        if (viewedPost == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Viewed post not found");
         }
 
-
-        viewedPosts.remove(targetPost);
-        viewedPostRepository.delete(targetPost);
+        viewedPostRepository.delete(viewedPost);
 
         return ResponseEntity.ok("Post removed from view history");
     }
@@ -119,9 +112,9 @@ public class ViewedPostHistoryController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
-        List<ViewedPostHistory> viewedPosts = u.getViewedPostHistory();
+        List<ViewedPostHistory> viewedPostHistory = viewedPostRepository.findAllByUser(u);
 
-        viewedPostRepository.deleteAll(viewedPosts);
+        viewedPostRepository.deleteAll(viewedPostHistory);
 
         return ResponseEntity.ok("Viewed post history cleared");
     }
