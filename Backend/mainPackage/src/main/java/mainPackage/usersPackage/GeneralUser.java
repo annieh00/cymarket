@@ -82,7 +82,7 @@ public class GeneralUser {
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private Set<Rating> myRatings = new HashSet<>();
+    private List<Rating> myRatings;
 
     @Expose
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
@@ -180,11 +180,11 @@ public class GeneralUser {
 
     public List<Announcement> getAnnouncements() { return this.announcements; }
 
-    public Set<Rating> getMyRatings() {
+    public List<Rating> getMyRatings() {
         return myRatings;
     }
 
-    public void setMyRatings(Set<Rating> myRatings) {
+    public void setMyRatings(List<Rating> myRatings) {
         this.myRatings = myRatings;
     }
 

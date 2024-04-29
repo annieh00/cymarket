@@ -27,9 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JunhyungShimSystemTest {
     private String globalEmail;
+    private String globalUserName;
     @BeforeEach
     void setUp() {
-        globalEmail = (new java.util.Date()).toString() +"@email.com";
+        globalUserName = (new java.util.Date()).toString();
+        globalEmail = globalUserName +"@email.com";
         RestAssured.registerParser("text/plain", Parser.JSON);
         RestAssured.port = 8080;
     }
@@ -43,6 +45,9 @@ class JunhyungShimSystemTest {
         JsonPath jp = new JsonPath(r.asString());
         String response = jp.get("fromServer").toString();
         Assertions.assertEquals("true", response);
+        json = "{\"userName\" : \"" + globalUserName + "\"}";
+        Response r2 =  given().contentType(MediaType.APPLICATION_JSON_VALUE).body(json).when().post("/deleteUser");
+        r2.then().statusCode(200);
         System.out.println(r.asString());
     }
 

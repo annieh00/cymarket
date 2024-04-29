@@ -12,6 +12,7 @@ import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,9 +39,9 @@ public class UserRatings {
             return "{\"serverResponse\":false}";
         }
         if(r.getDescription() != null && !r.getDescription().isEmpty()){
-            r.setReviewee(u);
+            r.setRevieweeUserName(u.getUserName());
             ratingRepository.save(r);
-            Set<Rating> setOfRatings = u.getMyRatings();
+            List<Rating> setOfRatings = u.getMyRatings();
             setOfRatings.add(r);
             generalUserRepository.save(u);
             return "{\"serverResponse\":true}";
@@ -54,7 +55,7 @@ public class UserRatings {
         List<Rating> lr = ratingRepository.findAll();
         for(int i = 0; i < lr.size(); i++){
             Rating rating = lr.get(i);
-            rating.setRevieweeUserName(rating.getReviewee().getUserName());
+            rating.setRevieweeUserName(rating.getRevieweeUserName());
         }
 
         GsonBuilder builder = new GsonBuilder();
@@ -68,7 +69,7 @@ public class UserRatings {
     public String getRatings(@PathVariable(name = "userName") String userName){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u != null){
-            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
+            List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
             GsonBuilder builder = new GsonBuilder();
             builder.serializeNulls();
             Gson gson = builder.setPrettyPrinting().create();
@@ -82,8 +83,8 @@ public class UserRatings {
     public String deleteRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u != null){
-            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
-            Set<Rating> modified = new HashSet<>();
+            List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
+            List<Rating> modified = new ArrayList<>();
             Rating del = null;
             for(int i = 0; i < lr.size(); i++){
                 if(lr.get(i).getAuthorUsername().equals(userName)){
@@ -109,8 +110,8 @@ public class UserRatings {
     public String modifyRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u != null){
-            List<Rating> lr =  ratingRepository.findRatingsByReviewee(u);
-            Set<Rating> modified = new HashSet<>();
+            List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
+            List<Rating> modified = new ArrayList<>();
             Rating del = null;
 
             for(int i = 0; i < lr.size(); i++){

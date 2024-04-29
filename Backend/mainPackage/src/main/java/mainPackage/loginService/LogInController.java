@@ -148,19 +148,18 @@ public class LogInController {
             @ApiResponse(responseCode = "401", description = "Unathorized deletion, you are not the user")
 
     })
-    @PostMapping("/login/deleteUser")
+    @PostMapping("/deleteUser")
     public String deleteUser(@RequestBody GeneralUser userToEdit){
         System.out.println(userToEdit.getEmail());
         System.out.println(userToEdit.getPassword());
-        GeneralUser db = generalUserRepository.findGeneralUserByEmail(userToEdit.getEmail());
+        GeneralUser db = generalUserRepository.findGeneralUserByUserName(userToEdit.getUserName());
         if(db == null){
             return "{\"deleteUser\" : false}";
         }
         //String msg = db.getUserName() + " was successfully deleted";
         //System.out.println(db.getUserName());
         generalUserRepository.delete(db);
-        GeneralUser gg =generalUserRepository.findGeneralUserByEmail(db.getEmail());
-        System.out.println(gg);
+
         return "{\"deleteUser\" : true}";
     }
 

@@ -42,15 +42,12 @@ public class Rating {
         this.revieweeUserName = revieweeUserName;
     }
 
-    @Expose
+    @Column(name = "revieweeUserName")
     private String revieweeUserName;
 
 
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userName")
-    private GeneralUser reviewee;
+
 
     public int getStars() {
         return stars;
@@ -60,13 +57,6 @@ public class Rating {
         this.stars = stars;
     }
 
-    public GeneralUser getReviewee() {
-        return reviewee;
-    }
-
-    public void setReviewee(GeneralUser reviewee) {
-        this.reviewee = reviewee;
-    }
     public String getDescription() {
         return description;
     }
