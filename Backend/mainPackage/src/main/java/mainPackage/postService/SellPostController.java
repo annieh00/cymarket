@@ -143,7 +143,7 @@ public class SellPostController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
         return "{ \"donations\" :" +json + "}";
     }
@@ -160,7 +160,7 @@ public class SellPostController {
             //p = getPictures(p);
             GsonBuilder builder = new GsonBuilder();
             builder.serializeNulls();
-            Gson gson = builder.setPrettyPrinting().create();
+            Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
             String json = gson.toJson(p);
             return json;
         }
@@ -189,7 +189,7 @@ public class SellPostController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
         return "{ \"auctions\" :" +json + "}";
 
@@ -482,7 +482,7 @@ public class SellPostController {
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(p);
         System.out.println("saving: " + json);
         return json;
@@ -497,7 +497,7 @@ public class SellPostController {
         ArrayList<Posting> myposts = postingRepository.findPostingByUserName(userName);
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(myposts);
         return "{ \"posts\" :" +json + "}";
     }

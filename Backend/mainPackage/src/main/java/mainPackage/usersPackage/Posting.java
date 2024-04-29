@@ -31,6 +31,8 @@ public class Posting {
     @Expose
     @Column(name = "title")
     private String title;
+
+    @Expose
     @Column(name = "description")
     private String description;
 
@@ -98,6 +100,7 @@ public class Posting {
             strategy=GenerationType.TABLE,
             generator="postsGenerator")
     @Column(name = "postId")
+    @Expose
     private int id;
 
     public String getUserName() {
