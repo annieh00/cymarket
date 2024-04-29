@@ -54,6 +54,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private Button editPostBtn;
     public static int pid;
     private int imageNum = 0;
+    private TextView authorOfPostTxtView;
 
     private int displayedImageIndex = 1;
 
@@ -82,6 +83,7 @@ public class PostDetailActivity extends AppCompatActivity {
         rightArrowBtn = findViewById(R.id.rightArrowBtn);
         deletePostBtn = findViewById(R.id.deletePostBtn);
         editPostBtn = findViewById(R.id.editPostBtn);
+        authorOfPostTxtView = findViewById(R.id.authorOfPostTxt);
 
         pid = Integer.parseInt(getIntent().getExtras().getString("id"));
         getImageNum();
@@ -181,6 +183,17 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        //asking if the user hasn't created an account yet
+        TextView txtRegister = (TextView)findViewById(R.id.authorOfPostTxt);
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class);
+                intent.putExtra("userName", userName);
+                startActivity(intent);  // go to other profile
+            }
+        });
+
 
     }
 
@@ -228,9 +241,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 editPostBtn.setVisibility(View.GONE);
                             }
 
-
-
-
+                            authorOfPostTxtView.setText(userName);
                             titleTxtView.setText(titleTxt);
                             if (donation != true){
                                 priceTxtView.setText(String.valueOf(price));

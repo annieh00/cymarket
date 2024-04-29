@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * Main feed displays the current posts.
  */
-public class ProfileActivity extends AppCompatActivity {
+public class OtherProfileActivity extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
 
@@ -72,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * this is a tag that is attached to the log
      */
-    private String TAG = ProfileActivity.class.getSimpleName();
+    private String TAG = OtherProfileActivity.class.getSimpleName();
 
 
     /**
@@ -97,7 +97,14 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int EXTRA_postID = 0;
 
     public boolean alreadyConnected = false;
-    public String specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + LoginActivity.username;
+    Bundle extras = getIntent().getExtras();
+
+    String userNameOfAuthor = extras.getString("userName");
+    //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
+//
+//    private String userName;
+//    userName = getIntent().getExtras().getString("userName");
+    public String specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
 
 
     /**
@@ -134,10 +141,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private RatingBar ratingBar;
 
+    private Button confirmRatingBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_other_profile);
 //        refreshBtn = findViewById(R.id.refreshBtn);
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
@@ -151,8 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
 //        updatedY = findViewById(R.id.updateY);
 
 
-
-        builder = new AlertDialog.Builder(ProfileActivity.this);
+        builder = new AlertDialog.Builder(OtherProfileActivity.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -161,17 +169,6 @@ public class ProfileActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
-        ratingBar = (RatingBar) findViewById(R.id.rb_ratingBar);
-
-        // Set the rating bar as non-editable
-        ratingBar.setIsIndicator(true);
-        //json get method req that gets the average rating of the user and displays it
-        // Set the current rating, e.g., when loading user data
-//        float userRating = // Get the user's rating from the database
-//                ratingBar.setRating(userRating);
-        //"/getRatingsOf" + /{username}
-
-
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -183,83 +180,24 @@ public class ProfileActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+        confirmRatingBtn = findViewById(R.id.confirmRatingBtn);
 
 
-//        setLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                final String
-////
-////                String announcement = adminMessage.toString();
-////                sendAnnouncementToServer(announcement);
-//
-//                final String x, y;
-//                x = xCoord.getText().toString();
-//                y = yCoord.getText().toString();
-//
-//
-//                JSONObject jsonBody = new JSONObject();
-//                try {
-//                    jsonBody.put("x", x);
-//                    jsonBody.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        builder.setTitle("Server Response");
-//                        try {
-//                            builder.setMessage("Response " + response.getString("status"));
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                xCoord.setText("");
-//                                yCoord.setText("");
-//                            }
-//                        });
-//                        AlertDialog alertDialog = builder.create();
-//                        alertDialog.show();
-//
-//                    }
-//
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainFeed.this, "Error....", Toast.LENGTH_LONG).show();
-//                        error.printStackTrace();
-//                    }
-//                }) {
-//                    //                    @Nullable
-//                    @Override
-//                    protected Map<String, String> getParams() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-////
-////                        params.put("title", msgTitle);
-////                        params.put("description", message);
-////
-//                        return params;
-//                    }
-//                };
-//
-//                MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
-//
-//            }
-//        });
-//
-//
-//
-//        seeCoordinates.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                makeJsonArrayReq();
-//            }
-//        });
+        ratingBar = findViewById(R.id.rb_ratingBar);
+
+        // Set an OnRatingBarChangeListener to handle user input
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                // Handle the rating change, e.g., update it in the database
+                // Update the user interface to reflect the new rating
+                // This could involve displaying the selected rating to the user
+            }
+        });
+
+        //send back that rating to the database thru post method req, and then the average rating will be in a
+        //json obj get method req or in that same post req
+
 
         /** If a certain screen is pressed, it will go to that certain screen.
          *
@@ -421,11 +359,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-
-    //RATING BAR JSON OBJ REQ THAT GETS THE AVERAGE RATING OF YOUR USER
-    // Set the current rating, e.g., when loading user data
-    //    float userRating = // Get the user's rating from the database
-    //            ratingBar.setRating(userRating);
     private void fetchPosts() {
 //        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 //        JSONObject jsonObject2 = new JSONObject();
