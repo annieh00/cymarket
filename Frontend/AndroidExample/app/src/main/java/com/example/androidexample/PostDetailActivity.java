@@ -183,7 +183,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        //asking if the user hasn't created an account yet
+        //user that made the post
         TextView txtRegister = (TextView)findViewById(R.id.authorOfPostTxt);
         txtRegister.setOnClickListener(new View.OnClickListener() {
 
@@ -220,7 +220,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Volley Response", response.toString());
+                        Log.d("ACTUAL POST INFORMATION LLLLLL", response.toString());
                         try {
                             titleTxt = response.getString("title");
                             price = response.getInt("price");
@@ -247,6 +247,7 @@ public class PostDetailActivity extends AppCompatActivity {
                                 priceTxtView.setText(String.valueOf(price));
                             }
                             descriptionTxtView.setText(description);
+//                            Log.d("JSON REQ TO GET POST" + response.toString());
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -292,6 +293,7 @@ public class PostDetailActivity extends AppCompatActivity {
             jsonObject.put("userName", userName);
             jsonObject.put("id", Integer.parseInt(getIntent().getExtras().getString("id")));
             Log.d("JSON OBJ:", jsonObject.toString());
+            System.out.println("userName: " + userName);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -426,6 +426,7 @@ public class ProfileActivity extends AppCompatActivity {
     // Set the current rating, e.g., when loading user data
     //    float userRating = // Get the user's rating from the database
     //            ratingBar.setRating(userRating);
+
     private void fetchPosts() {
 //        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 //        JSONObject jsonObject2 = new JSONObject();

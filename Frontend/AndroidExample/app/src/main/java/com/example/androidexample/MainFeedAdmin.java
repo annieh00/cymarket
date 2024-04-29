@@ -286,6 +286,12 @@ public class MainFeedAdmin extends AppCompatActivity {
 //                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
+                        break;
+                    case "Organization Requests":
+                        // Handle click on the third item
+//                        alreadyConnected = true;
+                        intent = new Intent(getApplicationContext(), RequestOrganizationPermActivity.class);
+                        startActivity(intent);
 
                         break;
                     case "Announcements":

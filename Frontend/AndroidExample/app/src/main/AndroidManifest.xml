@@ -40,6 +40,9 @@
             android:name=".AuctionActivity"
             android:exported="false" />
         <activity
+            android:name=".RequestOrganizationPermActivity"
+            android:exported="false" />
+        <activity
             android:name=".FlaggedPostsActivity"
             android:exported="false" />
         <activity
