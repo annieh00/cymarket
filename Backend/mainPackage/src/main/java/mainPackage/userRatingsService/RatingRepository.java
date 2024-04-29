@@ -11,6 +11,6 @@ public interface RatingRepository extends JpaRepository<Rating,Long> {
     List<Rating> findRatingsByAuthorUsername(String authorUserName);
 
 
-    List<Rating> findRatingsByReviewee(GeneralUser reviewee);
+    List<Rating> findRatingsByRevieweeUserName(String revieweeUserName);
 
 }
