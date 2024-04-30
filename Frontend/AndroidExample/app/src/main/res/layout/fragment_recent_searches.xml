@@ -27,7 +27,7 @@
             android:textColor="@color/cardinal" />
 
         <ListView
-            android:id="@+id/listView"
+            android:id="@+id/listViewRecentSearches"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/header_text_view_friends" />
