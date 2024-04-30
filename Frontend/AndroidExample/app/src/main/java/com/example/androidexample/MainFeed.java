@@ -1,7 +1,5 @@
 package com.example.androidexample;
 
-import static java.security.AccessController.getContext;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -18,7 +16,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
-import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,7 +28,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
@@ -41,7 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -102,9 +97,9 @@ public class MainFeed extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private PostAdapter mPostAdapter;
-    private RecyclerView mRecyclerView;
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+    public static PostAdapter mPostAdapter;
+    public RecyclerView mRecyclerView;
+    public static ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
 
     /**
@@ -130,6 +125,8 @@ public class MainFeed extends AppCompatActivity {
 
 
 
+        search = findViewById(R.id.searchBtn);
+
 
         builder = new AlertDialog.Builder(MainFeed.this);
 
@@ -152,15 +149,13 @@ public class MainFeed extends AppCompatActivity {
 
 
         }
-        search = findViewById(R.id.searchBtn);
-        refreshBtn = findViewById(R.id.refreshBtn);
-
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshContent();
-            }
-        });
+//        refreshBtn = findViewById(R.id.refreshBtn);
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refreshContent();
+//            }
+//        });
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,6 +274,8 @@ public class MainFeed extends AppCompatActivity {
         });
 
         fetchPosts();
+//        refreshContent();
+
 
 
 
@@ -288,11 +285,13 @@ public class MainFeed extends AppCompatActivity {
         // Perform actions to refresh the content here
         // For example, reload data from the server or reset the RecyclerView adapter
         mPostList.clear(); // Clear the current list of posts
+//        mPostList.de
         mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         fetchPosts(); // Fetch new posts from the server
     }
 
     private void fetchPosts() {
+        mPostList.clear();
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {

@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -28,14 +30,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.androidexample.Post.PostAdapter;
-import com.example.androidexample.Post.PostItemObject;
+import com.example.androidexample.Auction.AuctionAdapter;
+import com.example.androidexample.Auction.AuctionItemObject;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -45,11 +48,9 @@ import java.util.List;
 /**
  * Main feed displays the current posts.
  */
-public class ProfileActivity extends AppCompatActivity {
+public class AuctionActivityOrganizer extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
-
-    private String postsUsersURL;
 
 
     AlertDialog.Builder builder;
@@ -58,9 +59,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ListAdapter adapter;
     private ListView listView;
     private String itemSelected;
-    private String actualPostURL;
-
-
 
     /**
      *
@@ -71,7 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * this is a tag that is attached to the log
      */
-    private String TAG = ProfileActivity.class.getSimpleName();
+    private String TAG = AuctionActivity.class.getSimpleName();
+    private ImageButton refreshBtn;
 
 
     /**
@@ -96,23 +95,22 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int EXTRA_postID = 0;
 
     public boolean alreadyConnected = false;
-    public String specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + LoginActivity.username;
 
 
     /**
      * recyclerview related variables
      */
-    private PostAdapter mPostAdapter;
+    public static AuctionAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+    static ArrayList<AuctionItemObject> mPostList = new ArrayList<>();
 
-
+    private Button stopAuctionBtn;
     /**
      * this is the tag itself
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-//    private ImageButton refreshBtn;
+
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
@@ -129,15 +127,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
 
-    private Button deleteBtn;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_auction);
+
 //        refreshBtn = findViewById(R.id.refreshBtn);
+
+
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
 //        setLocationBtn = findViewById(R.id.locationButton);
@@ -150,7 +150,8 @@ public class ProfileActivity extends AppCompatActivity {
 //        updatedY = findViewById(R.id.updateY);
 
 
-        builder = new AlertDialog.Builder(ProfileActivity.this);
+
+        builder = new AlertDialog.Builder(AuctionActivityOrganizer.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -170,6 +171,13 @@ public class ProfileActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshContent();
+            }
+        });
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -257,8 +265,20 @@ public class ProfileActivity extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
+                    case "Main Feed":
+                        intent = new Intent(getApplicationContext(), MainFeedOrganizer.class);
+                        startActivity(intent);
+                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "Create Donation":
+                        intent = new Intent(getApplicationContext(), CreateDonationActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "Donation Feed":
+                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
                         startActivity(intent);
                         break;
                     case "Auction":
@@ -280,11 +300,10 @@ public class ProfileActivity extends AppCompatActivity {
 //                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
-
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+                        intent = new Intent(getApplicationContext(), ViewAnnouncementsGenUser.class);
                         startActivity(intent);
                         break;
                     case "Settings":
@@ -300,27 +319,6 @@ public class ProfileActivity extends AppCompatActivity {
                 return true; // Return true to indicate that the item is selected
             }
         });
-
-//        refreshBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //sendJsonObjReq();
-//                mPostList = new ArrayList<>();
-//                fetchPosts();
-//                /* grab strings from user inputs */
-////                if (txtValidity == true) {
-////                    Pass();
-////                }else if (!txtValidity){
-////                    Pass();
-////                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
-////                }
-//                /* when login button is pressed, use intent to switch to Login Activity */
-////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-////                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
-////                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
-////                startActivity(intent);  // go to MainActivity with the key-value data
-//            }
-//        });
 
 
 //        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -388,67 +386,55 @@ public class ProfileActivity extends AppCompatActivity {
 //            }
 //        });
 
-
-
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
-            @Override public void onItemClick(PostItemObject item) {
-//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+        mPostAdapter = new AuctionAdapter(mPostList, new AuctionAdapter.OnItemClickListener() {
+            @Override public void onItemClick(AuctionItemObject item) {
+                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
-//                Log.d("Hi"," Bye");
-                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+                Intent intent = new Intent(AuctionActivityOrganizer.this, AuctionDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }
         });
 
+        mRecyclerView.setAdapter(mPostAdapter);
         fetchPosts();
+    }
 
+    private void refreshContent() {
+        // Perform actions to refresh the content here
+        // For example, reload data from the server or reset the RecyclerView adapter
+        mPostList.clear(); // Clear the current list of posts
+        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+        fetchPosts(); // Fetch new posts from the server
     }
 
     private void fetchPosts() {
-//        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
-//        JSONObject jsonObject2 = new JSONObject();
-//        try {
-//            //input your API parameters
-//            jsonObject2.put("userName", LoginActivity.username);
-//
-//            //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
 
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, specificPostURL, null,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_AUCTIONS, null,
                 response -> {
                     try {
-                        JSONArray jsonArray = response.getJSONArray("posts");
+                        JSONArray jsonArray = response.getJSONArray("auctions");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                            String picture1 = jsonObject.getString("picture1");
-//                            String picture2 = jsonObject.getString("picture2");
-//                            String picture3 = jsonObject.getString("picture3");
-//                            String picture4 = jsonObject.getString("picture4");
-//                            String picture5 = jsonObject.getString("picture5");
-//                            String picture6 = jsonObject.getString("picture6");
-                            String picture1 = null;
-                            String picture2 = null;
-                            String picture3 = null;
-                            String picture4 = null;
-                            String picture5 = null;
-                            String picture6 = null;
-
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
                             int price = jsonObject.getInt("price");
                             Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
-                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -611,6 +597,8 @@ public class ProfileActivity extends AppCompatActivity {
 //        startActivity(detailIntent);
 //
 //    }
+
+
 
 
 }

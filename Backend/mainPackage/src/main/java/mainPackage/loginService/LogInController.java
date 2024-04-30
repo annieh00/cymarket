@@ -1,5 +1,6 @@
 package mainPackage.loginService;
 
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,8 +67,10 @@ public class LogInController {
     @GetMapping("/login/getAllUsers")
     public String getUsers(){
         ArrayList<GeneralUser> mylist = generalUserRepository.findAll();
-        String json = new Gson().toJson(mylist);
-
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(mylist);
         return "{ \"users\" :" +json + "}";
     }
 
@@ -126,17 +129,17 @@ public class LogInController {
     }
 
     //delete
-//    @DeleteMapping("/login/deleteUser/{email}")
-//    public String deleteUser(@PathVariable(name = "email") String email){
-//        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email.trim());
-//        if(db == null){
-//            return "{\"deleteUser\" : false}";
-//        }
-//
-//        //String msg = db.getUserName() + " was successfully deleted";
-//        generalUserRepository.delete(db);
-//        return "{\"deleteUser\" : true}";
-//    }
+    @DeleteMapping("/login/deleteUser/{email}")
+    public String deleteUser(@PathVariable(name = "email") String email){
+        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email);
+        if(db == null){
+            return "{\"deleteUser\" : false}";
+        }
+
+        //String msg = db.getUserName() + " was successfully deleted";
+        generalUserRepository.delete(db);
+        return "{\"deleteUser\" : true}";
+    }
 
     @Operation(summary = "deletes specific user in DB", description = "deletes specific user in DB, password is required")
     @ApiResponses(value = {
@@ -145,19 +148,18 @@ public class LogInController {
             @ApiResponse(responseCode = "401", description = "Unathorized deletion, you are not the user")
 
     })
-    @PostMapping("/login/deleteUser")
+    @PostMapping("/deleteUser")
     public String deleteUser(@RequestBody GeneralUser userToEdit){
         System.out.println(userToEdit.getEmail());
         System.out.println(userToEdit.getPassword());
-        GeneralUser db = generalUserRepository.findGeneralUserByEmail(userToEdit.getEmail());
+        GeneralUser db = generalUserRepository.findGeneralUserByUserName(userToEdit.getUserName());
         if(db == null){
             return "{\"deleteUser\" : false}";
         }
         //String msg = db.getUserName() + " was successfully deleted";
         //System.out.println(db.getUserName());
         generalUserRepository.delete(db);
-        GeneralUser gg =generalUserRepository.findGeneralUserByEmail(db.getEmail());
-        System.out.println(gg);
+
         return "{\"deleteUser\" : true}";
     }
 

@@ -1,15 +1,13 @@
 package mainPackage.usersPackage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
-import lombok.Getter;
 import lombok.NonNull;
-import mainPackage.announcementPackage.Announcement;
-import mainPackage.imageProcess.Image;
-import mainPackage.websocket.AuctionTable;
 
-import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,62 +22,87 @@ import java.util.Set;
 @Table(name = "posts")
 public class Posting {
 
+    @Expose
     //@OneToOne(cascade = CascadeType.ALL)
     @Column(name = "userName")
     @JoinColumn(name="email")
     private String userName;
 
+    @Expose
     @Column(name = "title")
     private String title;
+
+    @Expose
     @Column(name = "description")
     private String description;
 
+    @Expose
+    @ElementCollection
+    @CollectionTable(
+            name = "post_categories",
+            joinColumns = @JoinColumn(name = "postId")
+    )
+    @Column(name = "categories")
+    private List<String> categories;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<ViewedPostHistory> viewedUsers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Bookmark> usersBookmarked = new ArrayList<>();
+
+    @Expose
     @Column(name = "isAuction")
     private boolean isAuction = false;
 
+    @Expose
     @Column(name = "isDonation")
     private boolean isDonation = false;
 
+    @Expose
     @Column(name = "isClosed")
     private boolean isClosed = false;
+    @Expose
     @Column(name = "picture1")
     private String picture1;
-
+    @Expose
     @Column(name = "picture2")
     private String picture2;
 
+    @Expose
     @Column(name = "picture3")
     private String picture3;
 
-
+    @Expose
     @Column(name = "picture4")
     private String picture4;
 
+    @Expose
     @Column(name = "picture5")
     private String picture5;
 
+    @Expose
     @Column(name = "picture6")
     private String picture6;
 
-
+    @Expose
     @Column(name = "price")
     private int price;
 
-
-
+    @Expose
     @Column(name = "PublishedDate")
     String date;
-
-
-
 
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
-            generator="usersGenerator")
+            generator="postsGenerator")
     @Column(name = "postId")
+    @Expose
     private int id;
+
     public String getUserName() {
         return userName;
     }
@@ -218,5 +241,20 @@ public class Posting {
 
     public void setIsDonation(boolean donation) {
         isDonation = donation;
+    }
+
+    public void setCategories(List<String> categories) { this.categories = categories; }
+    public List<String> getCategories() { return this.categories; }
+
+    public List<ViewedPostHistory> getViewedUsers() {
+        return viewedUsers;
+    }
+
+    public List<Bookmark> getUsersBookmarked() {
+        return usersBookmarked;
+    }
+
+    public void setUsersBookmarked(List<Bookmark> usersBookmarked) {
+        this.usersBookmarked = usersBookmarked;
     }
 }
