@@ -1,12 +1,16 @@
 package mainPackage.usersPackage;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.friendsService.Friend;
+import mainPackage.userRatingsService.Rating;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
+import javax.swing.text.View;
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -21,15 +25,21 @@ import java.util.*;
 @Entity
 @Table(name="users")
 public class GeneralUser {
+
+
+    @Expose
     @Column(name = "firstName")
     private String firstName;
 
+    @Expose
     @Column(name = "lastName")
     private String lastName;
 
+    @Expose
     @Column(name = "email",unique = true)
     private String email;
 
+    @Expose
     @GeneratedValue(
             strategy=GenerationType.TABLE,
             generator="usersGenerator")
@@ -37,19 +47,44 @@ public class GeneralUser {
     @Column(name = "uid")
     private int id;
 
+    @Expose
     @Column(name = "password")
     private String password;
 
+    @Expose
     @Column(name="userType")
     private int userType;
 
-    @Column(name = "userName",unique = true)
+    @Expose
+    @Column(name = "userName", unique = true)
     private String userName;
+
+    @Expose
+    @Column(name = "searchHistory")
+    @ElementCollection
+    @CollectionTable(
+            name = "searchHistory_user",
+            joinColumns = @JoinColumn(name = "uid")
+    )
+    private List<String> searchHistory;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<ViewedPostHistory> viewedPostHistory;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Bookmark> postBookmarks;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Rating> myRatings;
+
+    @Expose
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Posting> publishedPosts = new HashSet<>();
@@ -69,6 +104,7 @@ public class GeneralUser {
     @OneToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Friend> friendships;
+
 
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
@@ -143,4 +179,32 @@ public class GeneralUser {
     }
 
     public List<Announcement> getAnnouncements() { return this.announcements; }
+
+    public List<Rating> getMyRatings() {
+        return myRatings;
+    }
+
+    public void setMyRatings(List<Rating> myRatings) {
+        this.myRatings = myRatings;
+    }
+
+    public List<String> getSearchHistory() {
+        return searchHistory;
+    }
+
+    public void setSearchHistory(List<String> searchHistory) {
+        this.searchHistory = searchHistory;
+    }
+
+    public List<ViewedPostHistory> getViewedPostHistory() {
+        return viewedPostHistory;
+    }
+
+    public List<Bookmark> getPostBookmarks() {
+        return postBookmarks;
+    }
+
+    public void setPostBookmarks(List<Bookmark> postBookmarks) {
+        this.postBookmarks = postBookmarks;
+    }
 }
