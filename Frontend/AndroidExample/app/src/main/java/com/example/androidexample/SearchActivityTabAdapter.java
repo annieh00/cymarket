@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.androidexample.Fragment.RecentSearchesFragment;
+import com.example.androidexample.Fragment.RecentlyViewed;
 import com.example.androidexample.Fragment.SavedActivityFragment;
 
 import java.util.ArrayList;
@@ -31,6 +32,10 @@ public class SearchActivityTabAdapter extends FragmentStateAdapter {
             case 1:
                 fragment = new SavedActivityFragment();
                 break;
+
+            case 2:
+                fragment = new RecentlyViewed();
+                break;
             default:
                 fragment = new RecentSearchesFragment();
                 break;
@@ -40,7 +45,7 @@ public class SearchActivityTabAdapter extends FragmentStateAdapter {
     }
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 
 
