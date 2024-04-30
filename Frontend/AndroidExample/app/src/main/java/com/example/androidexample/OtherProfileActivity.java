@@ -18,17 +18,21 @@ import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
@@ -37,18 +41,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**
  * Main feed displays the current posts.
  */
-public class MainFeedAdmin extends AppCompatActivity {
+public class OtherProfileActivity extends AppCompatActivity {
 
     private DrawerLayout nDrawerLayout;
+
+    private String postsUsersURL;
 
 
     AlertDialog.Builder builder;
@@ -57,6 +69,9 @@ public class MainFeedAdmin extends AppCompatActivity {
     private ListAdapter adapter;
     private ListView listView;
     private String itemSelected;
+    private String actualPostURL;
+
+
 
     /**
      *
@@ -67,7 +82,7 @@ public class MainFeedAdmin extends AppCompatActivity {
     /**
      * this is a tag that is attached to the log
      */
-    private String TAG = MainFeed.class.getSimpleName();
+    private String TAG = OtherProfileActivity.class.getSimpleName();
 
 
     /**
@@ -93,6 +108,18 @@ public class MainFeedAdmin extends AppCompatActivity {
 
     public boolean alreadyConnected = false;
 
+//    Intent intent = getIntent();
+
+//    Bundle extras = intent.getExtras();
+
+//    if (intent != null){
+//        String value = intent.getStringExtra("userName");
+//    }
+    //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
+//
+//    private String userName;
+//    userName = getIntent().getExtras().getString("userName");
+
 
     /**
      * recyclerview related variables
@@ -107,7 +134,7 @@ public class MainFeedAdmin extends AppCompatActivity {
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
 
-    private ImageButton refreshBtn;
+//    private ImageButton refreshBtn;
 
 
     //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
@@ -124,18 +151,51 @@ public class MainFeedAdmin extends AppCompatActivity {
 
     String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
 
+    private Button deleteBtn;
+    private TextView nameTxt;
 
+    private RatingBar ratingBar;
 
+    private Button confirmRatingBtn;
+    private String specificPostURL;
 
+    private float ratingOfUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_feed_admin);
+        setContentView(R.layout.activity_other_profile);
+//        refreshBtn = findViewById(R.id.refreshBtn);
+//        xCoord = findViewById(R.id.xInput);
+//        yCoord = findViewById(R.id.yInput);
+//        setLocationBtn = findViewById(R.id.locationButton);
+//        seeCoordinates = findViewById(R.id.listCoords);
+//        coordListing = findViewById(R.id.coordList);
+//        deleteCoordButton = findViewById(R.id.deleteCoord);
+//        id = findViewById(R.id.coordIdDelete);
+//        updateLocationBtn = findViewById(R.id.updateCoord);
+//        updatedX = findViewById(R.id.updateX);
+//        updatedY = findViewById(R.id.updateY);
+
+        nameTxt = findViewById(R.id.Name);
 
 
+        String userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
+
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            String receivedValue = intent.getStringExtra("userName");
+//            // Use the receivedValue here
+//        }
+
+        //        Bundle extras = getIntent().getExtras();
+//        String userNameOfAuthor = extras.getString("userName");
+        specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
 
 
-        builder = new AlertDialog.Builder(MainFeedAdmin.this);
+        nameTxt.setText(userNameOfAuthor);
+
+
+        builder = new AlertDialog.Builder(OtherProfileActivity.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -144,6 +204,7 @@ public class MainFeedAdmin extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
+
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -155,165 +216,157 @@ public class MainFeedAdmin extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
-        refreshBtn = findViewById(R.id.refreshBtn);
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
+        confirmRatingBtn = findViewById(R.id.confirmRatingBtn);
+
+
+        ratingBar = findViewById(R.id.rb_ratingBar);
+
+        ratingBar.setStepSize(0.5f);
+
+        // Set an OnRatingBarChangeListener to handle user input
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            private float ratingOfUser;
+
             @Override
-            public void onClick(View v) {
-                refreshContent();
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                // Handle the rating change, e.g., update it in the database
+                // Update the user interface to reflect the new rating
+                // This could involve displaying the selected rating to the user
+                Toast.makeText(getApplicationContext(), "Rating: " + rating, Toast.LENGTH_LONG).show();
+                String ratingString = String.valueOf(rating);
+                Log.d("Rating: ", ratingString);
+                ratingOfUser = rating;
+
             }
         });
 
+        confirmRatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRating();
+
+            }
+        });
+
+        //send back that rating to the database thru post method req, and then the average rating will be in a
+        //json obj get method req or in that same post req
+
+//
+//        /** If a certain screen is pressed, it will go to that certain screen.
+//         *
+//         */
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                itemSelected = item.toString();
+//                Intent intent;
+//                switch (itemSelected) {
+//                    case "Main Feed":
+//                        intent = new Intent(getApplicationContext(), MainFeed.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Friends":
+//                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Auction":
+//                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Profile":
+//                        // Handle click on the first item
+//                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Sell":
+//                        // Handle click on the second item
+//                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Inbox":
+//                        // Handle click on the third item
+////                        alreadyConnected = true;
+//                        intent = new Intent(getApplicationContext(), InboxActivity.class);
+//                        startActivity(intent);
+//
+//                        break;
+//                    case "Announcements":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Settings":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                }
+//
+//                // Close the navigation drawer after handling the click
+//                nDrawerLayout.closeDrawers();
+//
+//                return true; // Return true to indicate that the item is selected
+//            }
+//        });
+
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //sendJsonObjReq();
+//                mPostList = new ArrayList<>();
+//                fetchPosts();
+//                /* grab strings from user inputs */
+////                if (txtValidity == true) {
+////                    Pass();
+////                }else if (!txtValidity){
+////                    Pass();
+////                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
+////                }
+//                /* when login button is pressed, use intent to switch to Login Activity */
+////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+////                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
+////                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
+////                startActivity(intent);  // go to MainActivity with the key-value data
+//            }
+//        });
 
 
-
-
-
-
-
-//        setLocationBtn.setOnClickListener(new View.OnClickListener() {
+//        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//
-////                final String
-////
-////                String announcement = adminMessage.toString();
-////                sendAnnouncementToServer(announcement);
-//
-//                final String x, y;
-//                x = xCoord.getText().toString();
-//                y = yCoord.getText().toString();
+//                int uid = Integer.parseInt(id.getText().toString());
 //
 //
-//                JSONObject jsonBody = new JSONObject();
+//                String x = updatedX.getText().toString();
+//                String y = updatedY.getText().toString();
+//
+//                String updateAnnouncementUrl = server_url_update + uid;
+//
+//                JSONObject jsonObject = new JSONObject();
 //                try {
-//                    jsonBody.put("x", x);
-//                    jsonBody.put("y", y);
+//                    jsonObject.put("x", x);
+//                    jsonObject.put("y", y);
 //                } catch (JSONException e) {
 //                    e.printStackTrace();
 //                }
 //
-//                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
+//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
 //                    @Override
 //                    public void onResponse(JSONObject response) {
-//                        builder.setTitle("Server Response");
-//                        try {
-//                            builder.setMessage("Response " + response.getString("status"));
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                xCoord.setText("");
-//                                yCoord.setText("");
-//                            }
-//                        });
-//                        AlertDialog alertDialog = builder.create();
-//                        alertDialog.show();
-//
+//                        Log.d("Volley Response", "Announcement updated successfully");
 //                    }
-//
 //                }, new Response.ErrorListener() {
 //                    @Override
 //                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainFeed.this, "Error....", Toast.LENGTH_LONG).show();
-//                        error.printStackTrace();
+//                        Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
 //                    }
-//                }) {
-//                    //                    @Nullable
-//                    @Override
-//                    protected Map<String, String> getParams() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-////
-////                        params.put("title", msgTitle);
-////                        params.put("description", message);
-////
-//                        return params;
-//                    }
-//                };
-//
-//                MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
-//
+//                });
+//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 //            }
 //        });
 //
 //
 //
-//        seeCoordinates.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                makeJsonArrayReq();
-//            }
-//        });
-
-        /** If a certain screen is pressed, it will go to that certain screen.
-         *
-         */
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                itemSelected = item.toString();
-                Intent intent;
-                switch (itemSelected) {
-                    case "Flagged Posts":
-                        intent = new Intent(getApplicationContext(), FlaggedPostsActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Main Feed":
-                        intent = new Intent(getApplicationContext(), MainFeedAdmin.class);
-                        startActivity(intent);
-                        break;
-                    case "Friends":
-                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Auction":
-                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Profile":
-                        // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Sell":
-                        // Handle click on the second item
-                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Inbox":
-                        // Handle click on the third item
-//                        alreadyConnected = true;
-                        intent = new Intent(getApplicationContext(), InboxActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Organization Requests":
-                        // Handle click on the third item
-//                        alreadyConnected = true;
-                        intent = new Intent(getApplicationContext(), RequestOrganizationPermActivity.class);
-                        startActivity(intent);
-
-                        break;
-                    case "Announcements":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
-                        startActivity(intent);
-                        break;
-                    case "Settings":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-
-                // Close the navigation drawer after handling the click
-                nDrawerLayout.closeDrawers();
-
-                return true; // Return true to indicate that the item is selected
-            }
-        });
-
-
 //        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -346,15 +399,13 @@ public class MainFeedAdmin extends AppCompatActivity {
 
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager linearManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearManager);
-
-
-
-
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-                Log.d("Hi"," Bye");
+//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                // intent to the detail activity
+//                Log.d("Hi"," Bye");
                 Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
@@ -363,31 +414,116 @@ public class MainFeedAdmin extends AppCompatActivity {
 
         fetchPosts();
 
+    }
+
+    private void sendRating() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JSONObject jsonObject = new JSONObject();
+        JSONObject body = new JSONObject();
+        try {
+            //input your API parameters
+            jsonObject.put("addedRating", ratingOfUser);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/login", jsonObject, response -> {
+            Log.d(TAG, response.toString());
+//            try {
+//                email = response.getString("email");
+//                password = response.getString("password");
+//                validUser = response.getBoolean("fromServer");
+//                permission = response.getInt("permission");
+//                //I, jess added these two lines
+//                username = response.getString("username");
+//                loginID = response.getInt("id");
+
+//                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
+//            }
+//            catch (JSONException e) {
+////                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+//            }
+
+//            if (validUser && permission == 0){
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
+//                startActivity(intent);
+//            }else if (validUser && permission == 1) {
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
+//                startActivity(intent);
+//            }else if (validUser && permission == 2){
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
+//                startActivity(intent);
+//            }else{
+//                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+//            }
+
+        }, error -> {
+//            VolleyLog.d(TAG, "Error: " + error.getMessage());
+//            Toast.makeText(LoginActivity.this, "L", Toast.LENGTH_LONG).show();
+//            txtValidity = true;
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+
+        };
+
+        //queue.add(jsonObjReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
 
     }
 
-    private void refreshContent() {
-        // Perform actions to refresh the content here
-        // For example, reload data from the server or reset the RecyclerView adapter
-        mPostList.clear(); // Clear the current list of posts
-        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
-        fetchPosts(); // Fetch new posts from the server
-    }
 
     private void fetchPosts() {
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+//        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
+//        JSONObject jsonObject2 = new JSONObject();
+//        try {
+//            //input your API parameters
+//            jsonObject2.put("userName", LoginActivity.username);
+//
+//            //            Toast.makeText(LoginActivity.this, "got e and p", Toast.LENGTH_LONG).show();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, specificPostURL, null,
                 response -> {
                     try {
                         JSONArray jsonArray = response.getJSONArray("posts");
-                        for (int i = jsonArray.length()-1; i >= 0; i--) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String picture1 = jsonObject.getString("picture1");
-                            String picture2 = jsonObject.getString("picture2");
-                            String picture3 = jsonObject.getString("picture3");
-                            String picture4 = jsonObject.getString("picture4");
-                            String picture5 = jsonObject.getString("picture5");
-                            String picture6 = jsonObject.getString("picture6");
+//                            String picture1 = jsonObject.getString("picture1");
+//                            String picture2 = jsonObject.getString("picture2");
+//                            String picture3 = jsonObject.getString("picture3");
+//                            String picture4 = jsonObject.getString("picture4");
+//                            String picture5 = jsonObject.getString("picture5");
+//                            String picture6 = jsonObject.getString("picture6");
+                            String picture1 = null;
+                            String picture2 = null;
+                            String picture3 = null;
+                            String picture4 = null;
+                            String picture5 = null;
+                            String picture6 = null;
+
                             String title = jsonObject.getString("title");
                             int price = jsonObject.getInt("price");
                             Boolean auction = jsonObject.getBoolean("isAuction");
@@ -397,13 +533,11 @@ public class MainFeedAdmin extends AppCompatActivity {
                             mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
-
                         mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }, error -> {
             // Handle error
         });

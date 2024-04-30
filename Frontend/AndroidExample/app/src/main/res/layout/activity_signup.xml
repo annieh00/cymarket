@@ -62,7 +62,6 @@
         <EditText
             android:id="@+id/firstNameEditTxt"
             android:layout_width="wrap_content"
-            android:inputType="textPassword"
             android:layout_height="50dp"
             android:hint="Enter First Name Here...">
         </EditText>
@@ -88,7 +87,6 @@
         <EditText
             android:id="@+id/lastNameEditTxt"
             android:layout_width="wrap_content"
-            android:inputType="textPassword"
             android:layout_height="50dp"
             android:hint="Enter Last Name Here...">
         </EditText>

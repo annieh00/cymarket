@@ -13,13 +13,17 @@
     </style>
 
     <style name="AppTheme" parent="AppTheme.Base"></style>
-    <style name="ThemeOverlay.MyNoTitleActivity" parent ="AppTheme">
+
+    <style name="ThemeOverlay.MyNoTitleActivity" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
     </style>
 
-
+    <style name="Widget.Theme.AndroidExample.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
 
 
 </resources>

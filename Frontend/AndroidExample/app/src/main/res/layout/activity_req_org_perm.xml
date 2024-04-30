@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FriendFeatureActivity">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/vwebtoolbar1"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/cardinal"
+            app:navigationIcon="?attr/homeAsUpIndicator">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cymarket_logos_white" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <!-- Gold bar under the app bar -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/gold"
+        android:layout_below="@id/appbar" />
+
+    <!-- Header TextView for Friends -->
+    <TextView
+        android:id="@+id/header_text_view_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Organization Requests"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="0dp"
+        android:layout_below="@id/appbar"
+        android:layout_centerHorizontal="true" />
+
+    <!-- ListView for displaying Friends -->
+    <ListView
+        android:id="@+id/orgReq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_text_view_friends"
+        android:layout_marginTop="4dp" />
+
+    <!-- Bar-like container for the Friend Requests header -->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:background="@color/gold"-->
+<!--        android:layout_below="@id/FriendList" />-->
+
+
+    <!-- Header TextView for Friend Requests -->
+<!--    <TextView-->
+<!--        android:id="@+id/header_text_view_requests"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Friend Requests"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:padding="0dp"-->
+<!--        android:layout_below="@id/FriendList"-->
+<!--        android:layout_centerHorizontal="true" />-->
+
+    <!-- ListView for displaying Friend Requests -->
+<!--    <ListView-->
+<!--        android:id="@+id/FriendRequestList"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/header_text_view_requests"-->
+<!--        android:layout_marginTop="8dp" />-->
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:background="@color/gold"-->
+<!--        android:layout_below="@id/FriendRequestList" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/otherUsers"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="People you may know"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:padding="0dp"-->
+<!--        android:layout_below="@id/FriendRequestList"-->
+<!--        android:layout_centerHorizontal="true" />-->
+
+    <!-- ListView for displaying Friend Requests -->
+<!--    <ListView-->
+<!--        android:id="@+id/generalUsers"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/otherUsers"-->
+<!--        android:layout_marginTop="8dp" />-->
+
+
+
+
+</RelativeLayout>
+

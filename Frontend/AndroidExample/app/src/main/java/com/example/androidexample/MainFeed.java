@@ -138,6 +138,8 @@ public class MainFeed extends AppCompatActivity {
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
 
+        search = findViewById(R.id.searchBtn);
+
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 
@@ -149,6 +151,7 @@ public class MainFeed extends AppCompatActivity {
 
 
         }
+
 //        refreshBtn = findViewById(R.id.refreshBtn);
 //        refreshBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -183,6 +186,11 @@ public class MainFeed extends AppCompatActivity {
 //                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "Organization Auction":
+                        // Handle click on the fourth item
+                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
                         startActivity(intent);
                         break;
                     case "Auction":
@@ -285,7 +293,6 @@ public class MainFeed extends AppCompatActivity {
         // Perform actions to refresh the content here
         // For example, reload data from the server or reset the RecyclerView adapter
         mPostList.clear(); // Clear the current list of posts
-//        mPostList.de
         mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         fetchPosts(); // Fetch new posts from the server
     }
@@ -311,6 +318,7 @@ public class MainFeed extends AppCompatActivity {
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
                             mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            Log.d("Post made with this information: ", picture1);
                         }
 
 

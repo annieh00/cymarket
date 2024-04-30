@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.RatingBar;
 
 import org.json.JSONArray;
 
@@ -131,7 +132,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Button deleteBtn;
 
-
+    private RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity {
 //        updatedY = findViewById(R.id.updateY);
 
 
+
         builder = new AlertDialog.Builder(ProfileActivity.this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -159,6 +161,17 @@ public class ProfileActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
+        ratingBar = (RatingBar) findViewById(R.id.rb_ratingBar);
+
+        // Set the rating bar as non-editable
+        ratingBar.setIsIndicator(true);
+        //json get method req that gets the average rating of the user and displays it
+        // Set the current rating, e.g., when loading user data
+//        float userRating = // Get the user's rating from the database
+//                ratingBar.setRating(userRating);
+        //"/getRatingsOf" + /{username}
+
+
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -407,6 +420,12 @@ public class ProfileActivity extends AppCompatActivity {
         fetchPosts();
 
     }
+
+
+    //RATING BAR JSON OBJ REQ THAT GETS THE AVERAGE RATING OF YOUR USER
+    // Set the current rating, e.g., when loading user data
+    //    float userRating = // Get the user's rating from the database
+    //            ratingBar.setRating(userRating);
 
     private void fetchPosts() {
 //        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";

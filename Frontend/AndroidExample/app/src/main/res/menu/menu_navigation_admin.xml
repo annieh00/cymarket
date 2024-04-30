@@ -8,8 +8,21 @@
                 >
             </item>
             <item
+                android:id="@+id/ReqPerm"
+                android:title="Organization Requests"
+                >
+
+            </item>
+            <item
                 android:id="@+id/flaggedPosts"
                 android:title="Flagged Posts"
+                >
+
+            </item>
+
+            <item
+                android:id="@+id/AuctionOrganizer"
+                android:title="Organization Auction"
                 >
 
             </item>
