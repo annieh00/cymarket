@@ -1,13 +1,17 @@
 package com.example.androidexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +29,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SearchActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager2 viewPager2;
@@ -34,6 +41,10 @@ public class SearchActivity extends AppCompatActivity {
     TextView clearHistory;
 
     private String URL = "http://coms-309-060.class.las.iastate.edu:8080";
+
+//    private ArrayAdapter<String> searchResultAdapter;
+//    private List<String> searchResults = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,12 @@ public class SearchActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.view_pager);
         searchActivityTabAdapter = new SearchActivityTabAdapter(this);
         viewPager2.setAdapter(searchActivityTabAdapter);
+//// Initialize the ArrayAdapter for search results
+//        searchResultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, searchResults);
+//
+//        // Other initialization code...
+
+
 
 
 
@@ -71,12 +88,17 @@ public class SearchActivity extends AppCompatActivity {
         sendSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //making sure that search inquiry actually has something
-                if(searchInquiry.toString() != null){
-
-                    searchRequest();
-
-
+                // Check if the search inquiry is not empty
+                String searchQuery = searchInquiry.getText().toString();
+                if (!searchQuery.isEmpty()) {
+                    // Start the new activity here
+                    Intent intent = new Intent(SearchActivity.this, SearchItemView.class);
+                    // Pass any data to the new activity if needed
+                    intent.putExtra("searchQuery", searchQuery);
+                    startActivity(intent);
+                } else {
+                    // Handle case where search inquiry is empty
+                    Log.d("SearchActivity", "Please enter a search query");
                 }
             }
         });
@@ -84,43 +106,7 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void searchRequest() {
-        // URL of your backend API
-        String url = URL + "/search/" + LoginActivity.loginID + "?query=" + searchInquiry.getText().toString();
-        //maybe this idk yet
-        // url:8080/search/3?query=""
-        // Create JSONObject for parameters
-        JSONObject jsonBody = new JSONObject();
-        try {
-            // Add query parameter
-            jsonBody.put("query", searchInquiry.getText().toString());
-            // Add any other parameters if required
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        // Create request
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("SearchRequest", response.toString());
-
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error here
-                        Log.d("SearchRequest", "Search successful");
-
-                    }
-                });
-
-        // Add the request to the RequestQueue
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(jsonObjectRequest);
-    }
     private void pullRecentSearches() {
 
         //this method needs work, im not sure for the endpoint yet or the structure of the announcements
@@ -137,7 +123,34 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        Log.d("Previous Searches", response.toString());
+                        List<String> lastThreeSearches = new ArrayList<>();
+                        int length = response.length();
+
+                        for (int i = length - 1; i >= Math.max(0, length - 3); i--) {
+                            try {
+                                // Get the search item at index i
+                                String searchItem = response.getString(i);
+                                // Add the search item to the list
+                                lastThreeSearches.add(searchItem);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                        int currentItem = viewPager2.getCurrentItem();
+                        SearchActivityTabAdapter adapter = (SearchActivityTabAdapter) viewPager2.getAdapter();
+                        Fragment currentFragment = adapter.getFragmentAtPosition(currentItem);
+                        if (currentFragment instanceof RecentSearchesFragment) {
+                            ((RecentSearchesFragment) currentFragment).updateRecentSearches(lastThreeSearches);
+                        }
+
+                        Log.d("Last 3 Searches", lastThreeSearches.toString());
+
+
+
+
                     }
                 },
                 new Response.ErrorListener() {
