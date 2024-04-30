@@ -98,14 +98,14 @@ public class OtherProfileActivity extends AppCompatActivity {
 
     public boolean alreadyConnected = false;
 
-    Bundle extras = getIntent().getExtras();
+//    Intent intent = getIntent();
 
 //    Bundle extras = intent.getExtras();
 
 //    if (intent != null){
 //        String value = intent.getStringExtra("userName");
 //    }
-    String userNameOfAuthor = extras.getString("userName");
+    String userNameOfAuthor = getIntent().getExtras().getString("userName");
     //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 //
 //    private String userName;
@@ -164,11 +164,19 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        updateLocationBtn = findViewById(R.id.updateCoord);
 //        updatedX = findViewById(R.id.updateX);
 //        updatedY = findViewById(R.id.updateY);
-        Bundle extras = getIntent().getExtras();
-        String userNameOfAuthor = extras.getString("userName");
+
+
+
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String receivedValue = intent.getStringExtra("userName");
+            // Use the receivedValue here
+        }
+
+        //        Bundle extras = getIntent().getExtras();
+//        String userNameOfAuthor = extras.getString("userName");
         specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
-
-
 
 
         builder = new AlertDialog.Builder(OtherProfileActivity.this);

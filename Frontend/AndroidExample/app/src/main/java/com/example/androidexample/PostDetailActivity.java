@@ -189,7 +189,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class);
-                intent.putExtra("userName", userName);
+                intent.putExtra("userName", userName); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);  // go to other profile
             }
         });
