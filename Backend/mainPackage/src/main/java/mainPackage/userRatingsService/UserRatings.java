@@ -44,6 +44,7 @@ public class UserRatings {
             List<Rating> setOfRatings = u.getMyRatings();
             setOfRatings.add(r);
             generalUserRepository.save(u);
+            System.out.println("Review::::" + r.getRevieweeUserName());
             return "{\"serverResponse\":true}";
         }
 
@@ -53,10 +54,6 @@ public class UserRatings {
     @GetMapping("/getAllRatings")
     public String getAllRatings(){
         List<Rating> lr = ratingRepository.findAll();
-        for(int i = 0; i < lr.size(); i++){
-            Rating rating = lr.get(i);
-            rating.setRevieweeUserName(rating.getRevieweeUserName());
-        }
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
@@ -106,33 +103,6 @@ public class UserRatings {
         return "{\"serverResponse\" : false}";
     }
 
-    @PostMapping("/modifyRating/{author}/{userName}")
-    public String modifyRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
-        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
-        if(u != null){
-            List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
-            List<Rating> modified = new ArrayList<>();
-            Rating del = null;
-
-            for(int i = 0; i < lr.size(); i++){
-                if(lr.get(i).getAuthorUsername().equals(userName)){
-                    del = lr.get(i);
-                    continue;
-                }
-                modified.add(lr.get(i));
-            }
-
-            if(del != null){
-                ratingRepository.delete(del);
-                u.setMyRatings(modified);
-                generalUserRepository.save(u);
-                return "{\"serverResponse\" : true}";
-
-            }
-
-        }
-        return "{\"serverResponse\" : false}";
-    }
 
     @GetMapping("getMyRatings/{userName}")
     public String getMyRatings(@PathVariable(name = "userName") String userName){

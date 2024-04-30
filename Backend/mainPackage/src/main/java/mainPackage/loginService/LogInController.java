@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import mainPackage.dbmsPackage.ConnectToDB;
+import mainPackage.userRatingsService.Rating;
+import mainPackage.userRatingsService.RatingRepository;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Junhyung Shim
@@ -30,6 +33,9 @@ public class LogInController {
 
     @Autowired
     private GeneralUserRepository generalUserRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
 
 
     @Operation(summary = "Check for login", description = "Checks whether given user data is in the DB")
@@ -129,14 +135,20 @@ public class LogInController {
     }
 
     //delete
-    @DeleteMapping("/login/deleteUser/{email}")
-    public String deleteUser(@PathVariable(name = "email") String email){
-        GeneralUser db = generalUserRepository.findGeneralUserByEmail(email);
+    @GetMapping("/login/deleteUser/{userName}")
+    public String deleteUser(@PathVariable(name = "userName") String userName){
+        GeneralUser db = generalUserRepository.findGeneralUserByUserName(userName);
         if(db == null){
             return "{\"deleteUser\" : false}";
         }
 
         //String msg = db.getUserName() + " was successfully deleted";
+        List<Rating> list = db.getMyRatings();
+        if(list != null && !list.isEmpty()){
+            for(Rating r : list){
+                ratingRepository.deleteById((long) r.getRid());
+            }
+        }
         generalUserRepository.delete(db);
         return "{\"deleteUser\" : true}";
     }

@@ -34,6 +34,12 @@ public class Rating {
     @Column(name = "stars")
     private int stars;
 
+    @Expose
+    @JsonIgnore
+    @Column(name = "revieweeUserName")
+    private String revieweeUserName;
+
+
     public String getRevieweeUserName() {
         return revieweeUserName;
     }
@@ -42,8 +48,6 @@ public class Rating {
         this.revieweeUserName = revieweeUserName;
     }
 
-    @Column(name = "revieweeUserName")
-    private String revieweeUserName;
 
 
 
@@ -77,8 +81,8 @@ public class Rating {
         return authorUsername;
     }
 
-    public void setAuthorUsername(String autorUsername) {
-        this.authorUsername = autorUsername;
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
 

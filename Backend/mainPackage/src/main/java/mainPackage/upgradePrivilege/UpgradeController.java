@@ -18,7 +18,7 @@ public class UpgradeController {
     @Autowired
     private GeneralUserRepository generalUserRepository;
 
-    @PostMapping("/upgrade")
+    @PostMapping("/requestUpgrade")
     public String upgradeUser(@RequestBody UpgradeQueue uq){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(uq.getUserName());
         if(u != null){
