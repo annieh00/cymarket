@@ -77,7 +77,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void bind(final PostItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
             price.setText(String.valueOf(item.getPrice()));
-            Log.d("picture1:", item.getPicture1());
+//            Log.d("picture1:", item.getPicture1());
 //            Bitmap bm = decodeBase64ToBitmap(item.getPicture1());
 //            bm = Bitmap.createScaledBitmap(bm,150,150,false);
 //            image.setImageBitmap(bm);

@@ -17,17 +17,22 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.widget.ListAdapter;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.navigation.NavigationView;
@@ -37,10 +42,15 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -105,7 +115,6 @@ public class OtherProfileActivity extends AppCompatActivity {
 //    if (intent != null){
 //        String value = intent.getStringExtra("userName");
 //    }
-    String userNameOfAuthor = getIntent().getExtras().getString("userName");
     //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 //
 //    private String userName;
@@ -143,12 +152,14 @@ public class OtherProfileActivity extends AppCompatActivity {
     String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
 
     private Button deleteBtn;
+    private TextView nameTxt;
 
     private RatingBar ratingBar;
 
     private Button confirmRatingBtn;
     private String specificPostURL;
 
+    private float ratingOfUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,18 +176,23 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        updatedX = findViewById(R.id.updateX);
 //        updatedY = findViewById(R.id.updateY);
 
+        nameTxt = findViewById(R.id.Name);
 
 
+        String userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            String receivedValue = intent.getStringExtra("userName");
-            // Use the receivedValue here
-        }
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            String receivedValue = intent.getStringExtra("userName");
+//            // Use the receivedValue here
+//        }
 
         //        Bundle extras = getIntent().getExtras();
 //        String userNameOfAuthor = extras.getString("userName");
         specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
+
+
+        nameTxt.setText(userNameOfAuthor);
 
 
         builder = new AlertDialog.Builder(OtherProfileActivity.this);
@@ -188,6 +204,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
+
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -204,72 +221,93 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         ratingBar = findViewById(R.id.rb_ratingBar);
 
+        ratingBar.setStepSize(0.5f);
+
         // Set an OnRatingBarChangeListener to handle user input
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            private float ratingOfUser;
+
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 // Handle the rating change, e.g., update it in the database
                 // Update the user interface to reflect the new rating
                 // This could involve displaying the selected rating to the user
+                Toast.makeText(getApplicationContext(), "Rating: " + rating, Toast.LENGTH_LONG).show();
+                String ratingString = String.valueOf(rating);
+                Log.d("Rating: ", ratingString);
+                ratingOfUser = rating;
+
+            }
+        });
+
+        confirmRatingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRating();
+
             }
         });
 
         //send back that rating to the database thru post method req, and then the average rating will be in a
         //json obj get method req or in that same post req
 
-
-        /** If a certain screen is pressed, it will go to that certain screen.
-         *
-         */
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                itemSelected = item.toString();
-                Intent intent;
-                switch (itemSelected) {
-                    case "Friends":
-                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Auction":
-                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Profile":
-                        // Handle click on the first item
-                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Sell":
-                        // Handle click on the second item
-                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Inbox":
-                        // Handle click on the third item
-//                        alreadyConnected = true;
-                        intent = new Intent(getApplicationContext(), InboxActivity.class);
-                        startActivity(intent);
-
-                        break;
-                    case "Announcements":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
-                        startActivity(intent);
-                        break;
-                    case "Settings":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(intent);
-                        break;
-                }
-
-                // Close the navigation drawer after handling the click
-                nDrawerLayout.closeDrawers();
-
-                return true; // Return true to indicate that the item is selected
-            }
-        });
+//
+//        /** If a certain screen is pressed, it will go to that certain screen.
+//         *
+//         */
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                itemSelected = item.toString();
+//                Intent intent;
+//                switch (itemSelected) {
+//                    case "Main Feed":
+//                        intent = new Intent(getApplicationContext(), MainFeed.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Friends":
+//                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Auction":
+//                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Profile":
+//                        // Handle click on the first item
+//                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Sell":
+//                        // Handle click on the second item
+//                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Inbox":
+//                        // Handle click on the third item
+////                        alreadyConnected = true;
+//                        intent = new Intent(getApplicationContext(), InboxActivity.class);
+//                        startActivity(intent);
+//
+//                        break;
+//                    case "Announcements":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
+//                        startActivity(intent);
+//                        break;
+//                    case "Settings":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                }
+//
+//                // Close the navigation drawer after handling the click
+//                nDrawerLayout.closeDrawers();
+//
+//                return true; // Return true to indicate that the item is selected
+//            }
+//        });
 
 //        refreshBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -377,6 +415,83 @@ public class OtherProfileActivity extends AppCompatActivity {
         fetchPosts();
 
     }
+
+    private void sendRating() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JSONObject jsonObject = new JSONObject();
+        JSONObject body = new JSONObject();
+        try {
+            //input your API parameters
+            jsonObject.put("addedRating", ratingOfUser);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/login", jsonObject, response -> {
+            Log.d(TAG, response.toString());
+//            try {
+//                email = response.getString("email");
+//                password = response.getString("password");
+//                validUser = response.getBoolean("fromServer");
+//                permission = response.getInt("permission");
+//                //I, jess added these two lines
+//                username = response.getString("username");
+//                loginID = response.getInt("id");
+
+//                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
+//            }
+//            catch (JSONException e) {
+////                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+//            }
+
+//            if (validUser && permission == 0){
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
+//                startActivity(intent);
+//            }else if (validUser && permission == 1) {
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
+//                startActivity(intent);
+//            }else if (validUser && permission == 2){
+//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
+//                startActivity(intent);
+//            }else{
+//                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+//            }
+
+        }, error -> {
+//            VolleyLog.d(TAG, "Error: " + error.getMessage());
+//            Toast.makeText(LoginActivity.this, "L", Toast.LENGTH_LONG).show();
+//            txtValidity = true;
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+
+        };
+
+        //queue.add(jsonObjReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
+
+
+    }
+
 
     private void fetchPosts() {
 //        String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";

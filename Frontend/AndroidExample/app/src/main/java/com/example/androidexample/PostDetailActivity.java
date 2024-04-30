@@ -189,7 +189,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                 Intent intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class);
-                intent.putExtra("userName", userName); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                intent.putExtra("userName", userName);
                 startActivity(intent);  // go to other profile
             }
         });
@@ -241,10 +241,10 @@ public class PostDetailActivity extends AppCompatActivity {
                                 editPostBtn.setVisibility(View.GONE);
                             }
 
-                            authorOfPostTxtView.setText(userName);
+                            authorOfPostTxtView.setText("Author: " + userName);
                             titleTxtView.setText(titleTxt);
                             if (donation != true){
-                                priceTxtView.setText(String.valueOf(price));
+                                priceTxtView.setText("$" + String.valueOf(price));
                             }
                             descriptionTxtView.setText(description);
 //                            Log.d("JSON REQ TO GET POST" + response.toString());
