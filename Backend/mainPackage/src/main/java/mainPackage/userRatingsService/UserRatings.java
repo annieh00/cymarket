@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class UserRatings {
@@ -49,9 +47,9 @@ public class UserRatings {
                 avg += r2.getStars();
             }
             if(setOfRatings.size() == 0){
-                u.setMyRatingScore(0.0);
+                u.setScore(0.0);
             }else{
-                u.setMyRatingScore(avg / setOfRatings.size());
+                u.setScore(avg / setOfRatings.size());
             }
 
             generalUserRepository.save(u);
@@ -94,17 +92,23 @@ public class UserRatings {
             List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
             List<Rating> modified = new ArrayList<>();
             Rating del = null;
+            double sum = 0.0;
             for(int i = 0; i < lr.size(); i++){
                 if(lr.get(i).getAuthorUsername().equals(userName)){
                     del = lr.get(i);
                     continue;
                 }
+                sum += lr.get(i).getStars();
                 modified.add(lr.get(i));
             }
 
             if(del != null){
                 ratingRepository.delete(del);
-                u.setMyRatings(modified);
+                if(modified.size() == 0){
+                    u.setScore(0);
+                }else{
+                    u.setScore(sum/lr.size());
+                }
                 generalUserRepository.save(u);
                 return "{\"serverResponse\" : true}";
 

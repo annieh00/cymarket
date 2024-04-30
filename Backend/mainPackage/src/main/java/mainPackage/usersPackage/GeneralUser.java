@@ -3,14 +3,14 @@ package mainPackage.usersPackage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import mainPackage.announcementPackage.Announcement;
 import mainPackage.friendsService.Friend;
 import mainPackage.userRatingsService.Rating;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
-import javax.swing.text.View;
-import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -52,6 +52,8 @@ public class GeneralUser {
     private String password;
 
 
+
+
     @Expose
     @Column(name="userType")
     private int userType;
@@ -64,8 +66,8 @@ public class GeneralUser {
 
 
     @Expose
-    @Column(name = "myRatingScore")
-    private double myRatingScore;
+    @Column(name = "score")
+    private double score;
 
     @Expose
     @Column(name = "searchHistory")
@@ -120,16 +122,22 @@ public class GeneralUser {
         return connectedSessions;
     }
 
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
+    }
     public void setConnectedSessions(Set<AuctionTable> connectedSessions) {
         this.connectedSessions = connectedSessions;
-    }
-
-    public double getMyRatingScore() {
-        return myRatingScore;
-    }
-
-    public void setMyRatingScore(double myRatingScore) {
-        this.myRatingScore = myRatingScore;
     }
 
     public void addConnectedSessions(AuctionTable a){
