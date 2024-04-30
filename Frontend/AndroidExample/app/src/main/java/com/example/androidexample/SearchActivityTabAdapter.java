@@ -6,29 +6,50 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.androidexample.Fragment.RecentSearchesFragment;
+import com.example.androidexample.Fragment.RecentlyViewed;
 import com.example.androidexample.Fragment.SavedActivityFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SearchActivityTabAdapter extends FragmentStateAdapter {
-        public SearchActivityTabAdapter(@NonNull FragmentActivity fragmentActivity) {
+
+
+    private List<Fragment> fragments = new ArrayList<>();
+
+    public SearchActivityTabAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
+        Fragment fragment;
+        switch (position) {
             case 0:
-                return new RecentSearchesFragment();
-
+                fragment = new RecentSearchesFragment();
+                break;
             case 1:
-                return new SavedActivityFragment();
-            default:
-                return new RecentSearchesFragment();
-        }
-    }
+                fragment = new SavedActivityFragment();
+                break;
 
+            case 2:
+                fragment = new RecentlyViewed();
+                break;
+            default:
+                fragment = new RecentSearchesFragment();
+                break;
+        }
+        fragments.add(fragment); // Add the created fragment to the list
+        return fragment;
+    }
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
+    }
+
+
+    public Fragment getFragmentAtPosition(int position) {
+        return fragments.get(position);
     }
 }

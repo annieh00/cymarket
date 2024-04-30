@@ -5,20 +5,18 @@ import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.transaction.Transactional;
 import mainPackage.usersPackage.GeneralUser;
 import mainPackage.usersPackage.GeneralUserRepository;
 import mainPackage.usersPackage.Posting;
 import mainPackage.usersPackage.PostingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class SearchController {
@@ -28,35 +26,79 @@ public class SearchController {
     @Autowired
     private GeneralUserRepository generalUserRepository;
 
-    @GetMapping("/search/{uid}")
-    @Operation(summary = "Search users or posts and adds to search history",
-            description = "Search users or posts and adds to search history through a search of String type")
+    @PostMapping("/search/{uid}")
+    @Operation(summary = "Search users or posts and add to search history",
+            description = "Search users or posts and add to search history with a given query.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Search retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Invalid input")
+            @ApiResponse(responseCode = "200", description = "Search completed successfully"),
+            @ApiResponse(responseCode = "404", description = "Invalid user ID or other input error")
     })
-    public String search(String query, @PathVariable int uid) {
-        Set<Object> results = new HashSet<>();
+    public ResponseEntity<Map<String, Object>> search(String query, @PathVariable int uid) {
+        GeneralUser user = generalUserRepository.findGeneralUserById(uid);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
 
-        GeneralUser u = generalUserRepository.findGeneralUserById(uid);
+        Set<Object> results = new HashSet<>();
 
         results.addAll(generalUserRepository.findByUserNameContainingIgnoreCase(query));
         results.addAll(generalUserRepository.findByFirstNameContainingIgnoreCase(query));
         results.addAll(generalUserRepository.findByLastNameContainingIgnoreCase(query));
-//        results.addAll(postingRepository.findByUserNameContainingIgnoreCase(query));
-//        results.addAll(postingRepository.findByTitleContainingIgnoreCase(query));
-//        results.addAll(postingRepository.findByDescriptionContainingIgnoreCase(query));
-//        results.addAll(postingRepository.findByCategory(query));
+        results.addAll(postingRepository.findByUserNameContainingIgnoreCase(query));
+        results.addAll(postingRepository.findByTitleContainingIgnoreCase(query));
+        results.addAll(postingRepository.findByDescriptionContainingIgnoreCase(query));
+        results.addAll(postingRepository.findByCategory(query));
+        results.addAll(postingRepository.findByCategoriesContaining(query));
 
-        u.getSearchHistory().add(query);
-        generalUserRepository.save(u);
+        // Add the query to the user's search history
+        user.getSearchHistory().add(query);
+        generalUserRepository.save(user);
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
-        String json = gson.toJson(results);
-        System.out.println("saving: " + query);
-        return json;
+        // Create a map to send both search results and updated search history
+        Map<String, Object> response = new HashMap<>();
+        response.put("results", results);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Get a user's search history",
+            description = "Retrieves all entries from a user's search history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved search history"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/search/{uid}/history")
+    public ResponseEntity<List<String>> getSearchHistory(@PathVariable int uid) {
+        GeneralUser user = generalUserRepository.findGeneralUserById(uid);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        List<String> searchHistory = user.getSearchHistory();
+
+        return ResponseEntity.ok(searchHistory);
+    }
+
+    @Operation(summary = "Clear a user's search history",
+            description = "Clears all entries from a user's search history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully cleared the search history"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @DeleteMapping("/search/{uid}/clear")
+    @Transactional
+    public ResponseEntity<String> clearSearchHistory(@PathVariable int uid) {
+        GeneralUser user = generalUserRepository.findGeneralUserById(uid);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        user.getSearchHistory().clear();
+        generalUserRepository.save(user);
+
+        return ResponseEntity.ok("Search history cleared");
     }
 
 }

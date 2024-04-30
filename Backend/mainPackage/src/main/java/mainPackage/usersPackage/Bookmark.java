@@ -1,19 +1,18 @@
 package mainPackage.usersPackage;
 
 import jakarta.persistence.*;
-import mainPackage.usersPackage.Posting;
 
 @Entity
 @TableGenerator(
-        name = "viewedPostGenerator",
+        name = "bookmarkGenerator",
         allocationSize = 1,
         initialValue = 1)
-@Table(name = "viewed_post_history")
-public class ViewedPostHistory {
+@Table(name = "bookmarks")
+public class Bookmark {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "viewedPostGenerator")
-    @Column(name = "viewId")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "bookmarkGenerator")
+    @Column(name = "bookmarkId")
     private int id;
 
     @ManyToOne

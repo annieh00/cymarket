@@ -104,11 +104,17 @@
             android:exported="true" /> <!-- <activity -->
         <!-- android:name=".postActivity" -->
         <!-- android:exported="true" /> -->
-        <activity
-            android:name=".ViewAnnouncementAdmin"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ViewAnnouncementAdmin"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ViewAnnouncementsGenUser"
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchItemView"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

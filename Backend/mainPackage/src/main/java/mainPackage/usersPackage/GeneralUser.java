@@ -9,6 +9,8 @@ import mainPackage.userRatingsService.Rating;
 import mainPackage.websocket.AuctionTable;
 import mainPackage.websocket.Message;
 
+import javax.swing.text.View;
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -66,13 +68,21 @@ public class GeneralUser {
     )
     private List<String> searchHistory;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<ViewedPostHistory> viewedPostHistory;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Bookmark> postBookmarks;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<AuctionTable> connectedSessions = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private Set<Rating> myRatings = new HashSet<>();
+    private List<Rating> myRatings;
 
     @Expose
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
@@ -170,11 +180,11 @@ public class GeneralUser {
 
     public List<Announcement> getAnnouncements() { return this.announcements; }
 
-    public Set<Rating> getMyRatings() {
+    public List<Rating> getMyRatings() {
         return myRatings;
     }
 
-    public void setMyRatings(Set<Rating> myRatings) {
+    public void setMyRatings(List<Rating> myRatings) {
         this.myRatings = myRatings;
     }
 
@@ -184,5 +194,17 @@ public class GeneralUser {
 
     public void setSearchHistory(List<String> searchHistory) {
         this.searchHistory = searchHistory;
+    }
+
+    public List<ViewedPostHistory> getViewedPostHistory() {
+        return viewedPostHistory;
+    }
+
+    public List<Bookmark> getPostBookmarks() {
+        return postBookmarks;
+    }
+
+    public void setPostBookmarks(List<Bookmark> postBookmarks) {
+        this.postBookmarks = postBookmarks;
     }
 }

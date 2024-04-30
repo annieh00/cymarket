@@ -125,6 +125,8 @@ public class MainFeed extends AppCompatActivity {
 
 
 
+        search = findViewById(R.id.searchBtn);
+
 
         builder = new AlertDialog.Builder(MainFeed.this);
 

@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating,Long> {
-    Rating findRatingByAuthorUsername(String authorUserName);
-    List<Rating> findRatingsByReviewee(GeneralUser reviewee);
+    List<Rating> findRatingsByAuthorUsername(String authorUserName);
+
+
+    List<Rating> findRatingsByRevieweeUserName(String revieweeUserName);
 
 }

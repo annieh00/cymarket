@@ -1,9 +1,11 @@
 package mainPackage.usersPackage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import lombok.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +31,8 @@ public class Posting {
     @Expose
     @Column(name = "title")
     private String title;
+
+    @Expose
     @Column(name = "description")
     private String description;
 
@@ -40,6 +44,14 @@ public class Posting {
     )
     @Column(name = "categories")
     private List<String> categories;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<ViewedPostHistory> viewedUsers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Bookmark> usersBookmarked = new ArrayList<>();
 
     @Expose
     @Column(name = "isAuction")
@@ -86,8 +98,9 @@ public class Posting {
     @Id
     @GeneratedValue(
             strategy=GenerationType.TABLE,
-            generator="usersGenerator")
+            generator="postsGenerator")
     @Column(name = "postId")
+    @Expose
     private int id;
 
     public String getUserName() {
@@ -232,4 +245,16 @@ public class Posting {
 
     public void setCategories(List<String> categories) { this.categories = categories; }
     public List<String> getCategories() { return this.categories; }
+
+    public List<ViewedPostHistory> getViewedUsers() {
+        return viewedUsers;
+    }
+
+    public List<Bookmark> getUsersBookmarked() {
+        return usersBookmarked;
+    }
+
+    public void setUsersBookmarked(List<Bookmark> usersBookmarked) {
+        this.usersBookmarked = usersBookmarked;
+    }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context=".SearchItemView">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -36,19 +36,19 @@
                     android:layout_gravity="bottom">
 
                     <EditText
-                        android:id="@+id/searchItem"
+                        android:id="@+id/searchedItem"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="#FFFFFF"
-                        android:hint="Enter Search" /> <!-- Set background color to white -->
+                        android:padding="8dp" /> <!-- Set background color to white -->
 
-                    <ImageButton
-                        android:id="@+id/searchBtn"
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/searchBtn"-->
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/baseline_send_24"/>
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/baseline_send_24"/>-->
 
                 </LinearLayout>
             </FrameLayout>
@@ -58,45 +58,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- TabLayout below AppBarLayout -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_below="@id/appbar"
-        app:tabIndicatorColor="@color/cardinal"
-        app:tabTextColor="@color/cardinal">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recent">
-
-        </com.google.android.material.tabs.TabItem>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Saved Posts">
-
-        </com.google.android.material.tabs.TabItem>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recently Viewed">
-
-        </com.google.android.material.tabs.TabItem>
-
-
-    </com.google.android.material.tabs.TabLayout>
-    
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/view_pager"
-        android:layout_below="@id/tabLayout">
-
-    </androidx.viewpager2.widget.ViewPager2>
+<!--    <-->
 
 
 </RelativeLayout>
