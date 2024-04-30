@@ -128,6 +128,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
+    private float avgRating;
 
     /**
      * this is the tag itself
@@ -160,6 +161,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private String specificPostURL;
 
     private float ratingOfUser;
+    private String userNameOfAuthor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +181,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         nameTxt = findViewById(R.id.Name);
 
 
-        String userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
+        userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
 
 //        Intent intent = getIntent();
 //        if (intent != null) {
@@ -417,9 +419,9 @@ public class OtherProfileActivity extends AppCompatActivity {
     }
 
     private void sendRating() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+//        RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();
-        JSONObject body = new JSONObject();
+//        JSONObject body = new JSONObject();
         try {
             //input your API parameters
             jsonObject.put("addedRating", ratingOfUser);
@@ -427,9 +429,13 @@ public class OtherProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/login", jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_SET_USER_RATING + "/" + userNameOfAuthor, jsonObject, response -> {
             Log.d(TAG, response.toString());
-//            try {
+            try {
+                    avgRating = (float) response.getDouble("avgRating");
+                    ratingBar.setRating(avgRating);
+                    ratingBar.setIsIndicator(true);
+
 //                email = response.getString("email");
 //                password = response.getString("password");
 //                validUser = response.getBoolean("fromServer");
@@ -439,31 +445,14 @@ public class OtherProfileActivity extends AppCompatActivity {
 //                loginID = response.getInt("id");
 
 //                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
-//            }
-//            catch (JSONException e) {
+            }catch (JSONException e) {
 ////                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-//            }
+            }
 
-//            if (validUser && permission == 0){
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
-//                startActivity(intent);
-//            }else if (validUser && permission == 1) {
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
-//                startActivity(intent);
-//            }else if (validUser && permission == 2){
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
-//                startActivity(intent);
-//            }else{
-//                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-//            }
 
         }, error -> {
-//            VolleyLog.d(TAG, "Error: " + error.getMessage());
-//            Toast.makeText(LoginActivity.this, "L", Toast.LENGTH_LONG).show();
-//            txtValidity = true;
+            VolleyLog.d(TAG, "Error: " + error.getMessage());
+
         }) {
 
             /**
