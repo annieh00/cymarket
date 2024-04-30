@@ -43,6 +43,17 @@ public class UserRatings {
             ratingRepository.save(r);
             List<Rating> setOfRatings = u.getMyRatings();
             setOfRatings.add(r);
+
+            double avg = 0.0;
+            for(Rating r2 : setOfRatings){
+                avg += r2.getStars();
+            }
+            if(setOfRatings.size() == 0){
+                u.setMyRatingScore(0.0);
+            }else{
+                u.setMyRatingScore(avg / setOfRatings.size());
+            }
+
             generalUserRepository.save(u);
             System.out.println("Review::::" + r.getRevieweeUserName());
             return "{\"serverResponse\":true}";

@@ -51,6 +51,7 @@ public class GeneralUser {
     @Column(name = "password")
     private String password;
 
+
     @Expose
     @Column(name="userType")
     private int userType;
@@ -58,6 +59,13 @@ public class GeneralUser {
     @Expose
     @Column(name = "userName", unique = true)
     private String userName;
+
+
+
+
+    @Expose
+    @Column(name = "myRatingScore")
+    private double myRatingScore;
 
     @Expose
     @Column(name = "searchHistory")
@@ -106,12 +114,22 @@ public class GeneralUser {
     private Set<Friend> friendships;
 
 
+
+
     public Set<AuctionTable> getConnectedSessions() {
         return connectedSessions;
     }
 
     public void setConnectedSessions(Set<AuctionTable> connectedSessions) {
         this.connectedSessions = connectedSessions;
+    }
+
+    public double getMyRatingScore() {
+        return myRatingScore;
+    }
+
+    public void setMyRatingScore(double myRatingScore) {
+        this.myRatingScore = myRatingScore;
     }
 
     public void addConnectedSessions(AuctionTable a){
@@ -150,13 +168,6 @@ public class GeneralUser {
         this.password = password;
     }
 
-    public int getUserType() {
-        return userType;
-    }
-
-    public void setUserType(int userType) {
-        this.userType = userType;
-    }
 
     public String getUserName() {
         return userName;
@@ -184,9 +195,6 @@ public class GeneralUser {
         return myRatings;
     }
 
-    public void setMyRatings(List<Rating> myRatings) {
-        this.myRatings = myRatings;
-    }
 
     public List<String> getSearchHistory() {
         return searchHistory;
