@@ -184,8 +184,8 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         //user that made the post
-        TextView txtRegister = (TextView)findViewById(R.id.authorOfPostTxt);
-        txtRegister.setOnClickListener(new View.OnClickListener() {
+//        TextView txtRegister = (TextView)findViewById(R.id.authorOfPostTxt);
+        authorOfPostTxtView.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
                 Intent intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class);

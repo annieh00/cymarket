@@ -97,14 +97,19 @@ public class OtherProfileActivity extends AppCompatActivity {
     public static final int EXTRA_postID = 0;
 
     public boolean alreadyConnected = false;
+
     Bundle extras = getIntent().getExtras();
 
+//    Bundle extras = intent.getExtras();
+
+//    if (intent != null){
+//        String value = intent.getStringExtra("userName");
+//    }
     String userNameOfAuthor = extras.getString("userName");
     //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
 //
 //    private String userName;
 //    userName = getIntent().getExtras().getString("userName");
-    public String specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
 
 
     /**
@@ -142,6 +147,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private RatingBar ratingBar;
 
     private Button confirmRatingBtn;
+    private String specificPostURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +164,11 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        updateLocationBtn = findViewById(R.id.updateCoord);
 //        updatedX = findViewById(R.id.updateX);
 //        updatedY = findViewById(R.id.updateY);
+        Bundle extras = getIntent().getExtras();
+        String userNameOfAuthor = extras.getString("userName");
+        specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
+
+
 
 
         builder = new AlertDialog.Builder(OtherProfileActivity.this);
