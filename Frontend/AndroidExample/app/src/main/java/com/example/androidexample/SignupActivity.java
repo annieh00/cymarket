@@ -78,15 +78,15 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        reqOrg.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                if (reqOrgBool){
-                    reqOrgBool = false;
-                }else{
-                    reqOrgBool = true;
-                }
-            }
-        });
+//        reqOrg.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view){
+//                if (reqOrgBool){
+//                    reqOrgBool = false;
+//                }else{
+//                    reqOrgBool = true;
+//                }
+//            }
+//        });
         /* click listener on login button pressed */
 //        loginButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -108,6 +108,7 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
                 sendJsonObjReq();
+
 
             }
         });

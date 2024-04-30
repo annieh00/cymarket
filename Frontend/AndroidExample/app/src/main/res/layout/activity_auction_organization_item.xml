@@ -36,6 +36,7 @@
                 </ImageView>
 
 
+
             </androidx.appcompat.widget.Toolbar>
 
 
@@ -49,7 +50,7 @@
 
 
             <TextView
-                android:id="@+id/titleTxt"
+                android:id="@+id/titleTxtView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -59,7 +60,7 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.189" />
+                app:layout_constraintVertical_bias="0.118" />
 
             <ImageView
                 android:id="@+id/imageSelView1"
@@ -67,22 +68,10 @@
                 android:layout_height="150dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.532"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.309" />
-
-            <TextView
-                android:id="@+id/descriptionTxt"
-                android:layout_width="283dp"
-                android:layout_height="123dp"
-                android:text="Description"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.654" />
+                app:layout_constraintVertical_bias="0.25" />
 
             <ImageButton
                 android:id="@+id/leftArrowBtn"
@@ -91,10 +80,10 @@
                 android:background="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.175"
+                app:layout_constraintHorizontal_bias="0.109"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.308"
+                app:layout_constraintVertical_bias="0.251"
                 app:srcCompat="@drawable/left_arrow" />
 
             <ImageButton
@@ -107,70 +96,109 @@
                 app:layout_constraintHorizontal_bias="0.875"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.308"
+                app:layout_constraintVertical_bias="0.251"
                 app:srcCompat="@drawable/right_arrow" />
 
+
+            <TextView
+                android:id="@+id/AuctionTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Auction"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.623" />
+
+            <ScrollView
+                android:layout_width="300dp"
+                android:layout_height="93dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.73">
+
+                <TextView
+                    android:id="@+id/tx1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text=""
+                    android:textSize="20dp" />
+
+
+                \
+
+            </ScrollView>
+
+            <EditText
+                android:id="@+id/bidEditTxt"
+                android:layout_width="318dp"
+                android:layout_height="41dp"
+                android:inputType="number"
+                android:hint="Enter your bid here..."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.862">
+
+
+            </EditText>
+
             <Button
-                android:id="@+id/deletePostBtn"
+                android:id="@+id/confirmBidBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm Bid"
+                android:backgroundTint="@color/cardinal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.96" />
+
+            <TextView
+                android:id="@+id/highestBidTxt"
+                android:layout_width="217dp"
+                android:layout_height="34dp"
+                android:text="Highest Bid:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.711"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.628">
+
+            </TextView>
+
+            <Button
+                android:id="@+id/closeAuctionBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/cardinal"
-                android:text="Delete"
+                android:text="Close Auction"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.897"
+                app:layout_constraintHorizontal_bias="0.974"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.12" />
-
-            <Button
-                android:id="@+id/editPostBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/cardinal"
-                android:text="Edit Post"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.122" />
-
-            <TextView
-                android:id="@+id/authorOfPostTxtView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.155"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.852" />
-
-            <TextView
-                android:id="@+id/authorOfPostTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Author of Post:"
-                android:textSize="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.263"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.77" />
+                app:layout_constraintVertical_bias="0.108" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/priceTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/descriptionTxtView"
+            android:layout_width="283dp"
+            android:layout_height="123dp"
             android:text=""
-            android:textSize="20dp"
             app:layout_anchor="@+id/constraintLayout3"
             app:layout_anchorGravity="center" />
 
