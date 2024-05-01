@@ -38,7 +38,7 @@ public class SearchItemView extends AppCompatActivity {
 
     Toolbar toolbar;
 
-    public PostAdapter mPostAdapter;
+    public PostAdapter mSearchPostAdapter;
 
 
     public RecyclerView mRecyclerViewSearch;
@@ -76,6 +76,13 @@ public class SearchItemView extends AppCompatActivity {
 
         searchRequest();
 
+        mSearchPostAdapter = new PostAdapter(mSearchList, new PostAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(PostItemObject post) {
+                // Handle item click if needed
+            }
+        });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,8 +102,10 @@ public class SearchItemView extends AppCompatActivity {
     public void searchRequest() {
         // URL of your backend API
         String url = URL + "/search/" + LoginActivity.loginID + "?query=" + searchQuery;
-        //maybe this idk yet
-        // url:8080/search/3?query=""
+
+        // Clear the search list before making a new request
+        mSearchList.clear();
+
         // Create JSONObject for parameters
         JSONObject jsonBody = new JSONObject();
         try {
@@ -112,69 +121,43 @@ public class SearchItemView extends AppCompatActivity {
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("SearchRequest", response.toString());
                         try {
-                            JSONArray resultsArray = response.getJSONArray("results");
-                            for (int i = 0; i < resultsArray.length(); i++) {
-                                JSONObject resultObject = resultsArray.getJSONObject(i);
-                                if (resultObject.has("firstName")) {
-                                    // This is user data
-                                    String firstName = resultObject.getString("firstName");
-                                    Log.d("USER", firstName);
-                                    String lastName = resultObject.getString("lastName");
-                                    String email = resultObject.getString("email");
-                                    int id = resultObject.getInt("id");
-                                    // Create a new Friend object and add it to the users list
-                                    users.add(new Friend(firstName, lastName, id, email));
-//                                    Log.d("users", users.);
-                                } else if (resultObject.has("userName")) {
-                                    String picture1 = resultObject.getString("picture1");
-                                    String picture2 = resultObject.getString("picture2");
-                                    String picture3 = resultObject.getString("picture3");
-                                    String picture4 = resultObject.getString("picture4");
-                                    String picture5 = resultObject.getString("picture5");
-                                    String picture6 = resultObject.getString("picture6");
-                                    String title = resultObject.getString("title");
-                                    int price = resultObject.getInt("price");
-                                    boolean auction = resultObject.getBoolean("isAuction");
-                                    String description = resultObject.getString("description");
-                                    String userName = resultObject.getString("userName");
-                                    int id = resultObject.getInt("id");
-                                    String pic1data = resultObject.getString("picture1Data");
+                            JSONArray jsonArray = response.getJSONArray("results");
 
-                                    Log.d("USERPOST", description);
+                            Log.d("results", response.toString());
 
-                                    // Create a new PostItemObject and add it to the list
-                                    mSearchList.add(new PostItemObject(pic1data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id));
-//                                    Log.d("posts", mSearchList);
-                                }
+                            for (int i = jsonArray.length() - 1; i >= 0; i--) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String picture1 = jsonObject.getString("picture1");
+                                String picture2 = jsonObject.getString("picture2");
+                                String picture3 = jsonObject.getString("picture3");
+                                String picture4 = jsonObject.getString("picture4");
+                                String picture5 = jsonObject.getString("picture5");
+                                String picture6 = jsonObject.getString("picture6");
+                                String title = jsonObject.getString("title");
+                                int price = jsonObject.getInt("price");
+                                Boolean auction = jsonObject.getBoolean("isAuction");
+                                String description = jsonObject.getString("description");
+                                String userName = jsonObject.getString("userName");
+                                int id = jsonObject.getInt("id");
+                                String pic1Data = jsonObject.getString("picture1Data");
+
+
+                                mSearchList.add(new PostItemObject(pic1Data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id));
                             }
 
-                            // Initialize the adapter with the updated list
-                            mPostAdapter = new PostAdapter(mSearchList, new PostAdapter.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(PostItemObject post) {
-                                    // Handle item click if needed
-                                }
-                            });
-
-
-
-
-                            mRecyclerViewSearch.setAdapter(mPostAdapter);
-
-
+                            // Notify any listeners about the data change
+                            mSearchPostAdapter.notifyDataSetChanged();
+                            mRecyclerViewSearch.setAdapter(mSearchPostAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle error here
                         Log.d("SearchRequest", "Search failed");
-
                     }
                 });
 
@@ -182,6 +165,5 @@ public class SearchItemView extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
-
 
 }

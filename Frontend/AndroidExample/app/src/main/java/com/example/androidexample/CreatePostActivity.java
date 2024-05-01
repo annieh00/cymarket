@@ -584,6 +584,7 @@ public class CreatePostActivity extends AppCompatActivity{
                     int pid = response.getInt("id");
                     title = response.getString("title");
                     sendImageToServer(pid, i+1);
+
                 }
 //                MainFeed.mPostAdapter.notifyDataSetChanged();
 //                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();

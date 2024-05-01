@@ -15,8 +15,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.androidexample.Const;
 import com.example.androidexample.LoginActivity;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
@@ -76,28 +78,40 @@ public class SavedActivityFragment extends Fragment {
     private void getBookmarks() {
         String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
 
+        mSavedList.clear();
         // Create a String request
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Handle successful response
-                        Log.d("saved posts", response);
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("bookmarks");
+                        for (int i = jsonArray.length() - 1; i >= 0; i--) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
+                            String title = jsonObject.getString("title");
+                            int price = jsonObject.getInt("price");
+                            Boolean auction = jsonObject.getBoolean("isAuction");
+                            String description = jsonObject.getString("description");
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
+                            String pic1Data = jsonObject.getString("picture1Data");
+                            mSavedList.add(new PostItemObject(pic1Data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id));
+                        }
 
-                        // Process the response here
-                        // You can parse the JSON string and handle the data as needed
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Log.e("Volley Error", error.toString());
-                        // You can show an error message to the user or perform any other error handling
-                    }
-                });
 
-        // Add the request to the RequestQueue
-        Volley.newRequestQueue(requireContext()).add(stringRequest);
+                        mRecyclerViewSaved.setAdapter(mSavedPostAdapter);
+                        mSavedPostAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(jsonArrayRequest);
     }
 }
