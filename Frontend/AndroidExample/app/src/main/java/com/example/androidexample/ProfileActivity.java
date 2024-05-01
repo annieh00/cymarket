@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,10 +38,13 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -164,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.rb_ratingBar);
 
         // Set the rating bar as non-editable
-        ratingBar.setIsIndicator(true);
+        getRating();
         //json get method req that gets the average rating of the user and displays it
         // Set the current rating, e.g., when loading user data
 //        float userRating = // Get the user's rating from the database
@@ -420,6 +424,55 @@ public class ProfileActivity extends AppCompatActivity {
         fetchPosts();
 
     }
+
+    private void getRating(){
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                    Request.Method.GET,
+                    Const.URL_GET_MY_RATING + "/" + LoginActivity.username,
+                    null, // Pass null as the request body since it's a GET request
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Volley Response", response.toString());
+                            try {
+                                float rating = (float)response.getDouble("ratings");
+                                ratingBar.setRating(rating);
+                                ratingBar.setIsIndicator(true);
+
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Volley Error", error.toString());
+                        }
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                    return params;
+                }
+            };
+
+            // Adding request to request queue
+            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        }
+
 
 
     //RATING BAR JSON OBJ REQ THAT GETS THE AVERAGE RATING OF YOUR USER

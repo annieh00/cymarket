@@ -33,12 +33,15 @@ public class Const {
     public static final String URL_AUCTION_WS = "ws://coms-309-060.class.las.iastate.edu:8080" + "/auction";
     public static final String URL_GET_ALL_DONATIONS = DOMAIN + "/getAllDonations";
 
-    public static final String URL_REQ_ORGANIZER = DOMAIN + "/updatePrivilege";
+    public static final String URL_REQ_ORGANIZER = DOMAIN + "/requestUpgrade"; //post mapping
     public static final String URL_SET_USER_RATING = DOMAIN + "/setUserRating"; // + /{username}
     public static final String URL_GET_ALL_RATINGS = DOMAIN + "/getAllRatings";
     public static final String URL_GET_RATING_OF_USER = DOMAIN + "/getRatingsOf"; // + /{username}
+    public static final String URL_GET_MY_RATING = DOMAIN + "/getMyRatings"; //+ /username
     public static final String URL_DELETE_RATING = DOMAIN + "/deleteRating"; // + "/{author}" + "/{userName}"
     public static final String URL_MODIFY_RATING = DOMAIN + "/modifyRating"; //+ "/{author}" + "/{userName}"
+    public static final String URL_APPROVE_UPGRADE = DOMAIN + "/approveUpgrade"; //+ "/userName" post mapping
+    public static final String URL_GET_UPGRADE_REQ = DOMAIN + "/getAllUpgradeRequests"; //get
 
 
 }

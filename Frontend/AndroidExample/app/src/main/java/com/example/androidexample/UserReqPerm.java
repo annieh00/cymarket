@@ -1,27 +1,16 @@
 package com.example.androidexample;
 
 public class UserReqPerm {
-    private String firstName;
-    private String lastName;
-
     private String username;
 
     private int userId;
 
-    public UserReqPerm(String first, String last, int id, String userName) {
-        this.firstName = first;
-        this.lastName = last;
+    public UserReqPerm(int id, String userName) {
         this.userId = id;
         this.username = userName;
     }
 
 
-    public String getFirstName() {
-        return firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
 
     public String getUsername() {
         return username;

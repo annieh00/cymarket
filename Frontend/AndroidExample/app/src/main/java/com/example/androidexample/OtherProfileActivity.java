@@ -160,8 +160,10 @@ public class OtherProfileActivity extends AppCompatActivity {
     private Button confirmRatingBtn;
     private String specificPostURL;
 
-    private float ratingOfUser;
+//    private float ratingOfUser;
     private String userNameOfAuthor;
+    private float ratingOfUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,9 +227,9 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         ratingBar.setStepSize(0.5f);
 
+
         // Set an OnRatingBarChangeListener to handle user input
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            private float ratingOfUser;
 
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -246,6 +248,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendRating();
+                confirmRatingBtn.setVisibility(View.GONE);
 
             }
         });
@@ -424,7 +427,10 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        JSONObject body = new JSONObject();
         try {
             //input your API parameters
-            jsonObject.put("addedRating", ratingOfUser);
+            jsonObject.put("userName", LoginActivity.username);
+            jsonObject.put("score", ratingOfUser);
+            jsonObject.put("description", "sdfklsdfl");
+            Log.d("what im sending in rating", jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -435,18 +441,8 @@ public class OtherProfileActivity extends AppCompatActivity {
                     avgRating = (float) response.getDouble("avgRating");
                     ratingBar.setRating(avgRating);
                     ratingBar.setIsIndicator(true);
-
-//                email = response.getString("email");
-//                password = response.getString("password");
-//                validUser = response.getBoolean("fromServer");
-//                permission = response.getInt("permission");
-//                //I, jess added these two lines
-//                username = response.getString("username");
-//                loginID = response.getInt("id");
-
-//                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
             }catch (JSONException e) {
-////                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
+
             }
 
 

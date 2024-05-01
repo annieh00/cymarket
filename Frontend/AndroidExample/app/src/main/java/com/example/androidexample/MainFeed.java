@@ -188,11 +188,11 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-                    case "Organization Auction":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
-                        startActivity(intent);
-                        break;
+//                    case "Organization Auction":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);

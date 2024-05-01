@@ -259,6 +259,10 @@ public class MainFeedOrganizer extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), MainFeedOrganizer.class);
                         startActivity(intent);
                         break;
+                    case "Create An Auction":
+                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
+                        startActivity(intent);
+                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);

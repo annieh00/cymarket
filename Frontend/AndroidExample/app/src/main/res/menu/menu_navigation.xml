@@ -20,12 +20,12 @@
                 >
 
             </item>
-            <item
-                android:id="@+id/AuctionOrganizer"
-                android:title="Organization Auction"
-                >
+<!--            <item-->
+<!--                android:id="@+id/AuctionOrganizer"-->
+<!--                android:title="Organization Auction"-->
+<!--                >-->
 
-            </item>
+<!--            </item>-->
 <!--            <item-->
 <!--                android:id="@+id/Donation"-->
 <!--                android:title="Donation"-->

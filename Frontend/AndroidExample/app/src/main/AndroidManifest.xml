@@ -60,12 +60,12 @@
         <activity
             android:name=".CreateDonationActivity"
             android:exported="false" />
-        <activity
-            android:name=".AuctionOrganizationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AuctionOrganizationDetailActivity"
-            android:exported="false" /> <!-- <activity -->
+<!--        <activity-->
+<!--            android:name=".AuctionOrganizationActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".AuctionOrganizationDetailActivity"-->
+<!--            android:exported="false" /> &lt;!&ndash; <activity &ndash;&gt;-->
         <!-- android:name=".ViewAnnouncementAdmin" -->
         <!-- android:exported="false" /> -->
         <!-- <activity -->
