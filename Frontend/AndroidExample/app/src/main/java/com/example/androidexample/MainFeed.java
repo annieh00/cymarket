@@ -286,6 +286,7 @@ public class MainFeed extends AppCompatActivity {
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
                             String picture1Data = jsonObject.getString("picture1Data");
+
                             mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                             Log.d("Post made with this information: ", picture1);
                         }
