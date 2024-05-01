@@ -112,7 +112,7 @@ public class SellPostController {
         // Convert list of Posting objects to JSON
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().create();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
 
         // Modify JSON to add Base64-encoded image data
