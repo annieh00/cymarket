@@ -115,6 +115,8 @@ public class SellPostController {
         Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
 
+        System.out.println("JSON of Posts without images: " + json); // Debug output
+
         // Modify JSON to add Base64-encoded image data
         try {
             List<String> postsWithImages = new ArrayList<>();
@@ -122,19 +124,27 @@ public class SellPostController {
             // Parse the JSON
             for (Posting p : ret) {
                 String postJson = gson.toJson(p);
+                System.out.println("Original JSON of Post: " + postJson); // Debug output
                 String picture1 = p.getPicture1();
 
                 if (picture1 != null && !picture1.isEmpty()) {
+                    System.out.println("Picture1 found: " + picture1); // Debug output
                     File imageFile = new File("images/" + picture1);
 
                     if (imageFile.exists()) {
+                        System.out.println("Image file exists: " + imageFile.getPath()); // Debug output
                         byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
                         String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                        System.out.println("Encoded image data: " + encodedImage); // Debug output
 
                         // Insert the Base64 data into the JSON representation
                         postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
                         postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    } else {
+                        System.out.println("Image file does not exist: " + imageFile.getPath()); // Debug output
                     }
+                } else {
+                    System.out.println("No picture1 for this post."); // Debug output
                 }
 
                 postsWithImages.add(postJson);
@@ -143,8 +153,10 @@ public class SellPostController {
             json = "{ \"posts\": [" + String.join(", ", postsWithImages) + "] }";
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle error
         }
+
+        System.out.println("Final JSON with images: " + json); // Debug output
 
         return json;
     }
@@ -175,7 +187,51 @@ public class SellPostController {
         builder.serializeNulls();
         Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
-        return "{ \"donations\" :" +json + "}";
+
+        System.out.println("JSON of Posts without images: " + json); // Debug output
+
+        // Modify JSON to add Base64-encoded image data
+        try {
+            List<String> postsWithImages = new ArrayList<>();
+
+            // Parse the JSON
+            for (Posting p : ret) {
+                String postJson = gson.toJson(p);
+                System.out.println("Original JSON of Post: " + postJson); // Debug output
+                String picture1 = p.getPicture1();
+
+                if (picture1 != null && !picture1.isEmpty()) {
+                    System.out.println("Picture1 found: " + picture1); // Debug output
+                    File imageFile = new File("images/" + picture1);
+
+                    if (imageFile.exists()) {
+                        System.out.println("Image file exists: " + imageFile.getPath()); // Debug output
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                        System.out.println("Encoded image data: " + encodedImage); // Debug output
+
+                        // Insert the Base64 data into the JSON representation
+                        postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                        postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    } else {
+                        System.out.println("Image file does not exist: " + imageFile.getPath()); // Debug output
+                    }
+                } else {
+                    System.out.println("No picture1 for this post."); // Debug output
+                }
+
+                postsWithImages.add(postJson);
+            }
+
+            json = "{ \"donations\": [" + String.join(", ", postsWithImages) + "] }";
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle error
+        }
+
+        System.out.println("Final JSON with images: " + json); // Debug output
+
+        return json;
     }
 
     @Operation(summary = "gets specific post in DB", description = "gets specific post in DB")
@@ -244,8 +300,50 @@ public class SellPostController {
         builder.serializeNulls();
         Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         String json = gson.toJson(ret);
-        return "{ \"auctions\" :" +json + "}";
+        System.out.println("JSON of Posts without images: " + json); // Debug output
 
+        // Modify JSON to add Base64-encoded image data
+        try {
+            List<String> postsWithImages = new ArrayList<>();
+
+            // Parse the JSON
+            for (Posting p : ret) {
+                String postJson = gson.toJson(p);
+                System.out.println("Original JSON of Post: " + postJson); // Debug output
+                String picture1 = p.getPicture1();
+
+                if (picture1 != null && !picture1.isEmpty()) {
+                    System.out.println("Picture1 found: " + picture1); // Debug output
+                    File imageFile = new File("images/" + picture1);
+
+                    if (imageFile.exists()) {
+                        System.out.println("Image file exists: " + imageFile.getPath()); // Debug output
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                        System.out.println("Encoded image data: " + encodedImage); // Debug output
+
+                        // Insert the Base64 data into the JSON representation
+                        postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                        postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    } else {
+                        System.out.println("Image file does not exist: " + imageFile.getPath()); // Debug output
+                    }
+                } else {
+                    System.out.println("No picture1 for this post."); // Debug output
+                }
+
+                postsWithImages.add(postJson);
+            }
+
+            json = "{ \"auctions\": [" + String.join(", ", postsWithImages) + "] }";
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle error
+        }
+
+        System.out.println("Final JSON with images: " + json); // Debug output
+
+        return json;
     }
 
     @Operation(summary = "returns byte array for the specified image", description = "gets the specified")
@@ -308,8 +406,6 @@ public class SellPostController {
         if(u2 == null){
             return null;
         }
-
-
 
         try {
             System.out.println(p.getPicture1());
