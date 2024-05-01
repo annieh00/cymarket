@@ -469,7 +469,10 @@ public class CreatePostActivity extends AppCompatActivity{
             jo.put("title", title);
             jo.put("userName", usernameString);
             jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
+
             System.out.println("ABOUT TO SEND " + jo.toString());
+            Log.d("usernameString", usernameString);
+
             Log.d("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -573,13 +576,17 @@ public class CreatePostActivity extends AppCompatActivity{
                 Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
                     int pid = response.getInt("id");
+                    title = response.getString("title");
+
+
                     sendImageToServer(pid, i+1);
                 }
-                MainFeed.mPostAdapter.notifyDataSetChanged();
-                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
-                MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
-                title = response.getString("title");
-
+//                MainFeed.mPostAdapter.notifyDataSetChanged();
+//                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
+//                MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
+//                title = response.getString("title");
+//
+//                Log.d("sendJsonObjectRequest title", title);
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");

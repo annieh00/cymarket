@@ -139,32 +139,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
         checkBookMarkStatus();
 
-
-//        Log.d("Boolean Status", "The status of myBoolean at the end of parsing is : " + alreadyBookmarked);
-
+        checkRecentlyViewedPosts();
 
 
-
-//        bookmarkBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                // Toggle bookmark status
-////                isBookmarked = !isBookmarked;
-//
-//                // If the bookmark is clicked
-//                if (isBookmarked) {
-//                    // Set the filled bookmark drawable
-////                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
-//                    // Add the post to the bookmark list
-//                    addPostToArrayList();
-//                } else {
-//                    // If the bookmark is unclicked, set the empty bookmark drawable
-//                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
-//                    // Remove the post from the bookmark list
-//                    unbookmarkPost();
-//                }
-//            }
-//        });
 
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
@@ -272,19 +249,35 @@ public class PostDetailActivity extends AppCompatActivity {
 
     }
 
+    private void checkRecentlyViewedPosts() {
+        String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
+
+
+
+
+
+
+
+
+    }
+
     private void checkBookMarkStatus() {
         String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
 
 
         // Create a JSON array request
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject bookmarkObj = response.getJSONObject(i);
-                                int postId = bookmarkObj.getInt("id");
+                            JSONArray jsonArray = response.getJSONArray("bookmarks");
+                            for (int i = jsonArray.length()-1; i >= 0; i--) {
+
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                int postId = jsonObject.getInt("id");
+
 
                                 if (postId == pid) {
                                     alreadyBookmarked = true;
@@ -321,7 +314,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 });
 
         // Add the request to the RequestQueue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
     private void unbookmarkPost() {
         String url = DOMAIN +"/bookmarks/" + LoginActivity.loginID + "/remove/" + pid;

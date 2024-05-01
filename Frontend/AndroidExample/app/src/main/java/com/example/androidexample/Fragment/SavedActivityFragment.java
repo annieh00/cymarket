@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.androidexample.LoginActivity;
 import com.example.androidexample.Post.PostAdapter;
@@ -75,45 +76,16 @@ public class SavedActivityFragment extends Fragment {
     private void getBookmarks() {
         String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
 
-        // Create a JSON array request
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        // Create a String request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            // Clear the existing list before adding new items
-                            mSavedList.clear();
+                    public void onResponse(String response) {
+                        // Handle successful response
+                        Log.d("saved posts", response);
 
-                            // Iterate through the JSON array
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject bookmarkObj = response.getJSONObject(i);
-
-//
-                                String picture1 = bookmarkObj.getString("picture1");
-                                String picture2 = bookmarkObj.getString("picture2");
-                                String picture3 = bookmarkObj.getString("picture3");
-                                String picture4 = bookmarkObj.getString("picture4");
-                                String picture5 = bookmarkObj.getString("picture5");
-                                String picture6 = bookmarkObj.getString("picture6");
-                                String title = bookmarkObj.getString("title");
-                                int price = bookmarkObj.getInt("price");
-                                Boolean auction = bookmarkObj.getBoolean("isAuction");
-                                String description = bookmarkObj.getString("description");
-                                String userName = bookmarkObj.getString("userName");
-                                int id = bookmarkObj.getInt("id");
-
-                                // Create a new PostItemObject instance
-                                PostItemObject postItem = new PostItemObject(picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id);
-
-                                // Add the new PostItemObject instance to the list
-                                mSavedList.add(postItem);
-                            }
-
-                            // Notify the adapter about the data change
-                            mSavedPostAdapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        // Process the response here
+                        // You can parse the JSON string and handle the data as needed
                     }
                 },
                 new Response.ErrorListener() {
@@ -126,6 +98,6 @@ public class SavedActivityFragment extends Fragment {
                 });
 
         // Add the request to the RequestQueue
-        Volley.newRequestQueue(requireContext()).add(jsonArrayRequest);
+        Volley.newRequestQueue(requireContext()).add(stringRequest);
     }
 }
