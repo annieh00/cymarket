@@ -162,7 +162,25 @@ public class SellPostController {
             builder.serializeNulls();
             Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
             String json = gson.toJson(p);
-            return json;
+
+            String picture1 = p.getPicture1();
+            if (picture1 != null && !picture1.isEmpty()) {
+                try {
+                    File imageFile = new File("images/" + picture1);
+                    if (imageFile.exists()) {
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+                        // Add picture1 Base64 data to the original JSON
+                        json = json.substring(0, json.length() - 1); // Remove closing brace
+                        json += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append image data
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return json; // Return JSON with post data and image data
         }
         return null;
     }
