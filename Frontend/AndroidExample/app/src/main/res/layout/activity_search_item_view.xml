@@ -57,8 +57,44 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- TabLayout below AppBarLayout -->
-<!--    <-->
+
+    <!-- RecyclerView positioned below the header -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar"
+        tools:listitem="@layout/post_item" />
+
+
+    <!-- Gold bar under the app bar -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/gold"
+        android:layout_below="@id/recycler_view_search" />
+
+    <!-- Header TextView for Friends -->
+    <TextView
+        android:id="@+id/header_text_view_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Users"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="0dp"
+        android:layout_below="@id/recycler_view_search"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:id="@+id/list_view_users"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_text_view_friends"
+        android:layout_marginTop="8dp" />
+
+
+
 
 
 </RelativeLayout>
