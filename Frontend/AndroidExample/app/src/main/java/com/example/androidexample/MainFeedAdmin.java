@@ -97,7 +97,7 @@ public class MainFeedAdmin extends AppCompatActivity {
     /**
      * recyclerview related variables
      */
-    private PostAdapter mPostAdapter;
+    public static PostAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
     ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
@@ -382,6 +382,7 @@ public class MainFeedAdmin extends AppCompatActivity {
                         JSONArray jsonArray = response.getJSONArray("posts");
                         for (int i = jsonArray.length()-1; i >= 0; i--) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String picture1Data = jsonObject.getString("picture1Data");
                             String picture1 = jsonObject.getString("picture1");
                             String picture2 = jsonObject.getString("picture2");
                             String picture3 = jsonObject.getString("picture3");
@@ -394,7 +395,7 @@ public class MainFeedAdmin extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
 
