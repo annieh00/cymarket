@@ -207,23 +207,13 @@ public class AuctionOrganizationDetailActivity extends AppCompatActivity impleme
                             userName = response.getString("userName");
                             id = response.getInt("id");
 
-//                            Log.d("title, price, auction, description, username, id", titleTxt+ price+ auction+description+userName);
                             if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
-//                                deletePostBtn.setVisibility(View.VISIBLE);
-//                                editPostBtn.setVisibility(View.VISIBLE);
                                 closeAuctionBtn.setVisibility(View.VISIBLE);
                             }else{
-//                                deletePostBtn.setVisibility(View.GONE);
-//                                editPostBtn.setVisibility(View.GONE);
                                 closeAuctionBtn.setVisibility(View.GONE);
                             }
-
-//                            highestBidTxt.setText("Inital Price:" + String.valueOf(price));
                             titleTxtView.setText(titleTxt);
-//                            priceTxtView.setText(String.valueOf(price));
                             descriptionTxtView.setText(description);
-
-
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -268,16 +258,6 @@ public class AuctionOrganizationDetailActivity extends AppCompatActivity impleme
          * is used to post a runnable to the UI thread's message queue, allowing UI updates
          * to occur safely from a background or non-UI thread.
          */
-
-        int highestBid;
-//        if(message.charAt(message.lastIndexOf("$")) != -1){
-//            if (message.charAt(message.lastIndexOf("$") + 1) == ' '){
-//                highestBid = Integer.parseInt(message.substring(message.lastIndexOf("$") + 2));
-//            }else{// a number
-//                highestBid = Integer.parseInt(message.substring(message.lastIndexOf("$") + 1 ));
-//            }
-////            highestBidTxt.setText("Highest Bid: " + highestBid);
-//        }
         runOnUiThread(() -> {
             String s = msgTv.getText().toString();
 
