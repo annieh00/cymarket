@@ -97,27 +97,57 @@ public class SellPostController {
     @GetMapping("/getAllPosts")
     public String getPosts(){
         List<Posting> mylist = postingRepository.findAll();
-        ArrayList<Posting> ret = new ArrayList<>();
+        List<Posting> ret = new ArrayList<>();
 
         try {
-            for(int i = 0; i < mylist.size(); i++){
-                //System.out.println(i);
-                Posting p = getPicturePaths(mylist.get(i));
-                if(p != null && !p.getIsAuction()){
+            for (Posting p : mylist) {
+                if (p != null && !p.getIsAuction()) {
                     ret.add(p);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle error
+        }
+
+        // Convert list of Posting objects to JSON
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().create();
+        String json = gson.toJson(ret);
+
+        // Modify JSON to add Base64-encoded image data
+        try {
+            List<String> postsWithImages = new ArrayList<>();
+
+            // Parse the JSON
+            for (Posting p : ret) {
+                String postJson = gson.toJson(p);
+                String picture1 = p.getPicture1();
+
+                if (picture1 != null && !picture1.isEmpty()) {
+                    File imageFile = new File("images/" + picture1);
+
+                    if (imageFile.exists()) {
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+                        // Insert the Base64 data into the JSON representation
+                        postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                        postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    }
+                }
+
+                postsWithImages.add(postJson);
+            }
+
+            json = "{ \"posts\": [" + String.join(", ", postsWithImages) + "] }";
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.serializeNulls();
-        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
-        String json = gson.toJson(ret);
-        return "{ \"posts\" :" +json + "}";
+        return json;
     }
-
 
     @Operation(summary = "get all donations in DB", description = "gets all donations in DB")
     @ApiResponses(value = {
@@ -162,25 +192,7 @@ public class SellPostController {
             builder.serializeNulls();
             Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
             String json = gson.toJson(p);
-
-            String picture1 = p.getPicture1();
-            if (picture1 != null && !picture1.isEmpty()) {
-                try {
-                    File imageFile = new File("images/" + picture1);
-                    if (imageFile.exists()) {
-                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
-                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
-
-                        // Add picture1 Base64 data to the original JSON
-                        json = json.substring(0, json.length() - 1); // Remove closing brace
-                        json += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append image data
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return json; // Return JSON with post data and image data
+            return json;
         }
         return null;
     }
