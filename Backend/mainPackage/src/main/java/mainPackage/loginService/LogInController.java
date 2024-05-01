@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.websocket.server.PathParam;
 import mainPackage.dbmsPackage.ConnectToDB;
 import mainPackage.userRatingsService.Rating;
 import mainPackage.userRatingsService.RatingRepository;
@@ -173,6 +174,16 @@ public class LogInController {
         generalUserRepository.delete(db);
 
         return "{\"deleteUser\" : true}";
+    }
+
+    @GetMapping("/getUserID/{userName}")
+    public String getUserID(@PathVariable(name = "userName") String userName){
+        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
+        if(u == null){
+            return "{\"id\" : -1}"; //sentinel to denote user does not exist
+        }else{
+            return "{\"id\" : " + u.getId()+ "}";
+        }
     }
 
 

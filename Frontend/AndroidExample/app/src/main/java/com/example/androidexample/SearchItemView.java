@@ -141,7 +141,9 @@ public class SearchItemView extends AppCompatActivity {
                                     String userName = resultObject.getString("userName");
                                     int id = resultObject.getInt("id");
                                     String pic1data = resultObject.getString("picture1Data");
+
                                     Log.d("USERPOST", description);
+
                                     // Create a new PostItemObject and add it to the list
                                     mSearchList.add(new PostItemObject(pic1data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id));
 //                                    Log.d("posts", mSearchList);
@@ -161,14 +163,7 @@ public class SearchItemView extends AppCompatActivity {
 
                             mRecyclerViewSearch.setAdapter(mPostAdapter);
 
-//                            ListFriendRequests adapter = new ListFriendRequests(SearchActivity.this, friendRequestList, SearchActivity.this);
 
-
-//                            listUsers.setAdapter();
-
-                            // Update your ListView with user data if needed
-                            // Notify adapter of data change
-                            // Update RecyclerView with posting data
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

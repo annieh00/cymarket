@@ -469,7 +469,10 @@ public class CreatePostActivity extends AppCompatActivity{
             jo.put("title", title);
             jo.put("userName", usernameString);
             jo.put("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
+
             System.out.println("ABOUT TO SEND " + jo.toString());
+            Log.d("usernameString", usernameString);
+
             Log.d("picture"+imageIndexStartFrom1, convertBitmapToBase64(bitmap1to6[imageIndexStartFrom1-1]));
         } catch (JSONException e) {
             e.printStackTrace();
