@@ -351,17 +351,23 @@ public class CreatePostActivity extends AppCompatActivity{
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendJsonObjReq();
-                if (LoginActivity.permission == 0){
-                    Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
-                    startActivity(intent);
-                } else if (LoginActivity.permission == 1){
-                    Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
-                    startActivity(intent);
-                } else if (LoginActivity.permission == 2){
-                    Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                    startActivity(intent);
+                if (imageIndex > 0){
+                    sendJsonObjReq();
+                    if (LoginActivity.permission == 0){
+                        Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
+                        startActivity(intent);
+                    } else if (LoginActivity.permission == 1){
+                        Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
+                        startActivity(intent);
+                    } else if (LoginActivity.permission == 2){
+                        Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                        startActivity(intent);
+                    }
+                }else{
+                    Toast.makeText(CreatePostActivity.this, "Cannot make post, does not have a picture", Toast.LENGTH_LONG).show();
                 }
+
+
 
             }
         });
@@ -386,7 +392,6 @@ public class CreatePostActivity extends AppCompatActivity{
                     categoriesList.add(which);
                 }else{
 //                    categoriesList.remove(which);
-
                     categoriesList.remove(Integer.valueOf(which)); // Remove the Integer object, not the index
 
                 }

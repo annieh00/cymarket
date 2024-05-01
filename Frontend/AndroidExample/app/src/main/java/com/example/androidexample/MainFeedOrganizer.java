@@ -98,8 +98,8 @@ public class MainFeedOrganizer extends AppCompatActivity {
      * recyclerview related variables
      */
     public static PostAdapter mPostAdapter;
-    private RecyclerView mRecyclerView;
-    ArrayList<PostItemObject> mPostList = new ArrayList<>();
+    public RecyclerView mRecyclerView;
+    public static ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
 
     /**
@@ -114,25 +114,18 @@ public class MainFeedOrganizer extends AppCompatActivity {
 //    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
 //    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
 
-    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation";
-
-    String server_url_create = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
 
 
-
-    String server_url_del = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/del/";
-
-    String server_url_update = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/update/";
-
-
-
+    private ImageButton search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_feed_organizer);
+        setContentView(R.layout.activity_main_feed);
 
 
+
+        search = findViewById(R.id.searchBtn);
 
 
         builder = new AlertDialog.Builder(MainFeedOrganizer.this);
@@ -145,6 +138,8 @@ public class MainFeedOrganizer extends AppCompatActivity {
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
 
+        search = findViewById(R.id.searchBtn);
+
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 
@@ -154,97 +149,27 @@ public class MainFeedOrganizer extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
+
         }
-        refreshBtn = findViewById(R.id.refreshBtn);
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
+
+//        refreshBtn = findViewById(R.id.refreshBtn);
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                refreshContent();
+//            }
+//        });
+
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshContent();
+
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                startActivity(intent);
+
             }
         });
 
-
-
-
-
-
-
-
-//        setLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                final String
-////
-////                String announcement = adminMessage.toString();
-////                sendAnnouncementToServer(announcement);
-//
-//                final String x, y;
-//                x = xCoord.getText().toString();
-//                y = yCoord.getText().toString();
-//
-//
-//                JSONObject jsonBody = new JSONObject();
-//                try {
-//                    jsonBody.put("x", x);
-//                    jsonBody.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, server_url_create, jsonBody, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        builder.setTitle("Server Response");
-//                        try {
-//                            builder.setMessage("Response " + response.getString("status"));
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                xCoord.setText("");
-//                                yCoord.setText("");
-//                            }
-//                        });
-//                        AlertDialog alertDialog = builder.create();
-//                        alertDialog.show();
-//
-//                    }
-//
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(MainFeed.this, "Error....", Toast.LENGTH_LONG).show();
-//                        error.printStackTrace();
-//                    }
-//                }) {
-//                    //                    @Nullable
-//                    @Override
-//                    protected Map<String, String> getParams() throws AuthFailureError {
-//                        Map<String, String> params = new HashMap<String, String>();
-////
-////                        params.put("title", msgTitle);
-////                        params.put("description", message);
-////
-//                        return params;
-//                    }
-//                };
-//
-//                MySingleton.getInstance(MainFeed.this).addToRequestQueue(jsonObjReq);
-//
-//            }
-//        });
-//
-//
-//
-//        seeCoordinates.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                makeJsonArrayReq();
-//            }
-//        });
 
         /** If a certain screen is pressed, it will go to that certain screen.
          *
@@ -255,26 +180,19 @@ public class MainFeedOrganizer extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
-                    case "Main Feed":
-                        intent = new Intent(getApplicationContext(), MainFeedOrganizer.class);
-                        startActivity(intent);
-                        break;
-                    case "Create An Auction":
-                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
-                        startActivity(intent);
-                        break;
+//                    case "Donation":
+//                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
                         break;
-                    case "Create Donation":
-                        intent = new Intent(getApplicationContext(), CreateDonationActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Donation Feed":
-                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
-                        startActivity(intent);
-                        break;
+//                    case "Organization Auction":
+//                        // Handle click on the fourth item
+//                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
+//                        startActivity(intent);
+//                        break;
                     case "Auction":
                         intent = new Intent(getApplicationContext(), AuctionActivity.class);
                         startActivity(intent);
@@ -294,6 +212,7 @@ public class MainFeedOrganizer extends AppCompatActivity {
 //                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
+
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
@@ -363,6 +282,8 @@ public class MainFeedOrganizer extends AppCompatActivity {
         });
 
         fetchPosts();
+//        refreshContent();
+
 
 
 
@@ -377,13 +298,13 @@ public class MainFeedOrganizer extends AppCompatActivity {
     }
 
     private void fetchPosts() {
+        mPostList.clear();
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
                 response -> {
                     try {
                         JSONArray jsonArray = response.getJSONArray("posts");
                         for (int i = jsonArray.length()-1; i >= 0; i--) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String picture1Data = jsonObject.getString("picture1Data");
                             String picture1 = jsonObject.getString("picture1");
                             String picture2 = jsonObject.getString("picture2");
                             String picture3 = jsonObject.getString("picture3");
@@ -396,7 +317,9 @@ public class MainFeedOrganizer extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
+                            String picture1Data = jsonObject.getString("picture1Data");
                             mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            Log.d("Post made with this information: ", picture1);
                         }
 
 
