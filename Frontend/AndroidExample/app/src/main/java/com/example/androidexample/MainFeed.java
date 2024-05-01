@@ -118,6 +118,8 @@ public class MainFeed extends AppCompatActivity {
 
     private ImageButton search;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +141,8 @@ public class MainFeed extends AppCompatActivity {
         navigationView.setItemIconTintList(null);
 
         search = findViewById(R.id.searchBtn);
+
+
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -233,10 +237,6 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
-
-
-
-
         mRecyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager linearManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearManager);
@@ -254,10 +254,6 @@ public class MainFeed extends AppCompatActivity {
         });
 
         fetchPosts();
-//        refreshContent();
-
-
-
 
     }
 
@@ -338,8 +334,6 @@ public class MainFeed extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
-
-
 
 }
 

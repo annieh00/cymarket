@@ -20,7 +20,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.androidexample.Fragment.SavedActivityFragment;
 import com.example.androidexample.Post.PostAdapter;
+import com.example.androidexample.Post.PostItemObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +35,9 @@ import java.util.Map;
 
 
 public class PostDetailActivity extends AppCompatActivity {
+
+    public static final String DOMAIN = "http://coms-309-060.class.las.iastate.edu:8080";
+
 
 
     public String actualPostURL = Const.URL_GET_ALL_POSTS;
@@ -55,6 +62,9 @@ public class PostDetailActivity extends AppCompatActivity {
     public static int pid;
     private int imageNum = 0;
     private TextView authorOfPostTxtView;
+
+    private ImageButton bookmarkBtn;
+    private boolean isBookmarked = false;
 
     private int displayedImageIndex = 1;
 
@@ -84,6 +94,7 @@ public class PostDetailActivity extends AppCompatActivity {
         deletePostBtn = findViewById(R.id.deletePostBtn);
         editPostBtn = findViewById(R.id.editPostBtn);
         authorOfPostTxtView = findViewById(R.id.authorOfPostTxt);
+        bookmarkBtn = findViewById(R.id.bookmarkBtn);
 
         pid = Integer.parseInt(getIntent().getExtras().getString("id"));
         getImageNum();
@@ -122,6 +133,29 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), EditPostActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        checkBookMarkStatus();
+
+        bookmarkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle bookmark status
+                isBookmarked = !isBookmarked;
+
+                // If the bookmark is clicked
+                if (isBookmarked) {
+                    // Set the filled bookmark drawable
+                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
+                    // Add the post to the bookmark list
+                    addPostToArrayList();
+                } else {
+                    // If the bookmark is unclicked, set the empty bookmark drawable
+                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
+                    // Remove the post from the bookmark list
+                    unbookmarkPost();
+                }
             }
         });
 
@@ -196,6 +230,75 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
     }
+
+    private void checkBookMarkStatus() {
+
+        String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
+
+
+
+
+
+    }
+
+    private void unbookmarkPost() {
+        String url = DOMAIN +"/bookmarks/" + LoginActivity.loginID + "/remove/" + pid;
+
+        Log.d("url" , url);
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle successful response
+                        Log.d("Response", response.toString());
+                        // You can perform any further actions here after the request is successful
+                        //update of adapter not working here
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Log.d("Error", error.toString());
+                        // You can show an error message to the user or perform any other error handling
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
+
+    }
+
+    private void addPostToArrayList() {
+
+        String url = DOMAIN +"/bookmarks/" + LoginActivity.loginID + "/add/" + pid;
+
+        Log.d("url" , url);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle successful response
+                        Log.d("Response", response.toString());
+                        // You can perform any further actions here after the request is successful
+                        //update of adapter not working here
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Log.d("Error", error.toString());
+                        // You can show an error message to the user or perform any other error handling
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
+    }
+
 
 
 

@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.SavedActivityFragment">
 
-<!--    &lt;!&ndash; RecyclerView positioned below the header &ndash;&gt;-->
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recycler_view"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:listitem="@layout/post_item" />-->
+    <!-- RecyclerView positioned below the header -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_saved"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/post_item" />
 
 
 </RelativeLayout>

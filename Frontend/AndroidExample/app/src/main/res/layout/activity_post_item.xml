@@ -162,6 +162,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.77" />
 
+            <ImageButton
+                android:id="@+id/bookmarkBtn"
+                android:layout_width="66dp"
+                android:layout_height="47dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.12"
+                app:srcCompat="@drawable/baseline_bookmark_border_24">
+
+            </ImageButton>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
