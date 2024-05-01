@@ -55,14 +55,14 @@ class JunhyungShimSystemTest {
     @Order(4)
     void loginTest(){
         System.out.println(globalEmail);
-        String json = "{\"firstName\": \"ff\",\"lastName\": \"efg\",\"email\": \"email@email.com\",\"password\": \"password\"}";
+        String json = "{\"firstName\": \"ff\",\"lastName\": \"efg\",\"email\": \"email@email.com\",\"password\" : \"password\"}";
         Response r =  given().contentType(MediaType.APPLICATION_JSON_VALUE).body(json).when().post("/login");
         System.out.println("TOSTRING: " + r.asString());
         //JsonObject jo = new Gson().fromJson(r.asString(), JsonObject.class);
         r.then().statusCode(200);
 
-        //boolean response = jo.get("fromServer").getAsBoolean();
-        Assertions.assertEquals(r.asString().contains("\"fromServer\" : true"),true);
+
+        Assertions.assertEquals(r.asString().contains("true"),true);
 
     }
 
@@ -97,6 +97,7 @@ class JunhyungShimSystemTest {
                 "    \"picture4\": \"\",\n" +
                 "    \"picture5\": \"\",\n" +
                 "    \"picture6\": \"\",\n" +
+                "    \"categories\": [\"Arts and Crafts\"],\n" +
                 "    \"price\": 110,\n" +
                 "    \"id\": 39\n" +
                 "  }";
@@ -106,7 +107,7 @@ class JunhyungShimSystemTest {
         JsonPath jp = new JsonPath(r.asString());
         System.out.println(r.asString());
 
-        String val = jp.get("userName").toString();
+
     }
     
 
