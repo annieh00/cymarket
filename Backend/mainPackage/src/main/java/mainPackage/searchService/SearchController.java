@@ -59,7 +59,7 @@ public class SearchController {
         try {
             GsonBuilder builder = new GsonBuilder();
             builder.serializeNulls();
-            Gson gson = builder.setPrettyPrinting().create();
+            Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 
             for (Object result : results) {
                 if (result instanceof Posting) { // Check if the result is a Posting object
