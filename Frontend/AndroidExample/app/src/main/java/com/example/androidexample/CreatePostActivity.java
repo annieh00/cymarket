@@ -545,6 +545,8 @@ public class CreatePostActivity extends AppCompatActivity{
 
             if (LoginActivity.permission == 1){
                 jsonObject.put("isDonation", true);
+                jsonObject.put("isAuction", true);
+
             }
             jsonObject.put("title", titleEditText.getText().toString());
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
@@ -577,12 +579,12 @@ public class CreatePostActivity extends AppCompatActivity{
                 Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
                     int pid = response.getInt("id");
+                    title = response.getString("title");
                     sendImageToServer(pid, i+1);
                 }
 //                MainFeed.mPostAdapter.notifyDataSetChanged();
 //                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
 //                MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
-                title = response.getString("title");
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");

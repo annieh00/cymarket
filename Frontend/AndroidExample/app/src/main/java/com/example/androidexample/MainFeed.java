@@ -118,16 +118,12 @@ public class MainFeed extends AppCompatActivity {
 
     private ImageButton search;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_feed);
 
 
-
-        search = findViewById(R.id.searchBtn);
 
 
         builder = new AlertDialog.Builder(MainFeed.this);
@@ -140,10 +136,6 @@ public class MainFeed extends AppCompatActivity {
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
 
-        search = findViewById(R.id.searchBtn);
-
-
-
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 
@@ -155,7 +147,6 @@ public class MainFeed extends AppCompatActivity {
 
 
         }
-
 //        refreshBtn = findViewById(R.id.refreshBtn);
 //        refreshBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -163,6 +154,8 @@ public class MainFeed extends AppCompatActivity {
 //                refreshContent();
 //            }
 //        });
+
+        search = findViewById(R.id.searchBtn);
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,11 +183,6 @@ public class MainFeed extends AppCompatActivity {
 //                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-                        startActivity(intent);
-                        break;
-                    case "Organization Auction":
-                        // Handle click on the fourth item
-                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
                         startActivity(intent);
                         break;
                     case "Auction":
@@ -237,6 +225,38 @@ public class MainFeed extends AppCompatActivity {
             }
         });
 
+
+//        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int announcementId = Integer.parseInt(id.getText().toString());
+////                String deleteAnnouncementUrl = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/" + announcementId;
+//                String deleteAnnouncementUrl = server_url_del + announcementId ;
+//
+//                StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, deleteAnnouncementUrl,
+//                        new Response.Listener<String>() {
+//                            @Override
+//                            public void onResponse(String response) {
+//                                Log.d("Volley Response", response);
+//                                // Handle successful deletion (if needed)
+//                            }
+//                        },
+//                        new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                                Log.e("Volley Error", "Error deleting announcement: " + error.getMessage());
+//                                // Handle error response (if needed)
+//                            }
+//
+//                        });
+//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(deleteRequest);
+//
+//
+//            }
+//        });
+
+
+
         mRecyclerView = findViewById(R.id.recycler_view_mainfeed);
         LinearLayoutManager linearManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearManager);
@@ -254,6 +274,10 @@ public class MainFeed extends AppCompatActivity {
         });
 
         fetchPosts();
+//        refreshContent();
+
+
+
 
     }
 
@@ -261,6 +285,7 @@ public class MainFeed extends AppCompatActivity {
         // Perform actions to refresh the content here
         // For example, reload data from the server or reset the RecyclerView adapter
         mPostList.clear(); // Clear the current list of posts
+//        mPostList.de
         mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
         fetchPosts(); // Fetch new posts from the server
     }
@@ -285,9 +310,8 @@ public class MainFeed extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            String picture1Data = jsonObject.getString("picture1Data");
-                            mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
-                            Log.d("Post made with this information: ", picture1);
+                            String pic1Data = jsonObject.getString("picture1Data");
+                            mPostList.add(new PostItemObject(pic1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
 
@@ -303,7 +327,83 @@ public class MainFeed extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
+//    private void jsonParse(){
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_POSTS, null,
+//                response -> {
+//                    try {
+//                        JSONArray jsonArray = response.getJSONArray("posts");
+//                        for (int i = 0; i < jsonArray.length(); i++){
+//
+//                        }
+//                    }catch(JSONException e){
+//                        throw new RuntimeException(e);
+//                    }
+//                })
+//
+//    }
 
+
+//    private void makeJsonArrayReq () {
+//
+//        coordListing.setText("");
+//        JsonArrayRequest jsonArrReq = new JsonArrayRequest(
+//                Request.Method.GET,
+//                server_url_list,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d("Volley Response", response.toString());
+//
+//
+//
+//                        StringBuilder stringBuilder = new StringBuilder();
+//                        // Parse the JSON array and add data to the adapter
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                JSONObject jsonObject = response.getJSONObject(i);
+//                                String x = jsonObject.getString("x");
+//                                String y = jsonObject.getString("y");
+//
+//                                // Create a ListItemObject and add it to the adapter
+////                                    ListItemObjectCoords item = new ListItemObjectCoords(x, y);
+////                                    adapter.add(item);
+//                                stringBuilder.append("X: ").append(x).append(", Y: ").append(y).append("\n");
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        coordListing.setText(stringBuilder.toString());
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("param1", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);
+//    }
     /**
      * Making image request
      * */
@@ -316,7 +416,6 @@ public class MainFeed extends AppCompatActivity {
                     public void onResponse(Bitmap response) {
                         // Display the image in the ImageView
                         imageView.setImageBitmap(response);
-
                     }
                 },
                 0, // Width, set to 0 to get the original width
@@ -336,6 +435,51 @@ public class MainFeed extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
+
+//    public static final Uri EXTRA_postPicture1 = null;
+//    public static final Uri EXTRA_postPicture2 = null;
+//    public static final Uri EXTRA_postPicture3 = null;
+//    public static final Uri EXTRA_postPicture4 = null;
+//    public static final Uri EXTRA_postPicture5 = null;
+//    public static final Uri EXTRA_postPicture6 = null;
+//
+//    public static final String EXTRA_postTitle = "postTitle";
+//    public static final int EXTRA_postPrice = 0;
+//    public static final String EXTRA_postDate = "date";
+//    public static final String EXTRA_postCategory = "category";
+//    public static final int EXTRA_postFlagCount = 0;
+//    public static final Boolean EXTRA_postAuction = false;
+//
+//    public static final int EXTRA_userID = 0;
+//
+//    public static final int EXTRA_postID = 0;
+
+    /**
+     * this sets up an intent and send them Vote Poll Activity
+     * @param position
+     */
+//    @Override
+//    public void onItemClick(int position) {
+//        Intent detailIntent = new Intent(this, MainFeed.class);
+//        PostItemObject clickeditem = mPostList.get(position);
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture1), clickeditem.getPicture1());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture2), clickeditem.getPicture2());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture3), clickeditem.getPicture3());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture4), clickeditem.getPicture4());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture5), clickeditem.getPicture5());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPicture6), clickeditem.getPicture6());
+//        detailIntent.putExtra(EXTRA_postTitle, clickeditem.getTitle());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postPrice), clickeditem.getPrice());
+//        detailIntent.putExtra(EXTRA_postDate, clickeditem.getDate());
+//        detailIntent.putExtra(EXTRA_postCategory, clickeditem.getCategory());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postFlagCount), clickeditem.getFlagCount());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postAuction), clickeditem.getAuction());
+//        detailIntent.putExtra(String.valueOf(EXTRA_userID), clickeditem.getUserID());
+//        detailIntent.putExtra(String.valueOf(EXTRA_postID), clickeditem.getPostID());
+//        startActivity(detailIntent);
+//
+//    }
+
 
 }
 

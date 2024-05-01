@@ -3,8 +3,8 @@ package com.example.androidexample.Post;
 import android.net.Uri;
 
 public class PostItemObject {
-    String picture1Data;
     String picture1;
+    String picture1Data;
     String picture2;
     String picture3;
     String picture4;
@@ -41,7 +41,9 @@ public class PostItemObject {
 
     }
 
-    public String getPicture1Data(){ return picture1Data; }
+    public String getPicture1Data() {
+        return picture1Data;
+    }
 
     public String getPicture1(){ return picture1; }
     public String getPicture2(){ return picture2; }
