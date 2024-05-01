@@ -72,16 +72,20 @@ public class Auction {
 
     private static HashMap <String, HashMap<String, Boolean>> participatingUsersFromAuctionID = new HashMap<>();
 
+    private static HashMap<String,Boolean> orgAuctionHist = new HashMap<>();
     private static HashMap<Session, String> auctionIDFromSession = new HashMap<>();
 
 
     private final Logger logger = LoggerFactory.getLogger(Auction.class);
+
+    private String id;
 
 
 
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username, @PathParam("associatedPostID") String auctionID) throws IOException {
+        id = auctionID;
         if(username == null || username == ""
                 && generalUserRepository.findGeneralUserByUserName(username) == null
                 || auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionID)) == null){
@@ -154,11 +158,17 @@ public class Auction {
             String m = auction.getBidHistory();
             if(m != null && m != ""){
                 System.out.println(m);
-                String[] split_msg =  m.split("\\s+");
+                String[] split_msg =  m.split("\\s+"); //split by space
 
                 for(int i = 0; i < split_msg.length; i++){
                     int splitPoint = split_msg[0].indexOf("-");
-                    String msg = split_msg[i].substring(0,splitPoint) + " bid $ " +  split_msg[i].substring(splitPoint+1);
+                    String msg;
+                    if(auction.getPost().getIsDonation()){
+                        msg = split_msg[i];
+                    }else{
+                        msg = split_msg[i].substring(0,splitPoint) + " bid $ " +  split_msg[i].substring(splitPoint+1);
+                    }
+
                     sendMessageToPArticularUser(username,msg);
                 }
             }
@@ -205,6 +215,7 @@ public class Auction {
         int bid = Integer.parseInt(split_msg[0]);
         if(auctionId != "" && auctionId != null){
             AuctionTable a = auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionId));
+
             if( bid > a.getHighestBidAmount()){
                 a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
                 a.setHighestBidAmount(bid);
