@@ -72,7 +72,7 @@ public class Auction {
 
     private static HashMap <String, HashMap<String, Boolean>> participatingUsersFromAuctionID = new HashMap<>();
 
-    private static HashMap<String,Boolean> orgAuctionHist = new HashMap<>();
+    private static HashMap<String,HashMap<Integer,Boolean>> orgAuctionHist = new HashMap<>();
     private static HashMap<Session, String> auctionIDFromSession = new HashMap<>();
 
 
@@ -215,18 +215,43 @@ public class Auction {
         int bid = Integer.parseInt(split_msg[0]);
         if(auctionId != "" && auctionId != null){
             AuctionTable a = auctionTableRepository.getAuctionTableById(Integer.parseInt(auctionId));
-
-            if( bid > a.getHighestBidAmount()){
-                a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
-                a.setHighestBidAmount(bid);
-                String msg = username + " bid $" + bid + ":";
-                a.setBidHistory(a.getBidHistory()+username+"-"+bid+" ");
-                auctionTableRepository.save(a);
-                Posting associated = postingRepository.findPostingById(a.getId());
-                associated.setPrice(bid);
-                postingRepository.save(associated);
-                broadcast(username + " bid $" + bid);
+            if(a.getPost().getIsDonation()){
+                String msg = username;
+                if(orgAuctionHist.containsKey(username)){
+                    //did not make a request yet
+                    if(!orgAuctionHist.get(username).containsKey(a.getPost().getId())){
+                        orgAuctionHist.get(username).put(a.getPost().getId(),true);
+                        a.setBidHistory(a.getBidHistory() +username+" ");
+                        broadcast(username);
+                        auctionTableRepository.save(a);
+                        Posting associated = postingRepository.findPostingById(a.getId());
+                        associated.setPrice(bid);
+                        postingRepository.save(associated);
+                    }
+                }else{
+                    orgAuctionHist.put(username,new HashMap<Integer,Boolean>());
+                    orgAuctionHist.get(username).put(a.getPost().getId(),true);
+                    a.setBidHistory(a.getBidHistory() +username+" ");
+                    broadcast(username);
+                    auctionTableRepository.save(a);
+                    Posting associated = postingRepository.findPostingById(a.getId());
+                    associated.setPrice(bid);
+                    postingRepository.save(associated);
+                }
+            }else{
+                if( bid > a.getHighestBidAmount()){
+                    a.setHighestBidder(generalUserRepository.findGeneralUserByUserName(username));
+                    a.setHighestBidAmount(bid);
+                    String msg = username + " bid $" + bid + ":";
+                    a.setBidHistory(a.getBidHistory()+username+"-"+bid+" ");
+                    auctionTableRepository.save(a);
+                    Posting associated = postingRepository.findPostingById(a.getId());
+                    associated.setPrice(bid);
+                    postingRepository.save(associated);
+                    broadcast(username + " bid $" + bid);
+                }
             }
+
         }
 
 
