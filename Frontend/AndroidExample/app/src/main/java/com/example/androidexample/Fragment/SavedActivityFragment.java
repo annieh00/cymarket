@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.androidexample.LoginActivity;
 import com.example.androidexample.Post.PostAdapter;
@@ -75,14 +76,13 @@ public class SavedActivityFragment extends Fragment {
     private void getBookmarks() {
         String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
 
-        // Create a JSON array request
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        // Create a String request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            // Clear the existing list before adding new items
-                            mSavedList.clear();
+                    public void onResponse(String response) {
+                        // Handle successful response
+                        Log.d("saved posts", response);
 
                             // Iterate through the JSON array
                             for (int i = 0; i < response.length(); i++) {
@@ -127,6 +127,6 @@ public class SavedActivityFragment extends Fragment {
                 });
 
         // Add the request to the RequestQueue
-        Volley.newRequestQueue(requireContext()).add(jsonArrayRequest);
+        Volley.newRequestQueue(requireContext()).add(stringRequest);
     }
 }
