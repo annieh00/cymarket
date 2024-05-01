@@ -41,7 +41,7 @@ public class UserRatings {
             ratingRepository.save(r);
             List<Rating> setOfRatings = u.getMyRatings();
             setOfRatings.add(r);
-
+            double ret = 0.0;
             double avg = 0.0;
             for(Rating r2 : setOfRatings){
                 avg += r2.getStars();
@@ -50,14 +50,15 @@ public class UserRatings {
                 u.setScore(0.0);
             }else{
                 u.setScore(avg / setOfRatings.size());
+                ret = avg / setOfRatings.size();
             }
 
             generalUserRepository.save(u);
             System.out.println("Review::::" + r.getRevieweeUserName());
-            return "{\"serverResponse\":true}";
+            return "{\"avgRating\" : " + ret +"}";
         }
 
-        return "{\"serverResponse\":false}";
+        return "{\"avgRating\" : -1.0}";
     }
 
     @GetMapping("/getAllRatings")
@@ -123,13 +124,23 @@ public class UserRatings {
     public String getMyRatings(@PathVariable(name = "userName") String userName){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u != null){
-            List<Rating> myratings = ratingRepository.findRatingsByAuthorUsername(u.getUserName());
+            List<Rating> myratings = ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
             GsonBuilder builder = new GsonBuilder();
             builder.serializeNulls();
             Gson gson = builder.setPrettyPrinting().create();
             String json = gson.toJson(myratings);
-            return "{\"ratings\" : " + json + "}";
+            double sum = 0.0;
+            for(Rating r : myratings){
+                sum += r.getStars();
+            }
+            if(myratings.size() == 0){
+                return "{\"ratings\" : 0.0}";
+            }else{
+                sum = sum / myratings.size();
+                return "{\"ratings\" : " + sum + "}";
+            }
+
         }
-        return "{\"ratings\" : null}";
+        return "{\"ratings\" : -1.0}";
     }
 }
