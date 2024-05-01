@@ -1,5 +1,8 @@
 package com.example.androidexample.Auction;
 
+import static com.example.androidexample.PostDetailActivity.decodeBase64ToBitmap;
+
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +62,9 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHold
         public void bind(final AuctionItemObject item, final OnItemClickListener listener) {
             title.setText(item.getTitle());
             price.setText(String.valueOf(item.getPrice()));
+            Bitmap bm = decodeBase64ToBitmap(item.getPicture1Data());
+            bm = Bitmap.createScaledBitmap(bm,150,150,false);
+            image.setImageBitmap(bm);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainFeed">
+    tools:context=".MainFeedOrganizer">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
@@ -35,6 +35,17 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/cymarket_logos_white" />
 
+
+                <ImageButton
+                    android:id="@+id/searchBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/baseline_search_24" />
+
             </androidx.appcompat.widget.Toolbar>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,17 +54,17 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageButton
-                android:id="@+id/refreshBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:background="@null"
-                android:src="@drawable/refresh_svgrepo_com"
-                android:visibility="visible" />
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/refreshBtn"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_alignParentEnd="true"-->
+            <!--                android:layout_gravity="end|center_vertical"-->
+            <!--                android:layout_marginStart="24dp"-->
+            <!--                android:layout_marginTop="16dp"-->
+            <!--                android:background="@null"-->
+            <!--                android:src="@drawable/refresh_svgrepo_com"-->
+            <!--                android:visibility="visible" />-->
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -75,7 +86,7 @@
 
             <!-- RecyclerView positioned below the header -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/recycler_view_mainfeedOrganizer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/post_item" />

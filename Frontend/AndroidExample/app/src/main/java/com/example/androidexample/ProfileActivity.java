@@ -511,20 +511,19 @@ public class ProfileActivity extends AppCompatActivity {
 //                            String picture4 = jsonObject.getString("picture4");
 //                            String picture5 = jsonObject.getString("picture5");
 //                            String picture6 = jsonObject.getString("picture6");
-                            String picture1Data = jsonObject.getString("picture1Data");
-                            String picture1 = null;
-                            String picture2 = null;
-                            String picture3 = null;
-                            String picture4 = null;
-                            String picture5 = null;
-                            String picture6 = null;
-
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");
+                            String picture3 = jsonObject.getString("picture3");
+                            String picture4 = jsonObject.getString("picture4");
+                            String picture5 = jsonObject.getString("picture5");
+                            String picture6 = jsonObject.getString("picture6");
                             String title = jsonObject.getString("title");
                             int price = jsonObject.getInt("price");
                             Boolean auction = jsonObject.getBoolean("isAuction");
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
+                            String picture1Data = jsonObject.getString("picture1Data");
                             mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 

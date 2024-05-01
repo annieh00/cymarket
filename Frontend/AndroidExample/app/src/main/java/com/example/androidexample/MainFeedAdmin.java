@@ -121,7 +121,7 @@ public class MainFeedAdmin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_feed);
+        setContentView(R.layout.activity_main_feed_admin);
 
 
 
@@ -180,10 +180,10 @@ public class MainFeedAdmin extends AppCompatActivity {
                 itemSelected = item.toString();
                 Intent intent;
                 switch (itemSelected) {
-//                    case "Donation":
-//                        intent = new Intent(getApplicationContext(), DonationsActivity.class);
-//                        startActivity(intent);
-//                        break;
+                    case "Main Feed":
+                        intent = new Intent(getApplicationContext(), MainFeedAdmin.class);
+                        startActivity(intent);
+                        break;
                     case "Friends":
                         intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
                         startActivity(intent);
@@ -265,7 +265,7 @@ public class MainFeedAdmin extends AppCompatActivity {
 
 
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view_mainfeedAdmin);
         LinearLayoutManager linearManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearManager);
 

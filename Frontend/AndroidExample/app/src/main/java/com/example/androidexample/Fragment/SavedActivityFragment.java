@@ -84,8 +84,37 @@ public class SavedActivityFragment extends Fragment {
                         // Handle successful response
                         Log.d("saved posts", response);
 
-                        // Process the response here
-                        // You can parse the JSON string and handle the data as needed
+                            // Iterate through the JSON array
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject bookmarkObj = response.getJSONObject(i);
+
+//
+                                String picture1 = bookmarkObj.getString("picture1");
+                                String picture2 = bookmarkObj.getString("picture2");
+                                String picture3 = bookmarkObj.getString("picture3");
+                                String picture4 = bookmarkObj.getString("picture4");
+                                String picture5 = bookmarkObj.getString("picture5");
+                                String picture6 = bookmarkObj.getString("picture6");
+                                String title = bookmarkObj.getString("title");
+                                int price = bookmarkObj.getInt("price");
+                                Boolean auction = bookmarkObj.getBoolean("isAuction");
+                                String description = bookmarkObj.getString("description");
+                                String userName = bookmarkObj.getString("userName");
+                                int id = bookmarkObj.getInt("id");
+                                String pic1data = bookmarkObj.getString("picture1Data");
+
+                                // Create a new PostItemObject instance
+                                PostItemObject postItem = new PostItemObject(pic1data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id);
+
+                                // Add the new PostItemObject instance to the list
+                                mSavedList.add(postItem);
+                            }
+
+                            // Notify the adapter about the data change
+                            mSavedPostAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {

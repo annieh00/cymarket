@@ -532,6 +532,7 @@ public class CreatePostActivity extends AppCompatActivity{
         //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
     }
+
     /**
      * Send a JSON Object request to server that posts the data for a new post.
      * This method constructs a JSON Object containing post data and sends it to the server
@@ -545,6 +546,9 @@ public class CreatePostActivity extends AppCompatActivity{
         try {
             //input your API parameters
 
+            if (LoginActivity.permission == 1){
+                jsonObject.put("isDonation", true);
+            }
             jsonObject.put("title", titleEditText.getText().toString());
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
             jsonObject.put("description", descriptionEditText.getText().toString());
@@ -584,9 +588,7 @@ public class CreatePostActivity extends AppCompatActivity{
 //                MainFeed.mPostAdapter.notifyDataSetChanged();
 //                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
 //                MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
-//                title = response.getString("title");
-//
-//                Log.d("sendJsonObjectRequest title", title);
+                title = response.getString("title");
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");
