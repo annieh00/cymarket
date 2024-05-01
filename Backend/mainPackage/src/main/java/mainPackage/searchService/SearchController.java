@@ -37,10 +37,11 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "Search completed successfully"),
             @ApiResponse(responseCode = "404", description = "Invalid user ID or other input error")
     })
-    public ResponseEntity<Map<String, Object>> search(String query, @PathVariable int uid) {
+    public ResponseEntity<String> search(String query, @PathVariable int uid) {
         GeneralUser user = generalUserRepository.findGeneralUserById(uid);
+
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{ \"error\": \"User not found\" }");
         }
 
         Set<Object> results = new HashSet<>();
@@ -54,49 +55,50 @@ public class SearchController {
         results.addAll(postingRepository.findByCategory(query));
         results.addAll(postingRepository.findByCategoriesContaining(query));
 
-        List<Object> resultsWithImages = new ArrayList<>();
-
-        try {
-            GsonBuilder builder = new GsonBuilder();
-            builder.serializeNulls();
-            Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
-
-            for (Object result : results) {
-                if (result instanceof Posting) { // Check if the result is a Posting object
-                    Posting post = (Posting) result;
-
-                    String postJson = gson.toJson(post);
-                    String picture1 = post.getPicture1();
-
-                    if (picture1 != null && !picture1.isEmpty()) {
-                        File imageFile = new File("images/" + picture1);
-                        if (imageFile.exists()) {
-                            byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
-                            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
-
-                            // Insert the Base64 data into the JSON representation
-                            postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
-                            postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
-                        }
-                    }
-
-                    resultsWithImages.add(postJson); // Store the modified JSON
-                } else {
-                    resultsWithImages.add(result); // If not Posting, add the original result
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        // Add query to search history
         user.getSearchHistory().add(query);
         generalUserRepository.save(user);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("results", resultsWithImages);
+        // Process the results to add Base64-encoded image data for `picture1`
+        List<String> resultsWithImages = new ArrayList<>();
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 
-        return ResponseEntity.ok(response);
+        for (Object result : results) {
+            if (result instanceof Posting) {
+                Posting post = (Posting) result;
+
+                String postJson = gson.toJson(post);
+                String picture1 = post.getPicture1();
+
+                if (picture1 != null && !picture1.isEmpty()) {
+                    File imageFile = new File("images/" + picture1);
+
+                    if (imageFile.exists()) {
+                        try {
+                            byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+                            // Insert Base64-encoded image data
+                            postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                            postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                        } catch (IOException e) {
+                            e.printStackTrace(); // Handle error
+                        }
+                    }
+                }
+
+                resultsWithImages.add(postJson); // Store modified JSON
+            } else {
+                resultsWithImages.add(gson.toJson(result)); // Add other results
+            }
+        }
+
+        // Create the final JSON response
+        String jsonResponse = "{ \"results\": [" + String.join(", ", resultsWithImages) + "] }";
+
+        return ResponseEntity.ok(jsonResponse);
     }
 
     @Operation(summary = "Get a user's search history",
