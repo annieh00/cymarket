@@ -246,8 +246,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             if (donation != true){
                                 priceTxtView.setText("$" + String.valueOf(price));
                             }
+
                             descriptionTxtView.setText(description);
-//                            Log.d("JSON REQ TO GET POST" + response.toString());
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
