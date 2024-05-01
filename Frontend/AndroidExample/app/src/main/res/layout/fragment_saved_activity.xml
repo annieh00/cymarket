@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.SavedActivityFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="saved posts activity"
-        android:layout_centerInParent="true"
-        android:textSize="32dp"
-        >
+<!--    &lt;!&ndash; RecyclerView positioned below the header &ndash;&gt;-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recycler_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:listitem="@layout/post_item" />-->
 
-    </TextView>
+
 </RelativeLayout>
