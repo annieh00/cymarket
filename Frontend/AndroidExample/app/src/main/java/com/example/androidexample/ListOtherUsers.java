@@ -97,6 +97,7 @@ public class ListOtherUsers extends ArrayAdapter<Friend> implements FriendAccept
                         Log.d("FriendRequest", "Friend request sent successfully to user ID: " + sentTo.getId());
                         Log.d("FriendRequest", "Friend request sent successfully to user ID: " + LoginActivity.loginID);
 
+
                     }
                 },
                 new Response.ErrorListener() {

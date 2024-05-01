@@ -131,6 +131,7 @@ public class ListOrganizationPermissions extends ArrayAdapter<UserReqPerm> imple
                         Log.d("AcceptFriendRequest", "Friend request from " + username + " accepted successfully");
                         // You can perform any further actions here after the request is successful
                         //update of adapter not working here
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -165,6 +166,7 @@ public class ListOrganizationPermissions extends ArrayAdapter<UserReqPerm> imple
                         Log.d("DeleteFriend", "Username of deleted user: " + id.getId());
 
                         Toast.makeText(context, "Friend deleted successfully", Toast.LENGTH_SHORT).show();
+
 
 
                     }

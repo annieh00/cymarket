@@ -115,6 +115,7 @@ public class ViewAnnouncementsGenUser extends AppCompatActivity {
                         allAnnouncements.clear();
                         allAnnouncements.addAll(fetchedAnnouncements);
                         adapter.notifyDataSetChanged();
+
                     }
                 },
                 new Response.ErrorListener() {

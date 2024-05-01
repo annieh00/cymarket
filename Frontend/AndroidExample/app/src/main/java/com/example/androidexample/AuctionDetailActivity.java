@@ -227,6 +227,7 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -340,6 +341,7 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -385,7 +387,7 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         try {
                             String encodedString = response.getString("image");
                             if(encodedString == null || encodedString.length() == 0 || encodedString.equals("")){
-                                return;
+
                             }
 
                             Bitmap bm = decodeBase64ToBitmap(encodedString);
@@ -394,7 +396,6 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
                         } catch (JSONException e) {
                             //no json was in the response, which means that the user does not have the image with index
 
-                            return;
                         }
                     }
                 },

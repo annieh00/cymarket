@@ -376,6 +376,7 @@ public class EditPostActivity extends AppCompatActivity{
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -455,6 +456,7 @@ public class EditPostActivity extends AppCompatActivity{
 //                } catch (JSONException e) {
 //                    throw new RuntimeException(e);
 //                }
+
             }
         },
                 new Response.ErrorListener() {

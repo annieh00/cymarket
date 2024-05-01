@@ -268,6 +268,7 @@ public class SetLocationActivity extends AppCompatActivity {
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+
             }
         }, new Response.ErrorListener() {
             @Override

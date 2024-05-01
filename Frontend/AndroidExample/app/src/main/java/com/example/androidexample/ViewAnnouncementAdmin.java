@@ -203,6 +203,7 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                         // Notify the adapter that the data set has changed
                         adapter.notifyDataSetChanged();
                         // Optionally, you can update the UI or perform any additional actions here
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -233,6 +234,7 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                         allAnnouncements.clear();
                         allAnnouncements.addAll(fetchedAnnouncements);
                         adapter.notifyDataSetChanged();
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -341,6 +343,7 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                         // Call getAnnouncements() to refresh the list
                         getAnnouncements();
 
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -382,6 +385,7 @@ public class ViewAnnouncementAdmin extends AppCompatActivity {
                         Log.d("AnnouncementUpdate", "Announcement " + id + " updated successfully");
                         getAnnouncements();
                         adapter.notifyDataSetChanged();
+
 
 
                     }

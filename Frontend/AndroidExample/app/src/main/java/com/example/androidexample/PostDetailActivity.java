@@ -19,6 +19,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,6 +27,7 @@ import com.example.androidexample.Fragment.SavedActivityFragment;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +39,6 @@ import java.util.Map;
 public class PostDetailActivity extends AppCompatActivity {
 
     public static final String DOMAIN = "http://coms-309-060.class.las.iastate.edu:8080";
-
 
 
     public String actualPostURL = Const.URL_GET_ALL_POSTS;
@@ -64,21 +65,21 @@ public class PostDetailActivity extends AppCompatActivity {
     private TextView authorOfPostTxtView;
 
     private ImageButton bookmarkBtn;
-    private boolean isBookmarked = false;
+//    private boolean isBookmarked = false;
 
     private int displayedImageIndex = 1;
 
-    private void processURL(Bundle extras){
+    Boolean alreadyBookmarked = false;
+
+    private void processURL(Bundle extras) {
         int i = Const.URL_GET_ALL_POSTS.lastIndexOf("/");
-        if (Const.URL_GET_ALL_POSTS.charAt(i+1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i+1) <= '9'){
-            actualPostURL = Const.URL_GET_ALL_POSTS.substring(0,i)+"/"+extras.getString("id");
-        }else{
+        if (Const.URL_GET_ALL_POSTS.charAt(i + 1) >= '0' && Const.URL_GET_ALL_POSTS.charAt(i + 1) <= '9') {
+            actualPostURL = Const.URL_GET_ALL_POSTS.substring(0, i) + "/" + extras.getString("id");
+        } else {
             actualPostURL += ("/" + extras.getString("id"));
         }
         URL_JSON_OBJECT += extras.getString("id");
     }
-
-
 
 
     @Override
@@ -105,22 +106,22 @@ public class PostDetailActivity extends AppCompatActivity {
         ImageView imv = (ImageView) findViewById(R.id.imageSelView1);
 
         try {
-            getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
-        }catch (Exception e){
+            getImageAsJsonObjAndSetIt(imv, displayedImageIndex);
+        } catch (Exception e) {
             System.out.println("CALLING FAILED");
         }
 
-        Toolbar t = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
 
         t.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                if (LoginActivity.permission == 0){
+            public void onClick(View view) {
+                if (LoginActivity.permission == 0) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeedAdmin.class);
                     startActivity(intent);
-                } else if (LoginActivity.permission == 1){
+                } else if (LoginActivity.permission == 1) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeedOrganizer.class);
                     startActivity(intent);
-                } else if (LoginActivity.permission == 2){
+                } else if (LoginActivity.permission == 2) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
                     startActivity(intent);
                 }
@@ -138,44 +139,50 @@ public class PostDetailActivity extends AppCompatActivity {
 
         checkBookMarkStatus();
 
-        bookmarkBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Toggle bookmark status
-                isBookmarked = !isBookmarked;
 
-                // If the bookmark is clicked
-                if (isBookmarked) {
-                    // Set the filled bookmark drawable
-                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
-                    // Add the post to the bookmark list
-                    addPostToArrayList();
-                } else {
-                    // If the bookmark is unclicked, set the empty bookmark drawable
-                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
-                    // Remove the post from the bookmark list
-                    unbookmarkPost();
-                }
-            }
-        });
+//        Log.d("Boolean Status", "The status of myBoolean at the end of parsing is : " + alreadyBookmarked);
+
+
+
+
+//        bookmarkBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                // Toggle bookmark status
+////                isBookmarked = !isBookmarked;
+//
+//                // If the bookmark is clicked
+//                if (isBookmarked) {
+//                    // Set the filled bookmark drawable
+////                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
+//                    // Add the post to the bookmark list
+//                    addPostToArrayList();
+//                } else {
+//                    // If the bookmark is unclicked, set the empty bookmark drawable
+//                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
+//                    // Remove the post from the bookmark list
+//                    unbookmarkPost();
+//                }
+//            }
+//        });
 
 
         rightArrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(displayedImageIndex < 1 || displayedImageIndex > 6){
+                if (displayedImageIndex < 1 || displayedImageIndex > 6) {
                     return;
                 }
 
-                if(displayedImageIndex  < imageNum){
+                if (displayedImageIndex < imageNum) {
                     displayedImageIndex++;
 
-                }else{
+                } else {
                     //make it to 1 so that it feels like the user is rolling through the pictures
                     displayedImageIndex = 1;
                 }
 
-                getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+                getImageAsJsonObjAndSetIt(imv, displayedImageIndex);
 
             }
         });
@@ -183,16 +190,16 @@ public class PostDetailActivity extends AppCompatActivity {
         leftArrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(displayedImageIndex < 1 || displayedImageIndex > 6){
+                if (displayedImageIndex < 1 || displayedImageIndex > 6) {
                     return;
                 }
-                if(displayedImageIndex  > 1){
+                if (displayedImageIndex > 1) {
                     displayedImageIndex--;
-                }else{
+                } else {
                     //make it the number of images so that it feels like the user is rolling through the pictures
                     displayedImageIndex = imageNum;
                 }
-                getImageAsJsonObjAndSetIt(imv,displayedImageIndex);
+                getImageAsJsonObjAndSetIt(imv, displayedImageIndex);
 
 
             }
@@ -203,13 +210,13 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 deletePost();
 
-                if (LoginActivity.permission == 0){
+                if (LoginActivity.permission == 0) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeedAdmin.class);
                     startActivity(intent);
-                } else if (LoginActivity.permission == 1){
+                } else if (LoginActivity.permission == 1) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeedOrganizer.class);
                     startActivity(intent);
-                } else if (LoginActivity.permission == 2){
+                } else if (LoginActivity.permission == 2) {
                     Intent intent = new Intent(PostDetailActivity.this, MainFeed.class);
                     startActivity(intent);
                 }
@@ -217,8 +224,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        //user that made the post
-//        TextView txtRegister = (TextView)findViewById(R.id.authorOfPostTxt);
+
         authorOfPostTxtView.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -228,19 +234,95 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+                Log.d("Boolean Status", "The status of myBoolean at the end of parsing is : " + alreadyBookmarked);
+
+        bookmarkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                // Toggle bookmark status
+//                isBookmarked = !isBookmarked;
+
+                // If the bookmark is clicked
+                if (alreadyBookmarked) {
+                    // Set the filled bookmark drawable
+//                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
+                    // Add the post to the bookmark list
+                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
+                    unbookmarkPost();
+
+
+                } else {
+                    // If the bookmark is unclicked, set the empty bookmark drawable
+                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
+//                    alreadyBookmarked = true;
+                    // Remove the post from the bookmark list
+                    addPostToArrayList();
+
+                }
+            }
+        });
+
+
+
+
+//                if(alreadyBookmarked){
+//
+//                }
+
 
     }
 
     private void checkBookMarkStatus() {
-
         String url = DOMAIN + "/bookmarks/" + LoginActivity.loginID;
 
 
+        // Create a JSON array request
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject bookmarkObj = response.getJSONObject(i);
+                                int postId = bookmarkObj.getInt("id");
+
+                                if (postId == pid) {
+                                    alreadyBookmarked = true;
+                                    Log.d("alreadyBookmarked", "This was already bookmarked");
+                                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_filled_24);
+                                    Log.d("Boolean Status", "The status of myBoolean is: " + alreadyBookmarked);
 
 
+                                }else {
+                                    Log.d("not bookmarked", "this has not been bookmarked");
+                                    bookmarkBtn.setImageResource(R.drawable.baseline_bookmark_border_24);
+                                    Log.d("Boolean Status", "The status of myBoolean is: " + alreadyBookmarked);
 
+
+                                }
+
+                                Log.d("bookmarks", String.valueOf(postId));
+                                // Handle each bookmarked post ID as needed
+                                // For example, you can store them in a list or perform any other operations
+                                // on the bookmarked post IDs
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Log.e("Volley Error", error.toString());
+                        // You can show an error message to the user or perform any other error handling
+                    }
+                });
+
+        // Add the request to the RequestQueue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
-
     private void unbookmarkPost() {
         String url = DOMAIN +"/bookmarks/" + LoginActivity.loginID + "/remove/" + pid;
 
@@ -252,8 +334,12 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Handle successful response
                         Log.d("Response", response.toString());
+
+                        alreadyBookmarked = false;
+
                         // You can perform any further actions here after the request is successful
                         //update of adapter not working here
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -282,8 +368,8 @@ public class PostDetailActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Handle successful response
                         Log.d("Response", response.toString());
-                        // You can perform any further actions here after the request is successful
-                        //update of adapter not working here
+                        alreadyBookmarked = true;
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -334,8 +420,8 @@ public class PostDetailActivity extends AppCompatActivity {
                             donation = response.getBoolean("isDonation");
 
 
-                            Log.d("userName of the author:, username of the current user:", userName+ LoginActivity.username);
-                            Log.d("permissin of the current user:", String.valueOf(LoginActivity.permission));
+//                            Log.d("userName of the author:, username of the current user:", userName+ LoginActivity.username);
+//                            Log.d("permissin of the current user:", String.valueOf(LoginActivity.permission));
                             if (userName.equals(LoginActivity.username) || LoginActivity.permission == 0){
                                 deletePostBtn.setVisibility(View.VISIBLE);
                                 editPostBtn.setVisibility(View.VISIBLE);
@@ -355,6 +441,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -425,6 +512,7 @@ public class PostDetailActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -471,7 +559,6 @@ public class PostDetailActivity extends AppCompatActivity {
                         try {
                             String encodedString = response.getString("image");
                             if(encodedString == null || encodedString.length() == 0 || encodedString.equals("")){
-                                return;
                             }
 
                             Bitmap bm = decodeBase64ToBitmap(encodedString);
@@ -480,8 +567,9 @@ public class PostDetailActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             //no json was in the response, which means that the user does not have the image with index
 
-                            return;
+
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -549,8 +637,9 @@ public class PostDetailActivity extends AppCompatActivity {
                             } catch (JSONException e) {
                                 //no json was in the response, which means that the user does not have the image with index
 
-                                return;
+
                             }
+
 
                         }
                     },

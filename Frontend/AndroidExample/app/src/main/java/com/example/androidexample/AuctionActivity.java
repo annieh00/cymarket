@@ -526,6 +526,7 @@ public class AuctionActivity extends AppCompatActivity {
                     public void onResponse(Bitmap response) {
                         // Display the image in the ImageView
                         imageView.setImageBitmap(response);
+
                     }
                 },
                 0, // Width, set to 0 to get the original width

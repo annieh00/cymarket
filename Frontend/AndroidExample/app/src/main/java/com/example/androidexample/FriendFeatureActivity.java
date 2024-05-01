@@ -93,6 +93,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                         // Populate ListView with friends data
                         ListFriends adapter = new ListFriends(FriendFeatureActivity.this, friendList);
                         listViewFriends.setAdapter(adapter);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -219,6 +220,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                         ListOtherUsers adapter = new ListOtherUsers(FriendFeatureActivity.this, generalUsers, FriendFeatureActivity.this);
                         listViewGenUsers.setAdapter(adapter);
 
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -254,6 +256,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
                         friendList.addAll(generalUsers);
 
                         ((ListFriends) listViewFriends.getAdapter()).updateFriendList(friendList);
+
 
                     }
                 },
@@ -334,6 +337,7 @@ public class FriendFeatureActivity extends AppCompatActivity implements FriendAc
 
                         // Notify the adapter that the data set has changed
                         ((ListFriends) listViewFriends.getAdapter()).notifyDataSetChanged();
+
                     }
                 },
                 new Response.ErrorListener() {

@@ -145,7 +145,6 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
-
                     }
                 },
                 new Response.ErrorListener() {
