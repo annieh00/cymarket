@@ -137,6 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button deleteBtn;
 
     private RatingBar ratingBar;
+    private TextView nameTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,11 @@ public class ProfileActivity extends AppCompatActivity {
         navigationView.setItemIconTintList(null);
         ratingBar = (RatingBar) findViewById(R.id.rb_ratingBar);
 
-        // Set the rating bar as non-editable
+
+        nameTxt = findViewById(R.id.Name);
+
+        nameTxt.setText(LoginActivity.username);
+
         getRating();
         //json get method req that gets the average rating of the user and displays it
         // Set the current rating, e.g., when loading user data
@@ -187,6 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
 
 
 //        setLocationBtn.setOnClickListener(new View.OnClickListener() {
@@ -505,6 +511,7 @@ public class ProfileActivity extends AppCompatActivity {
 //                            String picture4 = jsonObject.getString("picture4");
 //                            String picture5 = jsonObject.getString("picture5");
 //                            String picture6 = jsonObject.getString("picture6");
+                            String picture1Data = jsonObject.getString("picture1Data");
                             String picture1 = null;
                             String picture2 = null;
                             String picture3 = null;
@@ -518,7 +525,7 @@ public class ProfileActivity extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
                         mRecyclerView.setAdapter(mPostAdapter);

@@ -3,6 +3,7 @@ package com.example.androidexample.Post;
 import android.net.Uri;
 
 public class PostItemObject {
+    String picture1Data;
     String picture1;
     String picture2;
     String picture3;
@@ -19,7 +20,8 @@ public class PostItemObject {
     String description;
     String userName;
     int postID;
-    public PostItemObject(String picture1, String picture2, String picture3, String picture4, String picture5, String picture6, String title, int price, Boolean auction, String description, String userName, int postID) {
+    public PostItemObject(String picture1Data, String picture1, String picture2, String picture3, String picture4, String picture5, String picture6, String title, int price, Boolean auction, String description, String userName, int postID) {
+        this.picture1Data = picture1Data;
         this.picture1 = picture1;
         this.picture2 = picture2;
         this.picture3 = picture3;
@@ -38,6 +40,8 @@ public class PostItemObject {
 
 
     }
+
+    public String getPicture1Data(){ return picture1Data; }
 
     public String getPicture1(){ return picture1; }
     public String getPicture2(){ return picture2; }

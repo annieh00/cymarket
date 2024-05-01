@@ -502,6 +502,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 //                            String picture4 = jsonObject.getString("picture4");
 //                            String picture5 = jsonObject.getString("picture5");
 //                            String picture6 = jsonObject.getString("picture6");
+                            String picture1Data = jsonObject.getString("picture1Data");
                             String picture1 = null;
                             String picture2 = null;
                             String picture3 = null;
@@ -515,7 +516,7 @@ public class OtherProfileActivity extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            mPostList.add(new PostItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+                            mPostList.add(new PostItemObject(picture1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
                         mRecyclerView.setAdapter(mPostAdapter);
