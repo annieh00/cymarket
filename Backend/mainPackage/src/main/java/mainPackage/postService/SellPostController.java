@@ -209,7 +209,30 @@ public class SellPostController {
 
         try {
             for(int i = 0; i < mylist.size(); i++){
-                if(mylist.get(i).getIsAuction() && !mylist.get(i).getIsClosed()){
+                if(mylist.get(i).getIsAuction() && !mylist.get(i).getIsClosed() && ! mylist.get(i).getIsDonation()){
+                    ret.add(mylist.get(i));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(ret);
+        return "{ \"auctions\" :" +json + "}";
+
+    }
+
+    @GetMapping("/org/auctions")
+    public String getOrgAuctions(){
+        List<Posting> mylist = postingRepository.findAll();
+        ArrayList<Posting> ret = new ArrayList<>();
+
+        try {
+            for(int i = 0; i < mylist.size(); i++){
+                if(mylist.get(i).getIsAuction() && !mylist.get(i).getIsClosed() && mylist.get(i).getIsDonation()){
                     ret.add(mylist.get(i));
                 }
             }
