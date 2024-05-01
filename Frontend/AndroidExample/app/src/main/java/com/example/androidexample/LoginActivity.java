@@ -93,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                   Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-//                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                   startActivity(intent);  // go to SignupActivity
             }
         });
@@ -164,21 +163,20 @@ public class LoginActivity extends AppCompatActivity {
                 //I, jess added these two lines
                 username = response.getString("username");
                 loginID = response.getInt("id");
-
                 Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
             }
 
-            if (validUser && permission == 0){
+            if (validUser == true && permission == 0){
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
                 startActivity(intent);
-            }else if (validUser && permission == 1) {
+            }else if (validUser == true && permission == 1) {
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
                 startActivity(intent);
-            }else if (validUser && permission == 2){
+            }else if (validUser == true && permission == 2){
                 Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainFeed.class);
                 startActivity(intent);

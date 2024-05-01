@@ -133,9 +133,6 @@ public class InboxActivity extends AppCompatActivity implements WebSocketListene
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 onBackPressed();
                 WebSocketManager.getInstance().disconnectWebSocket();
             }

@@ -369,7 +369,6 @@ public class PostDetailActivity extends AppCompatActivity {
                         // Handle successful response
                         Log.d("Response", response.toString());
                         alreadyBookmarked = true;
-
                     }
                 },
                 new Response.ErrorListener() {

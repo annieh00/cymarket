@@ -101,9 +101,10 @@ public class SavedActivityFragment extends Fragment {
                                 String description = bookmarkObj.getString("description");
                                 String userName = bookmarkObj.getString("userName");
                                 int id = bookmarkObj.getInt("id");
+                                String pic1data = bookmarkObj.getString("picture1Data");
 
                                 // Create a new PostItemObject instance
-                                PostItemObject postItem = new PostItemObject(picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id);
+                                PostItemObject postItem = new PostItemObject(pic1data, picture1, picture2, picture3, picture4, picture5, picture6, title, price, auction, description, userName, id);
 
                                 // Add the new PostItemObject instance to the list
                                 mSavedList.add(postItem);

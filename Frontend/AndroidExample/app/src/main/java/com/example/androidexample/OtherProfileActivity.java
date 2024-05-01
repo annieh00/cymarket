@@ -154,6 +154,8 @@ public class OtherProfileActivity extends AppCompatActivity {
 
     private Button deleteBtn;
     private TextView nameTxt;
+    boolean alreadyRated = false;
+
 
     private RatingBar ratingBar;
 
@@ -168,6 +170,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_profile);
+
 //        refreshBtn = findViewById(R.id.refreshBtn);
 //        xCoord = findViewById(R.id.xInput);
 //        yCoord = findViewById(R.id.yInput);
@@ -181,6 +184,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        updatedY = findViewById(R.id.updateY);
 
         nameTxt = findViewById(R.id.Name);
+        alreadyRated();
 
 
         userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
@@ -221,6 +225,11 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         }
         confirmRatingBtn = findViewById(R.id.confirmRatingBtn);
+        if (alreadyRated == true){
+            confirmRatingBtn.setVisibility(View.GONE);
+        }else{
+            confirmRatingBtn.setVisibility(View.VISIBLE);
+        }
 
 
         ratingBar = findViewById(R.id.rb_ratingBar);
@@ -253,164 +262,13 @@ public class OtherProfileActivity extends AppCompatActivity {
             }
         });
 
-        //send back that rating to the database thru post method req, and then the average rating will be in a
-        //json obj get method req or in that same post req
-
-//
-//        /** If a certain screen is pressed, it will go to that certain screen.
-//         *
-//         */
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                itemSelected = item.toString();
-//                Intent intent;
-//                switch (itemSelected) {
-//                    case "Main Feed":
-//                        intent = new Intent(getApplicationContext(), MainFeed.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Friends":
-//                        intent = new Intent(getApplicationContext(), FriendFeatureActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Auction":
-//                        intent = new Intent(getApplicationContext(), AuctionActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Profile":
-//                        // Handle click on the first item
-//                        intent = new Intent(getApplicationContext(), ProfileActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Sell":
-//                        // Handle click on the second item
-//                        intent = new Intent(getApplicationContext(), CreatePostActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Inbox":
-//                        // Handle click on the third item
-////                        alreadyConnected = true;
-//                        intent = new Intent(getApplicationContext(), InboxActivity.class);
-//                        startActivity(intent);
-//
-//                        break;
-//                    case "Announcements":
-//                        // Handle click on the fourth item
-//                        intent = new Intent(getApplicationContext(), ViewAnnouncementAdmin.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Settings":
-//                        // Handle click on the fourth item
-//                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                }
-//
-//                // Close the navigation drawer after handling the click
-//                nDrawerLayout.closeDrawers();
-//
-//                return true; // Return true to indicate that the item is selected
-//            }
-//        });
-
-//        refreshBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //sendJsonObjReq();
-//                mPostList = new ArrayList<>();
-//                fetchPosts();
-//                /* grab strings from user inputs */
-////                if (txtValidity == true) {
-////                    Pass();
-////                }else if (!txtValidity){
-////                    Pass();
-////                    Toast.makeText(LoginActivity.this, "User Not Valid", Toast.LENGTH_LONG).show();
-////                }
-//                /* when login button is pressed, use intent to switch to Login Activity */
-////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-////                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
-////                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
-////                startActivity(intent);  // go to MainActivity with the key-value data
-//            }
-//        });
-
-
-//        updateLocationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int uid = Integer.parseInt(id.getText().toString());
-//
-//
-//                String x = updatedX.getText().toString();
-//                String y = updatedY.getText().toString();
-//
-//                String updateAnnouncementUrl = server_url_update + uid;
-//
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("x", x);
-//                    jsonObject.put("y", y);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, updateAnnouncementUrl, jsonObject, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", "Announcement updated successfully");
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", "Error updating announcement: " + error.getMessage());
-//                    }
-//                });
-//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-//            }
-//        });
-//
-//
-//
-//        deleteCoordButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int announcementId = Integer.parseInt(id.getText().toString());
-////                String deleteAnnouncementUrl = "http://coms-309-060.class.las.iastate.edu:8080/announcements/del/" + announcementId;
-//                String deleteAnnouncementUrl = server_url_del + announcementId ;
-//
-//                StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, deleteAnnouncementUrl,
-//                        new Response.Listener<String>() {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                Log.d("Volley Response", response);
-//                                // Handle successful deletion (if needed)
-//                            }
-//                        },
-//                        new Response.ErrorListener() {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//                                Log.e("Volley Error", "Error deleting announcement: " + error.getMessage());
-//                                // Handle error response (if needed)
-//                            }
-//
-//                        });
-//                VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(deleteRequest);
-//
-//
-//            }
-//        });
-
 
 
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mPostAdapter = new PostAdapter(mPostList, new PostAdapter.OnItemClickListener() {
             @Override public void onItemClick(PostItemObject item) {
-//                Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
-
                 // intent to the detail activity
-//                Log.d("Hi"," Bye");
                 Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
@@ -441,6 +299,7 @@ public class OtherProfileActivity extends AppCompatActivity {
                     avgRating = (float) response.getDouble("avgRating");
                     ratingBar.setRating(avgRating);
                     ratingBar.setIsIndicator(true);
+                    alreadyRated = true;
             }catch (JSONException e) {
 
             }
@@ -475,6 +334,30 @@ public class OtherProfileActivity extends AppCompatActivity {
         //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
 
 
+    }
+
+    private void alreadyRated() {
+
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_ALL_RATINGS, null,
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("ratings");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String authorUsername = jsonObject.getString("authorUsername");
+                            String revieweeUserName = jsonObject.getString("revieweeUserName");
+                            if (authorUsername.equals(userNameOfAuthor) && revieweeUserName.equals(LoginActivity.username)){
+                                alreadyRated = true;
+                            }
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
 
 
