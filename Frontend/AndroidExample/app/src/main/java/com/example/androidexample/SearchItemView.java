@@ -146,6 +146,18 @@ public class SearchItemView extends AppCompatActivity {
 //                                    Log.d("posts", mSearchList);
                                 }
                             }
+
+                            // Initialize the adapter with the updated list
+                            mPostAdapter = new PostAdapter(mSearchList, new PostAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(PostItemObject post) {
+                                    // Handle item click if needed
+                                }
+                            });
+
+
+
+
                             mRecyclerViewSearch.setAdapter(mPostAdapter);
 
 //                            ListFriendRequests adapter = new ListFriendRequests(SearchActivity.this, friendRequestList, SearchActivity.this);
