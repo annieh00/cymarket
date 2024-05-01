@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class UserRatings {
@@ -43,20 +41,29 @@ public class UserRatings {
             ratingRepository.save(r);
             List<Rating> setOfRatings = u.getMyRatings();
             setOfRatings.add(r);
+            double ret = 0.0;
+            double avg = 0.0;
+            for(Rating r2 : setOfRatings){
+                avg += r2.getStars();
+            }
+            if(setOfRatings.size() == 0){
+                u.setScore(0.0);
+            }else{
+                u.setScore(avg / setOfRatings.size());
+                ret = avg / setOfRatings.size();
+            }
+
             generalUserRepository.save(u);
-            return "{\"serverResponse\":true}";
+            System.out.println("Review::::" + r.getRevieweeUserName());
+            return "{\"avgRating\" : " + ret +"}";
         }
 
-        return "{\"serverResponse\":false}";
+        return "{\"avgRating\" : -1.0}";
     }
 
     @GetMapping("/getAllRatings")
     public String getAllRatings(){
         List<Rating> lr = ratingRepository.findAll();
-        for(int i = 0; i < lr.size(); i++){
-            Rating rating = lr.get(i);
-            rating.setRevieweeUserName(rating.getRevieweeUserName());
-        }
 
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
@@ -86,17 +93,23 @@ public class UserRatings {
             List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
             List<Rating> modified = new ArrayList<>();
             Rating del = null;
+            double sum = 0.0;
             for(int i = 0; i < lr.size(); i++){
                 if(lr.get(i).getAuthorUsername().equals(userName)){
                     del = lr.get(i);
                     continue;
                 }
+                sum += lr.get(i).getStars();
                 modified.add(lr.get(i));
             }
 
             if(del != null){
                 ratingRepository.delete(del);
-                u.setMyRatings(modified);
+                if(modified.size() == 0){
+                    u.setScore(0);
+                }else{
+                    u.setScore(sum/lr.size());
+                }
                 generalUserRepository.save(u);
                 return "{\"serverResponse\" : true}";
 
@@ -106,45 +119,28 @@ public class UserRatings {
         return "{\"serverResponse\" : false}";
     }
 
-    @PostMapping("/modifyRating/{author}/{userName}")
-    public String modifyRating(@PathVariable(name = "author") String author, @PathVariable(name="userName") String userName){
-        GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
-        if(u != null){
-            List<Rating> lr =  ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
-            List<Rating> modified = new ArrayList<>();
-            Rating del = null;
-
-            for(int i = 0; i < lr.size(); i++){
-                if(lr.get(i).getAuthorUsername().equals(userName)){
-                    del = lr.get(i);
-                    continue;
-                }
-                modified.add(lr.get(i));
-            }
-
-            if(del != null){
-                ratingRepository.delete(del);
-                u.setMyRatings(modified);
-                generalUserRepository.save(u);
-                return "{\"serverResponse\" : true}";
-
-            }
-
-        }
-        return "{\"serverResponse\" : false}";
-    }
 
     @GetMapping("getMyRatings/{userName}")
     public String getMyRatings(@PathVariable(name = "userName") String userName){
         GeneralUser u = generalUserRepository.findGeneralUserByUserName(userName);
         if(u != null){
-            List<Rating> myratings = ratingRepository.findRatingsByAuthorUsername(u.getUserName());
+            List<Rating> myratings = ratingRepository.findRatingsByRevieweeUserName(u.getUserName());
             GsonBuilder builder = new GsonBuilder();
             builder.serializeNulls();
             Gson gson = builder.setPrettyPrinting().create();
             String json = gson.toJson(myratings);
-            return "{\"ratings\" : " + json + "}";
+            double sum = 0.0;
+            for(Rating r : myratings){
+                sum += r.getStars();
+            }
+            if(myratings.size() == 0){
+                return "{\"ratings\" : 0.0}";
+            }else{
+                sum = sum / myratings.size();
+                return "{\"ratings\" : " + sum + "}";
+            }
+
         }
-        return "{\"ratings\" : null}";
+        return "{\"ratings\" : -1.0}";
     }
 }

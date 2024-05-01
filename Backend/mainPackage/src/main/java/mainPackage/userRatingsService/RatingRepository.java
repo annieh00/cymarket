@@ -13,4 +13,6 @@ public interface RatingRepository extends JpaRepository<Rating,Long> {
 
     List<Rating> findRatingsByRevieweeUserName(String revieweeUserName);
 
+    Rating findRatingByRid(int rid);
+
 }
