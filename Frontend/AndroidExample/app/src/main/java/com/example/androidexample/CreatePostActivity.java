@@ -550,6 +550,8 @@ public class CreatePostActivity extends AppCompatActivity{
                 jsonObject.put("isDonation", true);
                 jsonObject.put("isAuction", true);
 
+            }else{
+                jsonObject.put("isAuction", auction);
             }
             jsonObject.put("title", titleEditText.getText().toString());
             System.out.println("THE TITLE WAS " +titleEditText.getText().toString());
@@ -557,7 +559,6 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE DESCRIPTION WAS " + descriptionEditText.getText().toString());
             jsonObject.put("price", Integer.parseInt(priceEditTxt.getText().toString()));
             System.out.println("THE PRICE WAS " +Integer.parseInt(priceEditTxt.getText().toString()));
-            jsonObject.put("isAuction", auction);
             System.out.println("THE AUCTION STATUS WAS " + auction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
@@ -578,16 +579,15 @@ public class CreatePostActivity extends AppCompatActivity{
             Log.d(TAG, response.toString());
             try {
                 createPostSuccess = true;
-                usernameString = response.getString("userName");
                 Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
                     int pid = response.getInt("id");
                     title = response.getString("title");
-                    sendImageToServer(pid, i+1);
+                    usernameString = response.getString("userName");
+                    sendImageToServer(pid, i + 1);
                 }
-//                MainFeed.mPostAdapter.notifyDataSetChanged();
-//                MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
-//                MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
+
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
                 //System.out.println("FAILED AT LINE 350");
