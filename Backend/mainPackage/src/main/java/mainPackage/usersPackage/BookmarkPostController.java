@@ -1,10 +1,13 @@
 package mainPackage.usersPackage;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Book;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,11 +97,11 @@ public class BookmarkPostController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}")
-    public ResponseEntity<List<Posting>> getBookmarks(@PathVariable int uid) {
+    public ResponseEntity<String> getBookmarks(@PathVariable int uid) {
         GeneralUser user = generalUserRepository.findGeneralUserById(uid);
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{ \"error\": \"User not found\" }");
         }
 
         List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
@@ -103,6 +110,39 @@ public class BookmarkPostController {
                 .map(Bookmark::getPost)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(bookmarkedPosts);
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+
+        List<String> postsWithImages = new ArrayList<>();
+
+        for (Posting post : bookmarkedPosts) {
+            String postJson = gson.toJson(post);
+
+            String picture1 = post.getPicture1();
+
+            if (picture1 != null && !picture1.isEmpty()) {
+                File imageFile = new File("images/" + picture1);
+
+                if (imageFile.exists()) {
+                    try {
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+                        // Insert the Base64 data into the JSON representation
+                        postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                        postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            postsWithImages.add(postJson);
+        }
+
+        String json = "{ \"bookmarks\": [" + String.join(", ", postsWithImages) + "] }";
+
+        return ResponseEntity.ok(json);
     }
 }
