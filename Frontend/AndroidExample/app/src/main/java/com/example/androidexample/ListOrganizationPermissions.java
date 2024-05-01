@@ -55,7 +55,7 @@ public class ListOrganizationPermissions extends ArrayAdapter<UserReqPerm> imple
         UserReqPerm currentFriend = pendingRequests.get(position);
 
         TextView nameTextView = listItemView.findViewById(R.id.name_text_view);
-        nameTextView.setText(currentFriend.getFirstName() + " " + currentFriend.getLastName());
+        nameTextView.setText(currentFriend.getUsername());
         nameTextView.setTextSize(30); // Set text size
         nameTextView.setTypeface(null, Typeface.NORMAL); // Set text style to bold
 
@@ -72,12 +72,12 @@ public class ListOrganizationPermissions extends ArrayAdapter<UserReqPerm> imple
                 context.sendBroadcast(intent);
 
                 // Assuming currentFriend has a first name & last
-                String newFirst = currentFriend.getFirstName();
-                String  newLast = currentFriend.getLastName();
+//                String newFirst = currentFriend.getFirstName();
+//                String  newLast = currentFriend.getLastName();
                 int uid = currentFriend.getId();
                 String username = currentFriend.getUsername();
 
-                UserReqPerm acceptedFriend = new UserReqPerm(newFirst, newLast, uid, username);
+                UserReqPerm acceptedFriend = new UserReqPerm(uid, username);
 
                 acceptFriendRequest(acceptedFriend);
 //                friendList.add(acceptedFriend);
@@ -107,7 +107,7 @@ public class ListOrganizationPermissions extends ArrayAdapter<UserReqPerm> imple
 
                 // Assuming currentFriend has an ID to identify the user to delete
                 String friendUsername = currentFriend.getUsername();
-                UserReqPerm delete = new UserReqPerm(currentFriend.getFirstName(), currentFriend.getLastName(), currentFriend.getId(), currentFriend.getUsername());
+                UserReqPerm delete = new UserReqPerm(currentFriend.getId(), currentFriend.getUsername());
                 deleteFriend(delete);
 
                 // Remove the user from the list

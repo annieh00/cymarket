@@ -15,6 +15,12 @@
 
             </item>
             <item
+                android:id="@+id/CreateAuction"
+                android:title="Create An Auction"
+                >
+
+            </item>
+            <item
                 android:id="@+id/DonationFeed"
                 android:title="Donation Feed"
                 >

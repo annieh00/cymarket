@@ -352,8 +352,16 @@ public class CreatePostActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 sendJsonObjReq();
-                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                startActivity(intent);
+                if (LoginActivity.permission == 0){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2){
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
 
             }
         });

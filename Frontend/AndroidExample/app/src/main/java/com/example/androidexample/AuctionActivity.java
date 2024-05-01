@@ -394,13 +394,13 @@ public class AuctionActivity extends AppCompatActivity {
         fetchPosts();
     }
 
-    private void refreshContent() {
-        // Perform actions to refresh the content here
-        // For example, reload data from the server or reset the RecyclerView adapter
-        mPostList.clear(); // Clear the current list of posts
-        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
-        fetchPosts(); // Fetch new posts from the server
-    }
+//    private void refreshContent() {
+//        // Perform actions to refresh the content here
+//        // For example, reload data from the server or reset the RecyclerView adapter
+//        mPostList.clear(); // Clear the current list of posts
+//        mPostAdapter.notifyDataSetChanged(); // Notify the adapter that the data has changed
+//        fetchPosts(); // Fetch new posts from the server
+//    }
 
     private void fetchPosts() {
         String url = "http://42b4cef6-ab22-4745-b3fe-4fa097c327da.mock.pstmn.io/getAllPosts";
@@ -426,7 +426,7 @@ public class AuctionActivity extends AppCompatActivity {
                             int id = jsonObject.getInt("id");
                             mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
-                        mPostList.clear(); // Clear the current list of posts
+                        mRecyclerView.setAdapter(mPostAdapter);
                         mPostAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();

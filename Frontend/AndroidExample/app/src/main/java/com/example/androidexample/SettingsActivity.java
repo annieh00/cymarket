@@ -60,17 +60,6 @@ public class SettingsActivity extends AppCompatActivity {
         FAQsButton = findViewById(R.id.FAQArrow);
         logOutButton = findViewById(R.id.logOutArrow);
 
-        /* click listener on login button pressed */
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                /* when login button is pressed, use intent to switch to Profile SetUp Activity */
-//                Intent intent = new Intent(SettingsActivity.this, .class);
-//                startActivity(intent);  // go to LoginActivity
-            }
-        });
-
         FAQsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

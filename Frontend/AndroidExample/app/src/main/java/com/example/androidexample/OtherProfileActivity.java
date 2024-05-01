@@ -128,6 +128,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
+    private float avgRating;
 
     /**
      * this is the tag itself
@@ -159,7 +160,10 @@ public class OtherProfileActivity extends AppCompatActivity {
     private Button confirmRatingBtn;
     private String specificPostURL;
 
+//    private float ratingOfUser;
+    private String userNameOfAuthor;
     private float ratingOfUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +183,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         nameTxt = findViewById(R.id.Name);
 
 
-        String userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
+        userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
 
 //        Intent intent = getIntent();
 //        if (intent != null) {
@@ -223,9 +227,9 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         ratingBar.setStepSize(0.5f);
 
+
         // Set an OnRatingBarChangeListener to handle user input
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            private float ratingOfUser;
 
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -244,6 +248,7 @@ public class OtherProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendRating();
+                confirmRatingBtn.setVisibility(View.GONE);
 
             }
         });
@@ -417,53 +422,33 @@ public class OtherProfileActivity extends AppCompatActivity {
     }
 
     private void sendRating() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+//        RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonObject = new JSONObject();
-        JSONObject body = new JSONObject();
+//        JSONObject body = new JSONObject();
         try {
             //input your API parameters
-            jsonObject.put("addedRating", ratingOfUser);
+            jsonObject.put("userName", LoginActivity.username);
+            jsonObject.put("score", ratingOfUser);
+            jsonObject.put("description", "sdfklsdfl");
+            Log.d("what im sending in rating", jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/login", jsonObject, response -> {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_SET_USER_RATING + "/" + userNameOfAuthor, jsonObject, response -> {
             Log.d(TAG, response.toString());
-//            try {
-//                email = response.getString("email");
-//                password = response.getString("password");
-//                validUser = response.getBoolean("fromServer");
-//                permission = response.getInt("permission");
-//                //I, jess added these two lines
-//                username = response.getString("username");
-//                loginID = response.getInt("id");
+            try {
+                    avgRating = (float) response.getDouble("avgRating");
+                    ratingBar.setRating(avgRating);
+                    ratingBar.setIsIndicator(true);
+            }catch (JSONException e) {
 
-//                Toast.makeText(LoginActivity.this, "validUser : " + username, Toast.LENGTH_LONG).show();
-//            }
-//            catch (JSONException e) {
-////                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-//            }
+            }
 
-//            if (validUser && permission == 0){
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeedAdmin.class);
-//                startActivity(intent);
-//            }else if (validUser && permission == 1) {
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeedOrganizer.class);
-//                startActivity(intent);
-//            }else if (validUser && permission == 2){
-//                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(LoginActivity.this, MainFeed.class);
-//                startActivity(intent);
-//            }else{
-//                Toast.makeText(LoginActivity.this, "User Not Found", Toast.LENGTH_LONG).show();
-//            }
 
         }, error -> {
-//            VolleyLog.d(TAG, "Error: " + error.getMessage());
-//            Toast.makeText(LoginActivity.this, "L", Toast.LENGTH_LONG).show();
-//            txtValidity = true;
+            VolleyLog.d(TAG, "Error: " + error.getMessage());
+
         }) {
 
             /**

@@ -16,8 +16,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.androidexample.Post.PostItemObject;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.json.JSONArray;
@@ -69,70 +71,30 @@ public class RequestOrganizationPermActivity extends AppCompatActivity implement
 
     //THIS WORKS
     private void fetchFriendRequestsData() {
-//        String url = URL + "/friendrequests/" + LoginActivity.loginID + "/";
-//        String url = URL + "/";
-
-
-        String url = "https://07537acc-da80-4457-8b10-ff9e97cbea07.mock.pstmn.io/reqOrg";
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // Handle JSON response for friend requests data
-                        friendRequestList = parseFriendsRequests(response);
-
-                        // Populate ListView with friend requests data
-                        ListOrganizationPermissions adapter = new ListOrganizationPermissions(RequestOrganizationPermActivity.this, friendRequestList, RequestOrganizationPermActivity.this);
-                        listViewFriendRequests.setAdapter(adapter);
-
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle errors
-                        Toast.makeText(RequestOrganizationPermActivity.this, "Error fetching friend requests data", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        queue.add(jsonArrayRequest);
-    }
-
-    //
-    private List<UserReqPerm> parseFriendsRequests(JSONArray jsonArray) {
         List<UserReqPerm> friendRequests = new ArrayList<>();
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_UPGRADE_REQ, null,
+                response -> {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("upgradeList");
+                        for (int i = jsonArray.length()-1; i >= 0; i--) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String userName = jsonObject.getString("userName");
+                            int id = jsonObject.getInt("id");
+                            UserReqPerm friendRequest = new UserReqPerm(id, userName);
 
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String status = jsonObject.getString("status");
+                            friendRequests.add(friendRequest);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                // Check if the status is "PENDING"
-                if (status.equals("PENDING")) {
-                    JSONObject senderObject = jsonObject.getJSONObject("sender");
-
-                    // Extract sender information
-                    String firstName = senderObject.getString("firstName");
-                    String lastName = senderObject.getString("lastName");
-                    int id = senderObject.getInt("id");
-                    String username = senderObject.getString("userName");
-
-                    // Create a FriendRequest object with sender information
-                    UserReqPerm friendRequest = new UserReqPerm(firstName, lastName, id, username);
-
-                    friendRequests.add(friendRequest);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return friendRequests;
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
     }
+
+
 
     @Override
     public void onOrgAccepted() {
