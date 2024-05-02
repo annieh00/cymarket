@@ -108,17 +108,6 @@ public class OtherProfileActivity extends AppCompatActivity {
 
     public boolean alreadyConnected = false;
 
-//    Intent intent = getIntent();
-
-//    Bundle extras = intent.getExtras();
-
-//    if (intent != null){
-//        String value = intent.getStringExtra("userName");
-//    }
-    //    pid = Integer.parseInt(getIntent().getExtras().getString("id"));
-//
-//    private String userName;
-//    userName = getIntent().getExtras().getString("userName");
 
 
     /**
@@ -134,13 +123,6 @@ public class OtherProfileActivity extends AppCompatActivity {
      * this is the tag itself
      */
     private String tag_json_obj = "jobj_req", tag_json_arry = "jarray_req";
-
-//    private ImageButton refreshBtn;
-
-
-    //    String server_url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/admin";
-//    String server_url = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation/create";
-//    String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/announcements";
 
     String server_url_list = "http://coms-309-060.class.las.iastate.edu:8080/meetinglocation";
 
