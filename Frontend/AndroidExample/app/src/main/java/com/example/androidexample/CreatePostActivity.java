@@ -583,8 +583,10 @@ public class CreatePostActivity extends AppCompatActivity{
                 for(int i = 0; i < imageIndex; i++ ) {
                     int pid = response.getInt("id");
                     title = response.getString("title");
+
                     usernameString = response.getString("userName");
                     sendImageToServer(pid, i + 1);
+
                 }
 
 
