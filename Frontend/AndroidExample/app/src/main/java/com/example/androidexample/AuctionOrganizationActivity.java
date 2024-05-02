@@ -384,7 +384,7 @@ public class AuctionOrganizationActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT).show();
 
                 // intent to the detail activity
-                Intent intent = new Intent(AuctionOrganizationActivity.this, AuctionDetailActivity.class);
+                Intent intent = new Intent(AuctionOrganizationActivity.this, AuctionOrganizationDetailActivity.class);
                 intent.putExtra("id", String.valueOf(item.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
                 startActivity(intent);
             }

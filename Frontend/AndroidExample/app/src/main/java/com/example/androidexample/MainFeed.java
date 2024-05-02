@@ -216,6 +216,11 @@ public class MainFeed extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(intent);
                         break;
+                    case "Organization Auction":
+                        // Handle click on the fourth item
+                        intent = new Intent(getApplicationContext(), AuctionOrganizationActivity.class);
+                        startActivity(intent);
+                        break;
                 }
 
                 // Close the navigation drawer after handling the click

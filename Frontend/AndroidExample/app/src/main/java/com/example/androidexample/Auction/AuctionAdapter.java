@@ -3,6 +3,8 @@ package com.example.androidexample.Auction;
 import static com.example.androidexample.PostDetailActivity.decodeBase64ToBitmap;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +59,11 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.ViewHold
             image = itemView.findViewById(R.id.imageSelView1);
             price = itemView.findViewById(R.id.itemPrice);
             title = itemView.findViewById(R.id.itemTitle);
+        }
+
+        public static Bitmap decodeBase64ToBitmap(String base64Image) {
+            byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
         }
 
         public void bind(final AuctionItemObject item, final OnItemClickListener listener) {

@@ -1,17 +1,23 @@
 package mainPackage.usersPackage;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.transaction.Transactional;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,19 +65,51 @@ public class ViewedPostHistoryController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{uid}/view_history")
-    public ResponseEntity<List<Posting>> findRecentlyViewedPosts(@PathVariable int uid) {
-        GeneralUser u = generalUserRepository.findGeneralUserById(uid);
-        if (u == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity<String> findRecentlyViewedPosts(@PathVariable int uid) {
+        GeneralUser user = generalUserRepository.findGeneralUserById(uid);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{ \"error\": \"User not found\" }");
         }
 
-        List<ViewedPostHistory> viewedPostHistories = viewedPostRepository.findAllByUser(u);
+        List<ViewedPostHistory> viewedPostHistories = viewedPostRepository.findAllByUser(user);
 
         List<Posting> viewedPosts = viewedPostHistories.stream()
                 .map(ViewedPostHistory::getPost)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(viewedPosts);
+        List<String> postsWithImages = new ArrayList<>();
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+
+        // Add Base64-encoded image data for `picture1` to each `Posting`
+        try {
+            for (Posting post : viewedPosts) {
+                String postJson = gson.toJson(post);
+
+                String picture1 = post.getPicture1();
+
+                if (picture1 != null && !picture1.isEmpty()) {
+                    File imageFile = new File("images/" + picture1);
+                    if (imageFile.exists()) {
+                        byte[] fileContent = FileUtils.readFileToByteArray(imageFile);
+                        String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+
+                        // Insert the Base64 data into the JSON representation
+                        postJson = postJson.substring(0, postJson.length() - 1); // Remove closing brace
+                        postJson += ", \"picture1Data\": \"" + encodedImage + "\"}"; // Append Base64 image data
+                    }
+                }
+
+                postsWithImages.add(postJson);
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle error
+        }
+
+        String json = "{ \"viewed_posts\": [" + String.join(", ", postsWithImages) + "] }";
+
+        return ResponseEntity.ok(json); // Return the JSON response with Base64-encoded image data
     }
 
     @Operation(summary = "Delete a post from a user's viewed history", description = "Deletes a specific post from a user's viewed post history")
