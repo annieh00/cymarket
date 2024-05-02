@@ -57,7 +57,7 @@ public class SearchItemView extends AppCompatActivity {
         setContentView(R.layout.activity_search_item_view);
 
         toolbar = findViewById(R.id.vwebtoolbar1);
-        listUsers = findViewById(R.id.list_view_users);
+//        listUsers = findViewById(R.id.list_view_users);
 
         mRecyclerViewSearch = findViewById(R.id.recycler_view_search);
         LinearLayoutManager linearManager = new LinearLayoutManager(this);
@@ -79,7 +79,10 @@ public class SearchItemView extends AppCompatActivity {
         mSearchPostAdapter = new PostAdapter(mSearchList, new PostAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(PostItemObject post) {
-                // Handle item click if needed
+                Log.d("Hi"," Bye");
+                Intent intent = new Intent(getApplicationContext(), PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(post.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                startActivity(intent);
             }
         });
 

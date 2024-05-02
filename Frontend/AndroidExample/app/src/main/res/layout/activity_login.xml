@@ -7,16 +7,17 @@
     android:layout_width="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CyMarket"
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="150dp"
-        android:textSize="30dp"
+        android:src="@drawable/cymarket_logo_black"
         android:textColor="#fc0303">
-    </TextView>
+    </ImageView>
+
+
 
     <LinearLayout
         android:layout_width="wrap_content"

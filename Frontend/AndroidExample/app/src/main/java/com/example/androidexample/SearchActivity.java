@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -60,6 +61,24 @@ public class SearchActivity extends AppCompatActivity {
 
 
 
+
+        Toolbar t = (Toolbar) findViewById(R.id.vwebtoolbar1);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (LoginActivity.permission == 0) {
+                    Intent intent = new Intent(SearchActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1) {
+                    Intent intent = new Intent(SearchActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2) {
+                    Intent intent = new Intent(SearchActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

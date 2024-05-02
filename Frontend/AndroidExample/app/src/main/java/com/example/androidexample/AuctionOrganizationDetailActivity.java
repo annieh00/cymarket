@@ -4,6 +4,7 @@ package com.example.androidexample;
 import static com.example.androidexample.LoginActivity.username;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -104,6 +105,23 @@ public class AuctionOrganizationDetailActivity extends AppCompatActivity impleme
 //
 //        }
 //        }
+        Toolbar t = (Toolbar) findViewById(R.id.toolbar);
+
+        t.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (LoginActivity.permission == 0) {
+                    Intent intent = new Intent(AuctionOrganizationDetailActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 1) {
+                    Intent intent = new Intent(AuctionOrganizationDetailActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                } else if (LoginActivity.permission == 2) {
+                    Intent intent = new Intent(AuctionOrganizationDetailActivity.this, MainFeed.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
         URL_JSON_OBJECT += extras.getString("id");
 
 //        Log.d("userNmae:", username);

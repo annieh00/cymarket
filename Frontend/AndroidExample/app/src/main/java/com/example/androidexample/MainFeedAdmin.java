@@ -98,7 +98,7 @@ public class MainFeedAdmin extends AppCompatActivity {
      * recyclerview related variables
      */
     public static PostAdapter mPostAdapter;
-    public RecyclerView mRecyclerView;
+    public static RecyclerView mRecyclerView;
     public static ArrayList<PostItemObject> mPostList = new ArrayList<>();
 
 

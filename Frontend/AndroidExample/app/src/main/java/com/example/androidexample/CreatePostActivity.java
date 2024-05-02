@@ -63,57 +63,26 @@ public class CreatePostActivity extends AppCompatActivity{
     private EditText titleEditText;
     private ImageButton addImageBtn;
     private EditText descriptionEditText;
-    private EditText categoryEditTxt;
-    private Button cancelBtn;
-
     private Button postBtn;
     private String TAG = CreatePostActivity.class.getSimpleName();
-    //    private EditText categoryEditTxt;
-    private HorizontalScrollView imagesHorizontalScrollView;
-    private Uri pic;
     private ImageView image1 = null;
     private ImageView image2 = null;
     private ImageView image3 = null;
     private ImageView image4 = null;
     private ImageView image5 = null;
     private ImageView image6 = null;
-
     private int imageIndex = 0;
-    private Boolean createPostSuccess;
-
+    private Boolean createPostSuccess = false;
     private volatile String title;
-    private String description;
     private volatile String usernameString;
-
-    private Bitmap bitmap;
-    private String filePath;
-    TextView textView;
-    private  int userType = 0;
-
-    private EditText getCategoryEditTxt;
     private boolean auction = false;
-
     private ActivityResultLauncher<String> mGetContent;
-
     Uri selectiedUri;
-
-    private String encodedString;
-    //ArrayList<Bitmap> imageBitMaps = new ArrayList<>();
-
     private EditText priceEditTxt;
-//    private String encodedString;
-
     private volatile Bitmap[] bitmap1to6 = new Bitmap[6];
-
     private CheckBox isAuction;
-
-    public volatile JSONObject ret = new JSONObject();
-
     private static int ImageUploadedCounter = 0;
     private ImageButton deleteImageBtn;
-
-//    Spinner spinner;
-
     String[] categoryArray = {"Antiques and Collectibles", "Appliances", "Arts and Crafts", "Auto Parts", "Baby",
             "Books, Movies and Music" ,
     "Electronics", "Furniture", "Garage Sale", "Health and Beauty", "Home Goods and Decor",
@@ -121,18 +90,10 @@ public class CreatePostActivity extends AppCompatActivity{
     "Housing for Sale", "Jewelry and Watches", "Kidswear", "Luggage and Bags", "Menswear", "Miscellaneous",
             "Musical Instruments", "Patio and Garden",
     "Pet Supplies", "Rentals", "Sporting Goods", "Toys and Games", "Vehicles", "Womenswear"};
-
-
     MaterialCardView selectCard;
-
     boolean []selectedCategories;
-
     ArrayList<Integer> categoriesList = new ArrayList<>();
-
     ArrayList<String> selectedCategoriesNames;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,56 +106,39 @@ public class CreatePostActivity extends AppCompatActivity{
         descriptionEditText = findViewById(R.id.DescriptionEditText);
         descriptionEditText.setSaveEnabled(true);
         isAuction = findViewById(R.id.auctionCheckBox);
-//        getCategoryEditTxt = findViewById(R.id.CategoryEditTxt);
         image1 = findViewById(R.id.imageSelView1);
-
-
         deleteImageBtn = findViewById(R.id.deleteImageButton);
-
-
         image2 = findViewById(R.id.imageSelView2);
-
-
         image3 = findViewById(R.id.imageSelView3);
-
-
         image4 = findViewById(R.id.imageSelView4);
-
-
         image5 = findViewById(R.id.imageSelView5);
-
-
         image6 = findViewById(R.id.imageSelView6);
-
         priceEditTxt = findViewById(R.id.priceEditTxt);
-
         selectCard = findViewById(R.id.categorySpinner);
-
         selectedCategories = new boolean[categoryArray.length];
-
         Toolbar t = (Toolbar)findViewById(R.id.vwebtoolbar1);
-
         selectCard.setOnClickListener(v ->{
             showCategoryDialog();
         });
-
-
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 if (LoginActivity.permission == 0){
+                    MainFeed.mPostAdapter.notifyDataSetChanged();
+//                    MainFeed.mRecyclerView.setAdapter(MainFeed.mPostAdapter);
                     Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
                     startActivity(intent);
                 } else if (LoginActivity.permission == 1){
+                    MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
                     Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
                     startActivity(intent);
                 } else if (LoginActivity.permission == 2){
+                    MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
                     Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                     startActivity(intent);
                 }
 
             }
         });
-
         isAuction.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 if (auction){
@@ -204,8 +148,6 @@ public class CreatePostActivity extends AppCompatActivity{
                 }
             }
         });
-
-
         deleteImageBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 if (imageIndex == 5){
@@ -266,11 +208,9 @@ public class CreatePostActivity extends AppCompatActivity{
                 }
             }
         });
-
         //Buttons
         postBtn = findViewById(R.id.post_button);  // link to signup button in the Login activity XML
         addImageBtn = findViewById(R.id.addImageButton); //link to add images
-
         // select image from gallery
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -339,52 +279,46 @@ public class CreatePostActivity extends AppCompatActivity{
                         }else{
                             Toast.makeText(CreatePostActivity.this, "Unable to add more than 6 pictures", Toast.LENGTH_LONG).show();
                         }
-
-
                     }
                 });
-
-
         /*
          *  click listener on post button pressed
          */
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageIndex > 0){
-                    sendJsonObjReq();
-                    if (LoginActivity.permission == 0){
-                        Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
-                        startActivity(intent);
-                    } else if (LoginActivity.permission == 1){
-                        Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
-                        startActivity(intent);
-                    } else if (LoginActivity.permission == 2){
-                        Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                        startActivity(intent);
+                    if (imageIndex > 0){
+                        sendJsonObjReq();
+                        if (LoginActivity.permission == 0){
+                            if (createPostSuccess){
+                                Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
+                                startActivity(intent);
+                            }
+                        } else if (LoginActivity.permission == 1){
+                            Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
+                            startActivity(intent);
+                        } else if (LoginActivity.permission == 2){
+//                            if (createPostSuccess) {
+//                                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+//                                startActivity(intent);
+//                            }
+                        }
+                    }else{
+                        Toast.makeText(CreatePostActivity.this, "Cannot make post, does not have a picture", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(CreatePostActivity.this, "Cannot make post, does not have a picture", Toast.LENGTH_LONG).show();
-                }
-
-
 
             }
         });
-
         /*
          * click listener for adding an image
          */
         addImageBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
     }
-
     //method for category setting
     private void showCategoryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CreatePostActivity.this);
-
         builder.setTitle("Select Categories");
         builder.setCancelable(false);
-
         builder.setMultiChoiceItems(categoryArray, selectedCategories, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -393,17 +327,13 @@ public class CreatePostActivity extends AppCompatActivity{
                 }else{
 //                    categoriesList.remove(which);
                     categoriesList.remove(Integer.valueOf(which)); // Remove the Integer object, not the index
-
                 }
-
             }
         }).setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 // Clear the existing list
                 categoriesList.clear();
-
                 // Iterate over the selected categories
                 for (int i = 0; i < selectedCategories.length; i++) {
                     if (selectedCategories[i]) {
@@ -411,48 +341,29 @@ public class CreatePostActivity extends AppCompatActivity{
                         categoriesList.add(i);
                     }
                 }
-
                 selectedCategoriesNames = new ArrayList<>();
-
                 for (int index : categoriesList) {
                     selectedCategoriesNames.add(categoryArray[index]);
-
                 }
-
                 Log.d("SelectedCategories", selectedCategoriesNames.toString());
-
-
             }
-
-
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.dismiss();
             }
         }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 //clearing all selected courses all click
                 for(int i = 0; i< selectedCategories.length; i++){
                     selectedCategories[i] = false;
-
                     categoriesList.clear();
-
-                    //set the text view to nothing
                 }
             }
         });
-
         builder.show();
-
-
-
     }
-
-
     private String convertBitmapToBase64(Bitmap b) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         b = Bitmap.createScaledBitmap(b,150,150,false);
@@ -460,8 +371,6 @@ public class CreatePostActivity extends AppCompatActivity{
         byte[] byteArray = stream.toByteArray();
         return Base64.getEncoder().encodeToString(byteArray);
     }
-
-
     private void sendImageToServer(int postId, int imageIndexStartFrom1){
         JSONObject jo = new JSONObject();
         try {
@@ -477,37 +386,43 @@ public class CreatePostActivity extends AppCompatActivity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Const.URL_UPDATE_POST, jo, response -> {
             Log.d(TAG, response.toString());
             try {
+                createPostSuccess = true;
                 System.out.println("RECEIVED FROM UPDATE");
                 System.out.println("SENT THIS: " + jo.toString());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
-
             if (createPostSuccess) {
+                if (LoginActivity.permission == 0){
+                    MainFeedAdmin.mRecyclerView.setAdapter(MainFeedAdmin.mPostAdapter);
+                    MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
+                    Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
+                    startActivity(intent);
+                }else if (LoginActivity.permission == 1){
+                    MainFeedOrganizer.mRecyclerView.setAdapter(MainFeedOrganizer.mPostAdapter);
+                    MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
+                    Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
+                    startActivity(intent);
+                }
+                MainFeed.mRecyclerView.setAdapter(MainFeed.mPostAdapter);
+                MainFeed.mPostAdapter.notifyDataSetChanged();
                 Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
-                //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-
-
-                //startActivity(intent);
+                Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
+                startActivity(intent);
             }else{
                 Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
             }
-
-
-
-
 
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
             Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
-
             /**
              * Passing some request headers
              */
@@ -517,20 +432,12 @@ public class CreatePostActivity extends AppCompatActivity{
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-//                params.put("param1", "value1");
-//                params.put("param2", "value2");
                 return params;
             }
-
         };
-
-        //queue.add(jsonObjReq);
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
-        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
-
     }
 
     /**
@@ -542,10 +449,7 @@ public class CreatePostActivity extends AppCompatActivity{
      */
     private void sendJsonObjReq() {
         JSONObject jsonObject = new JSONObject();
-        // JSONObject ret = new JSONObject();
         try {
-            //input your API parameters
-
             if (LoginActivity.permission == 1){
                 jsonObject.put("isDonation", true);
                 jsonObject.put("isAuction", true);
@@ -562,59 +466,36 @@ public class CreatePostActivity extends AppCompatActivity{
             System.out.println("THE AUCTION STATUS WAS " + auction);
             jsonObject.put("userName",LoginActivity.username);
             System.out.println("THE userName WAS " + LoginActivity.username);
-
-
             JSONArray categoriesArray = new JSONArray(selectedCategoriesNames);
             //adding categories feature
             jsonObject.put("categories", categoriesArray);
             System.out.println("THE categories were " + categoriesArray.toString());
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, "http://coms-309-060.class.las.iastate.edu:8080/posts", jsonObject, response -> {
             Log.d(TAG, response.toString());
             try {
-                createPostSuccess = true;
+                int pid = response.getInt("id");
                 Log.d("JSON Data:", jsonObject.toString());
                 for(int i = 0; i < imageIndex; i++ ) {
-                    int pid = response.getInt("id");
                     title = response.getString("title");
-
                     usernameString = response.getString("userName");
                     sendImageToServer(pid, i + 1);
-
                 }
-
-
             } catch (Exception e) {
                 throw new RuntimeException(e);
-                //System.out.println("FAILED AT LINE 350");
-                //createPostSuccess = false;
             }
-
-
-            if (createPostSuccess) {
-                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
-                //Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
-                //startActivity(intent);
-            }else{
-                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
-            }
-
-
-
-
-
+//            if (createPostSuccess) {
+//                Toast.makeText(CreatePostActivity.this, "Post is successful!", Toast.LENGTH_LONG).show();
+//            }else{
+//                Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
+//            }
         }, error -> {
             VolleyLog.d(TAG, "Error: " + error.getMessage());
             Toast.makeText(CreatePostActivity.this, "Post unsuccessful.", Toast.LENGTH_LONG).show();
 //            txtValidity = true;
         }) {
-
             /**
              * Passing some request headers
              */
@@ -624,20 +505,14 @@ public class CreatePostActivity extends AppCompatActivity{
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 //                params.put("param1", "value1");
 //                params.put("param2", "value2");
                 return params;
             }
-
         };
-
-        //queue.add(jsonObjReq);
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
-        //VolleySingleton.getInstance(getApplicationContext()).getRequestQueue().start();
-
     }
 
     /**
@@ -672,9 +547,4 @@ public class CreatePostActivity extends AppCompatActivity{
         }
         return null;
     }
-
-
-
-
-
 }

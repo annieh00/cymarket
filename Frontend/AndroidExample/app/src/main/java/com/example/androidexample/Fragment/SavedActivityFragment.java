@@ -1,5 +1,6 @@
 package com.example.androidexample.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import com.example.androidexample.Const;
 import com.example.androidexample.LoginActivity;
 import com.example.androidexample.Post.PostAdapter;
 import com.example.androidexample.Post.PostItemObject;
+import com.example.androidexample.PostDetailActivity;
 import com.example.androidexample.R;
 import com.example.androidexample.VolleySingleton;
 
@@ -66,7 +68,10 @@ public class SavedActivityFragment extends Fragment {
         mSavedPostAdapter = new PostAdapter(mSavedList, new PostAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(PostItemObject post) {
-                // Handle item click if needed
+                Log.d("Hi"," Bye");
+                Intent intent = new Intent(getContext(), PostDetailActivity.class);
+                intent.putExtra("id", String.valueOf(post.getPostID())); // +1 because the online example doesnt have "https://jsonplaceholder.typicode.com/users/0", just for demostration
+                startActivity(intent);
             }
         });
         mRecyclerViewSaved.setAdapter(mSavedPostAdapter);

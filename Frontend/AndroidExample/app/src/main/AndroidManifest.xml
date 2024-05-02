@@ -63,6 +63,9 @@
         <activity
             android:name=".AuctionOrganizationActivity"
             android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".Fragment.SavedActivityFragment"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".AuctionOrganizationDetailActivity"
             android:exported="false" />
