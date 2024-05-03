@@ -69,10 +69,10 @@
         <activity
             android:name=".AuctionOrganizationDetailActivity"
             android:exported="false" />
-        <!-- <activity -->
-        <!-- android:name=".ViewAnnouncementAdmin" -->
-        <!-- android:exported="false" /> -->
-        <!-- <activity -->
+         <activity
+         android:name=".ViewAnnouncementAdmin"
+         android:exported="false" />
+<!--         <activity -->
         <!-- android:name=".ViewPostActivity" -->
         <!-- android:exported="true" /> &lt;!&ndash; //changed this activity to true for testing purposes &ndash;&gt; -->
         <activity

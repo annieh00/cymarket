@@ -4,6 +4,7 @@ package com.example.androidexample;
 import static com.example.androidexample.LoginActivity.username;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -86,7 +87,13 @@ public class AuctionDetailActivity extends AppCompatActivity implements WebSocke
         titleTxtView = findViewById(R.id.titleTxtView);
 //        priceTxtView = findViewById(R.id.priceTxt);
         descriptionTxtView = findViewById(R.id.descriptionTxtView);
-
+        Toolbar t = (Toolbar)findViewById(R.id.toolbar);
+        t.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         getRequest = Const.URL_GET_ALL_POSTS + "/" + extras.getString("id");
         makeJsonObjReq();
 

@@ -206,6 +206,11 @@ public class MainFeedOrganizer extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), DonationsActivity.class);
                         startActivity(intent);
                         break;
+                    case "Settings":
+                        // Handle click on the first item
+                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(intent);
+                        break;
                 }
 
                 // Close the navigation drawer after handling the click

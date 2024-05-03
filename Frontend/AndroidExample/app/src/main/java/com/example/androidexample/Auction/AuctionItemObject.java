@@ -20,8 +20,8 @@ public class AuctionItemObject {
     String description;
     String userName;
     int postID;
-    public AuctionItemObject(String picture1Data, String picture1, String picture2, String picture3, String picture4, String picture5, String picture6, String title, int price, Boolean auction, String description, String userName, int postID) {
-        this.picture1Data = picture1Data;
+    public AuctionItemObject(String picture1, String picture2, String picture3, String picture4, String picture5, String picture6, String title, int price, Boolean auction, String description, String userName, int postID) {
+//        this.picture1Data = picture1Data;
         this.picture1 = picture1;
         this.picture2 = picture2;
         this.picture3 = picture3;
@@ -40,7 +40,7 @@ public class AuctionItemObject {
 
 
     }
-    public String getPicture1Data(){ return picture1Data; }
+//    public String getPicture1Data(){ return picture1Data; }
 
     public String getPicture1(){ return picture1; }
     public String getPicture2(){ return picture2; }

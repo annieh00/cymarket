@@ -123,16 +123,16 @@ public class CreatePostActivity extends AppCompatActivity{
         t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 if (LoginActivity.permission == 0){
-                    MainFeed.mPostAdapter.notifyDataSetChanged();
+//                    MainFeed.mPostAdapter.notifyDataSetChanged();
 //                    MainFeed.mRecyclerView.setAdapter(MainFeed.mPostAdapter);
                     Intent intent = new Intent(CreatePostActivity.this, MainFeedAdmin.class);
                     startActivity(intent);
                 } else if (LoginActivity.permission == 1){
-                    MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
+//                    MainFeedOrganizer.mPostAdapter.notifyDataSetChanged();
                     Intent intent = new Intent(CreatePostActivity.this, MainFeedOrganizer.class);
                     startActivity(intent);
                 } else if (LoginActivity.permission == 2){
-                    MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
+//                    MainFeedAdmin.mPostAdapter.notifyDataSetChanged();
                     Intent intent = new Intent(CreatePostActivity.this, MainFeed.class);
                     startActivity(intent);
                 }

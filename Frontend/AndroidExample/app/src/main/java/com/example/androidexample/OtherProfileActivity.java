@@ -207,7 +207,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         }
         confirmRatingBtn = findViewById(R.id.confirmRatingBtn);
-        if (alreadyRated == true){
+        if (alreadyRated){
             confirmRatingBtn.setVisibility(View.GONE);
         }else{
             confirmRatingBtn.setVisibility(View.VISIBLE);

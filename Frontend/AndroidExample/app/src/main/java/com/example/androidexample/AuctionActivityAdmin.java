@@ -423,8 +423,8 @@ public class AuctionActivityAdmin extends AppCompatActivity {
                             String description = jsonObject.getString("description");
                             String userName = jsonObject.getString("userName");
                             int id = jsonObject.getInt("id");
-                            String pic1Data = jsonObject.getString("picture1Data");
-                            mPostList.add(new AuctionItemObject(pic1Data, picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
+//                            String pic1Data = jsonObject.getString("picture1Data");
+                            mPostList.add(new AuctionItemObject(picture1,picture2,picture3,picture4,picture5,picture6,title,price,auction, description,userName,id));
                         }
 
                         mPostAdapter.notifyDataSetChanged();

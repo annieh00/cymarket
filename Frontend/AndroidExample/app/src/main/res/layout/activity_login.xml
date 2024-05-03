@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="150dp"
-        android:src="@drawable/cymarket_logo_black"
+        android:src="@drawable/cymarket_logos_black"
         android:textColor="#fc0303">
     </ImageView>
 

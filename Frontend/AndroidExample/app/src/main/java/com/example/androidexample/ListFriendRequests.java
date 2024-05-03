@@ -159,7 +159,7 @@ public class ListFriendRequests extends ArrayAdapter<Friend> implements FriendAc
 //        String url = "https://37668f7b-a5c8-475c-821b-06324c4610a1.mock.pstmn.io/friendsrequests/userName123/reject/";
         String url = URL + "/friendrequests/"+ LoginActivity.loginID+"/reject/" + id.getId();
 
-        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+        StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

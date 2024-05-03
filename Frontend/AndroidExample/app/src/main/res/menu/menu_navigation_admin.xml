@@ -7,25 +7,25 @@
                 android:title="Main Feed"
                 >
             </item>
-            <item
-                android:id="@+id/ReqPerm"
-                android:title="Organization Requests"
-                >
+<!--            <item-->
+<!--                android:id="@+id/ReqPerm"-->
+<!--                android:title="Organization Requests"-->
+<!--                >-->
 
-            </item>
-            <item
-                android:id="@+id/flaggedPosts"
-                android:title="Flagged Posts"
-                >
+<!--            </item>-->
+<!--            <item-->
+<!--                android:id="@+id/flaggedPosts"-->
+<!--                android:title="Flagged Posts"-->
+<!--                >-->
 
-            </item>
+<!--            </item>-->
 
-            <item
-                android:id="@+id/AuctionOrganizer"
-                android:title="Organization Auction"
-                >
+<!--            <item-->
+<!--                android:id="@+id/AuctionOrganizer"-->
+<!--                android:title="Organization Auction"-->
+<!--                >-->
 
-            </item>
+<!--            </item>-->
             <item
                 android:id="@+id/Announcements"
                 android:title="Announcements"
