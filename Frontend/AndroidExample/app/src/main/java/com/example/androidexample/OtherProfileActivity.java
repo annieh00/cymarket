@@ -267,8 +267,8 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        JSONObject body = new JSONObject();
         try {
             //input your API parameters
-            jsonObject.put("userName", LoginActivity.username);
-            jsonObject.put("score", ratingOfUser);
+            jsonObject.put("authorUsername", LoginActivity.username);
+            jsonObject.put("stars", ratingOfUser);
             jsonObject.put("description", "sdfklsdfl");
             Log.d("what im sending in rating", jsonObject.toString());
         } catch (JSONException e) {
