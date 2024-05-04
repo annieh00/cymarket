@@ -136,7 +136,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 
     private Button deleteBtn;
     private TextView nameTxt;
-    boolean alreadyRated = false;
+    private boolean alreadyRated;
 
 
     private RatingBar ratingBar;
@@ -147,6 +147,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 //    private float ratingOfUser;
     private String userNameOfAuthor;
     private float ratingOfUser;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +167,6 @@ public class OtherProfileActivity extends AppCompatActivity {
 //        updatedY = findViewById(R.id.updateY);
 
         nameTxt = findViewById(R.id.Name);
-        alreadyRated();
 
 
         userNameOfAuthor = Objects.requireNonNull(getIntent().getExtras()).getString("userName");
@@ -179,7 +179,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         //        Bundle extras = getIntent().getExtras();
 //        String userNameOfAuthor = extras.getString("userName");
-        specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author
+        specificPostURL = "http://coms-309-060.class.las.iastate.edu:8080/getSpecificPosts/" + userNameOfAuthor; //+ userName of the author of post
 
 
         nameTxt.setText(userNameOfAuthor);
@@ -187,14 +187,20 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         builder = new AlertDialog.Builder(OtherProfileActivity.this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.vwebtoolbar1);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         nDrawerLayout = findViewById(R.id.drawer);
         navigationView.setItemIconTintList(null);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
 
+            }
+        });
 
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -206,9 +212,13 @@ public class OtherProfileActivity extends AppCompatActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
 
         }
+
         confirmRatingBtn = findViewById(R.id.confirmRatingBtn);
+        alreadyRated();
+        Log.d("alreadyRated in main:", String.valueOf(alreadyRated));
         if (alreadyRated){
             confirmRatingBtn.setVisibility(View.GONE);
+            setRating();
         }else{
             confirmRatingBtn.setVisibility(View.VISIBLE);
         }
@@ -326,13 +336,36 @@ public class OtherProfileActivity extends AppCompatActivity {
                         JSONArray jsonArray = response.getJSONArray("ratings");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String authorUsername = jsonObject.getString("authorUsername");
+                            int rid = jsonObject.getInt("rid");
+                            String description = jsonObject.getString("description");
+                            int stars = jsonObject.getInt("stars");
                             String revieweeUserName = jsonObject.getString("revieweeUserName");
-                            if (authorUsername.equals(userNameOfAuthor) && revieweeUserName.equals(LoginActivity.username)){
+                            String authorUsername = jsonObject.getString("authorUsername");
+                            Log.d("authorUsername", authorUsername);
+                            Log.d("revieweeUserName", revieweeUserName);
+                            if (authorUsername.equals(LoginActivity.username) && revieweeUserName.equals(userNameOfAuthor)){
                                 alreadyRated = true;
                             }
-
+                            Log.d("alreadyRated:", String.valueOf(alreadyRated));
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            // Handle error
+        });
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void setRating() {
+
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest(Request.Method.GET, Const.URL_GET_MY_RATING + "/" + userNameOfAuthor, null,
+                response -> {
+                    try {
+                        float rating = (float)response.getDouble("ratings");
+                        ratingBar.setRating(rating);
+                        ratingBar.setIsIndicator(true);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -368,12 +401,12 @@ public class OtherProfileActivity extends AppCompatActivity {
 //                            String picture5 = jsonObject.getString("picture5");
 //                            String picture6 = jsonObject.getString("picture6");
                             String picture1Data = jsonObject.getString("picture1Data");
-                            String picture1 = null;
-                            String picture2 = null;
-                            String picture3 = null;
-                            String picture4 = null;
-                            String picture5 = null;
-                            String picture6 = null;
+                            String picture1 = jsonObject.getString("picture1");
+                            String picture2 = jsonObject.getString("picture2");;
+                            String picture3 = jsonObject.getString("picture3");;
+                            String picture4 = jsonObject.getString("picture4");;
+                            String picture5 = jsonObject.getString("picture5");;
+                            String picture6 = jsonObject.getString("picture6");;
 
                             String title = jsonObject.getString("title");
                             int price = jsonObject.getInt("price");
