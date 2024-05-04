@@ -198,7 +198,6 @@ public class OtherProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
             }
         });
 

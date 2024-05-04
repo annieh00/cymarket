@@ -205,11 +205,14 @@ public class PostDetailActivity extends AppCompatActivity {
         authorOfPostTxtView.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                Intent intent;
                 if (!LoginActivity.username.equals(userName)){
-                    Intent intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class);
-                    intent.putExtra("userName", userName);
-                    startActivity(intent);  // go to other profile
+                    intent = new Intent(PostDetailActivity.this, OtherProfileActivity.class); //go to other profile
+                    intent.putExtra("userName", userName); //put extra so that we can use the author of the post's username
+                }else{
+                    intent = new Intent(PostDetailActivity.this, ProfileActivity.class);
                 }
+                startActivity(intent);  // go to other profile
             }
         });
 

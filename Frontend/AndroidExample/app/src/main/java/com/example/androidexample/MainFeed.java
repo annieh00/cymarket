@@ -204,7 +204,6 @@ public class MainFeed extends AppCompatActivity {
 //                        alreadyConnected = true;
                         intent = new Intent(getApplicationContext(), InboxActivity.class);
                         startActivity(intent);
-
                         break;
                     case "Announcements":
                         // Handle click on the fourth item
