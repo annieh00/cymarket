@@ -75,11 +75,13 @@ My contributions included:
 * Android Studio
 
 ## Project Structure
+```text
 CyMarket/ ├── Backend/                                 # Backend services and server-side functionality 
 ├── Frontend/ # Android application ├── Documents/     # Project documentation and reports 
 ├── Experiments/                                       # Development experiments and prototypes 
 ├── tutorials/                                         # Development/tutorial materials 
 └── README.md
+```
 
 ## Architecture
 CyMarket uses a client-server architecture. The Android application communicates with backend services through REST APIs and WebSockets, with MySQL used for persistent application data.
