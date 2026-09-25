@@ -49,13 +49,18 @@ public class ConnectToDB {
      * */
     public static Connection getOneTimeConnection() {
         Connection ret = null;
-        try{
-            ret = DriverManager.getConnection("jdbc:mysql://localhost/cs309","cs309","cs309ta45");
+    
+        try {
+            String url = System.getenv("DB_URL");
+            String username = System.getenv("DB_USERNAME");
+            String password = System.getenv("DB_PASSWORD");
+    
+            ret = DriverManager.getConnection(url, username, password);
             return ret;
-        }catch(SQLException ex){
-            System.out.println("Error at ConnectToDB.getConnection()");
-
+        } catch (SQLException ex) {
+            System.out.println("Error at ConnectToDB.getOneTimeConnection()");
         }
+    
         return null;
     }
 
