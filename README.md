@@ -76,10 +76,11 @@ My contributions included:
 
 ## Project Structure
 ```text
-CyMarket/ ├── Backend/                                 # Backend services and server-side functionality 
-├── Frontend/ # Android application ├── Documents/     # Project documentation and reports 
-├── Experiments/                                       # Development experiments and prototypes 
-├── tutorials/                                         # Development/tutorial materials 
+CyMarket/ ├── Backend/         # Backend services and server-side functionality 
+├── Frontend/                  # Android application
+├── Documents/                 # Project documentation and reports 
+├── Experiments/               # Development experiments and prototypes 
+├── tutorials/                 # Development/tutorial materials 
 └── README.md
 ```
 
